@@ -60,7 +60,7 @@ using namespace std;
 #include <stdio.h>
 #include <Windows.h>
 
-int nScreenWidth = 80;			// Console Screen Size X (columns)
+int nScreenWidth = 120;			// Console Screen Size X (columns)
 int nScreenHeight = 30;			// Console Screen Size Y (rows)
 wstring tetromino[7];
 int nFieldWidth = 12;

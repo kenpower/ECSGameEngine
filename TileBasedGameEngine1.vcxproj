@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TileBasedGameEngine1.cpp" />
+    <ClCompile Include="virtualterminal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="olcConsoleGameEngine.h" />
