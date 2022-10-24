@@ -18,7 +18,7 @@ public:
 };
 
 
-int main()
+int main_old()
 {
 
 		// Use olcConsoleGameEngine derived app
