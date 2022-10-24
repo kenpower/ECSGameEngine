@@ -125,7 +125,7 @@ bool DoesPieceFit(int nTetromino, int nRotation, int nPosX, int nPosY)
 	return true;
 }
 
-int main()
+int tetris_main()
 {
 	// Create Screen Buffer
 	wchar_t* screen = new wchar_t[nScreenWidth * nScreenHeight];
