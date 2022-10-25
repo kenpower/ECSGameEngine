@@ -2,11 +2,11 @@
 #include "CollisionRect.h"
 
 struct Vector {
-	float x, y;
+	double x, y;
 };
 
 struct Seconds{
-	float value;
+	double value;
 };
 
 class Entity

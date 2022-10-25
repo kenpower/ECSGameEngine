@@ -13,6 +13,7 @@ class Level
 		
 public:
 	Level(const char*, int, int);
-	const Entity& getByName(string name) const;
+	Entity& getByName(string name) ;
+	void update(Seconds);
 };
 

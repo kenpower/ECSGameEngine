@@ -10,8 +10,8 @@ TEST(Level, EntityMoves) {
 	
 	e.vel = Vector{ 2, -3 };
 	
-	
-	e.update(Seconds{ 4 });
+	e.update(Seconds{ 3.8 });
+	e.update(Seconds{ 0.2 });
 	
 	EXPECT_NEAR(18, e.rect.x, epsilon);
 	EXPECT_NEAR(-2, e.rect.y, epsilon);

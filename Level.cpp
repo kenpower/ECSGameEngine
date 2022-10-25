@@ -10,6 +10,13 @@ Level::Level(const char* map, int width, int height) {
 		
 }
 
-const Entity& Level::getByName(string name) const {
+Entity& Level::getByName(string name)  {
 	return entities.find(name)->second;
+}
+
+void Level::update(Seconds seconds) {
+	for (auto kv : entities) 
+		kv.second.update(seconds);
+
+	
 }
