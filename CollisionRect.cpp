@@ -1,6 +1,6 @@
 #include "CollisionRect.h"
 
-bool isColliding(CollisionRect& a, CollisionRect& b, double epsilon = 0.001) {
+bool isColliding(CollisionRect& a, CollisionRect& b, double epsilon) {
 
 	if (a.x + a.w < b.x + epsilon) return false;
 	if (a.x + epsilon > b.x + b.w) return false;
