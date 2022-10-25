@@ -3,16 +3,16 @@
 #include<string>
 #include<map>
 #include<memory>
-#include "CollisionRect.h"
+#include "Entity.h"
 
 using namespace std;
 
 class Level
 {
-	std::map<std::string, CollisionRect> rects;
+	std::map<std::string, Entity> entities;
 		
 public:
 	Level(const char*, int, int);
-	const CollisionRect& getByName(string name) const;
+	const Entity& getByName(string name) const;
 };
 

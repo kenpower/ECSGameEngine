@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CollisionRect.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="tetris.cpp" />
     <ClCompile Include="consoleGameEngine.cpp" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionRect.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="olcConsoleGameEngine.h" />
   </ItemGroup>

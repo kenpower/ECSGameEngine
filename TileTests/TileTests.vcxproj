@@ -36,6 +36,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="entity.test.cpp" />
     <ClCompile Include="level.test.cpp" />
     <ClCompile Include="collisionrect.test.cpp" />
     <ClCompile Include="pch.cpp">
@@ -55,6 +56,9 @@
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="..\x64\Debug\Entity.obj" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
