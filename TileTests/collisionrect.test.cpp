@@ -2,7 +2,6 @@
 
 #include "../CollisionRect.h"
 
-
 TEST(CollisionRect, Collisions) {
 	CollisionRect a(0, 0, 10, 10);
 	CollisionRect b(5, 5, 10, 10);
