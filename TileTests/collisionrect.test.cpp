@@ -39,3 +39,15 @@ TEST(CollisionRect, CollisionResolution) {
 	EXPECT_FALSE(isColliding(a, b)) << a.toString() << " " << b.toString();
 
 }
+
+TEST(CollisionRect, CollisionResolutionFractional) {
+	CollisionRect a(0, 0, 1, 1);
+	CollisionRect b(0, 0.75, 1, 1);
+
+
+	resolveCollision(b, a);
+	EXPECT_FALSE(isColliding(a, b)) << a.toString() << " " << b.toString();
+
+	EXPECT_EQ(1, b.y) << a.toString() << " " << b.toString();
+
+}

@@ -50,18 +50,18 @@ TEST(Level, CanUpdateAll) {
 
 }
 
-//TEST(Level, ResolveCollision) {
-//
-//	Level lvl(
-//		"A....."
-//		"B....."
-//		"......", 6, 3);
-//
-//	lvl.getByName("A").vel = Vector{ 0.0, 0.0 };
-//	lvl.getByName("B").vel = Vector{ 0.0, -0.5 };
-//
-//	lvl.update(Seconds{ 0.5 });
-//
-//	EXPECT_VEQ(lvl.getByName("A").rect, CollisionRect{ 0, 0, 1, 1 });
-//	EXPECT_VEQ(lvl.getByName("B").rect, CollisionRect{ 0, 1, 1, 1 });
-//}
+TEST(Level, ResolveCollision) {
+
+	Level lvl(
+		"A....."
+		"B....."
+		"......", 6, 3);
+
+	lvl.getByName("A").vel = Vector{ 0.0, 0.0 };
+	lvl.getByName("B").vel = Vector{ 0.0, -0.5 };
+
+	lvl.update(Seconds{ 0.5 });
+
+	EXPECT_VEQ(lvl.getByName("A").rect, CollisionRect{ 0, 0, 1, 1 });
+	EXPECT_VEQ(lvl.getByName("B").rect, CollisionRect{ 0, 1, 1, 1 });
+}

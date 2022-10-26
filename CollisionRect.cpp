@@ -13,20 +13,20 @@ bool isColliding(CollisionRect& a, CollisionRect& b, double epsilon) {
 void resolveCollision(CollisionRect& a, CollisionRect& b) {
 	{
 		// calculate the distance vector
-		int dx = (a.x + a.w / 2) - (b.x + b.w / 2);
-		int dy = (a.y + a.h / 2) - (b.y + b.h / 2);
+		double dx = (a.x + a.w / 2) - (b.x + b.w / 2);
+		double dy = (a.y + a.h / 2) - (b.y + b.h / 2);
 
 		// can't have negative distance
 		if (dx < 0) dx = -dx;
 		if (dy < 0) dy = -dy;
 
 		// calculate the minimum distance before a collision
-		int minDistX = a.w / 2 + b.w / 2;
-		int minDistY = a.h / 2 + b.h / 2;
+		double minDistX = a.w / 2 + b.w / 2;
+		double minDistY = a.h / 2 + b.h / 2;
 
 		// calculate the depth of the collision
-		int overlapX = minDistX - dx;
-		int overlapY = minDistY - dy;
+		double overlapX = minDistX - dx;
+		double overlapY = minDistY - dy;
 
 		if (overlapX <= 0 || overlapY <= 0) return;
 
