@@ -92,7 +92,7 @@ public:
 			return Error(L"Screen Width / Font Width Too Big");
 
 		// Set Physical Console Window Size
-		m_rectWindow = { 0, 0, (short)m_nScreenWidth - 1, (short)m_nScreenHeight - 1 };
+		m_rectWindow = { 0, 0, m_nScreenWidth - 1, m_nScreenHeight - 1 };
 		if (!SetConsoleWindowInfo(m_hConsole, TRUE, &m_rectWindow))
 			return Error(L"SetConsoleWindowInfo");
 
@@ -766,8 +766,8 @@ protected:
 	}
 	*/
 protected:
-	int m_nScreenWidth;
-	int m_nScreenHeight;
+	short m_nScreenWidth;
+	short m_nScreenHeight;
 	CHAR_INFO* m_bufScreen;
 	wstring m_sAppName;
 	HANDLE m_hOriginalConsole;

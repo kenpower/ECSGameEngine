@@ -31,7 +31,7 @@ int main()
 	bool bGameOver = false;
 	bool bKey[4];
 
-	float x = 20, y = 20;
+	double x = 20, y = 20;
 	//float x = 0;
 	while (!bGameOver) // Main Loop
 	{
@@ -49,7 +49,7 @@ int main()
 		y += bKey[2] ? speed : 0;
 		y -= bKey[3] ? speed : 0;
 
-		crw.Draw(x,y, 'X');
+		crw.Draw((int)x, (int)y, 'X');
 		crw.DrawString(8, 8, L"Hello");
 
 		crw.Show();
