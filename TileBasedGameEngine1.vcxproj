@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionRect.h" />
+    <ClInclude Include="ConsoleRenderWindow.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="olcConsoleGameEngine.h" />
