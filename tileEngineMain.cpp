@@ -32,8 +32,10 @@ int main()
 	bool bKey[4];
 
 	float x = 20, y = 20;
+	//float x = 0;
 	while (!bGameOver) // Main Loop
 	{
+		
 		// Timing =======================
 		this_thread::sleep_for(50ms); // Small Step = 1 Game Tick
 
@@ -47,18 +49,12 @@ int main()
 		y += bKey[2] ? speed : 0;
 		y -= bKey[3] ? speed : 0;
 
-
-		screen[(int)y * nScreenWidth + (int)x] = L'X';
-		// Draw Score
-		swprintf_s(&screen[2 * nScreenWidth + nFieldWidth + 6], 16, L"SCORE: %8d", (int)x);
-
-		crw.Draw(5, 5, 'X');
+		crw.Draw(x,y, 'X');
 		crw.DrawString(8, 8, L"Hello");
-		// Display Frame
-		//WriteConsoleOutputCharacter(hConsole, screen, nScreenWidth * nScreenHeight, { 0,0 }, &dwBytesWritten);
+
 		crw.Show();
 	}
-		//CloseHandle(hConsole);
+
 		cout << "Game Over!! Score:"  << endl;
 		system("pause");
 		return 0;
