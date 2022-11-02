@@ -15,5 +15,6 @@ public:
 	Level(const char*, int, int);
 	Entity& getByName(string name) ;
 	void update(Seconds);
+	void draw();
 };
 

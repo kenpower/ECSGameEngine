@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TileBasedGameEngine", "Tile
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TileTests", "TileTests\TileTests.vcxproj", "{D4AF7FA0-65EB-498B-859C-67A9CA6F42B6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TiledGameEngine", "TiledGameEngine\TiledGameEngine.vcxitems", "{01CBAEB2-711D-430B-B640-D5234CCBD68E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

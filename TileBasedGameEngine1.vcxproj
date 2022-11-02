@@ -133,7 +133,7 @@
     <ClCompile Include="CollisionRect.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Level.cpp" />
-    <ClCompile Include="tileEngineMain.cpp" />
+    <ClCompile Include="tileGameMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionRect.h" />

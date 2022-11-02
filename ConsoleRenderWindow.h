@@ -519,6 +519,10 @@ public:
 		}
 	}
 	*/
+
+	void Clear() {
+		Fill(0, 0, m_nScreenWidth, m_nScreenHeight, ' ');
+	}
 	~ConsoleRenderWindow()
 	{
 		SetConsoleActiveScreenBuffer(m_hOriginalConsole);

@@ -6,7 +6,7 @@ Level::Level(const char* map, int width, int height) {
 		for (int y = 0; y < height; y++) {
 			char tag = map[x + y * width];
 			if (tag != '.')
-				entities.emplace(string(1, tag), CollisionRect(x, y, 1, 1));
+				;//entities.emplace(string(1, tag), CollisionRect(x, y, 1, 1));
 		}
 		
 }
@@ -26,4 +26,9 @@ void Level::update(Seconds seconds) {
 		checked.push_back(&(kv.second));
 	}
 	
+}
+
+void Level::draw() {
+	for (auto& kv : entities)
+		kv.second.draw();
 }

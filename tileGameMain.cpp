@@ -7,7 +7,19 @@ using namespace std;
 #include <Windows.h>
 
 #include "ConsoleRenderWindow.h"
+#include "Level.h"
+#include "Entity.h"
 
+
+class ConsoleSprite:public Sprite {
+	ConsoleRenderWindow& crw;
+	char image;
+public:
+	ConsoleSprite(ConsoleRenderWindow& crw, char image):crw(crw), image(image) {}
+	void draw(int x, int y) {
+		crw.Draw(x, y, image);
+	}
+};
 
 int main()
 {
@@ -20,6 +32,13 @@ int main()
 
 	ConsoleRenderWindow crw;
 	crw.ConstructConsole(50, 50, 10, 10);
+
+	ConsoleSprite s(crw, 'Z');
+
+	Entity e(CollisionRect(10,10,1,1),s);
+	e.position = { 10,10 };
+	e.vel = { 0.1,0.1 };
+
 	
 	// Create Screen Buffer
 	wchar_t* screen = new wchar_t[nScreenWidth * nScreenHeight];
@@ -51,8 +70,10 @@ int main()
 
 		crw.Draw((int)x, (int)y, 'X');
 		crw.DrawString(8, 8, L"Hello");
+		e.draw();
 
 		crw.Show();
+		crw.Clear();
 	}
 
 		cout << "Game Over!! Score:"  << endl;

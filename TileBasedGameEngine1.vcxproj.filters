@@ -13,33 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="TileEngine">
+      <UniqueIdentifier>{56577bcf-8cd0-4cf0-8b31-8d80e495a3fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tileEngineMain.cpp">
+    <ClCompile Include="tileGameMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CollisionRect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>TileEngine</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>TileEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>TileEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionRect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ConsoleRenderWindow.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionRect.h">
+      <Filter>TileEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>TileEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>TileEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
