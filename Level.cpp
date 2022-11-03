@@ -1,7 +1,6 @@
 #include "Level.h"
 #include<vector>
 
-
 Level::Level(const char* map, int width, int height, SpriteFactory& spriteFactory) {
 	for (int x = 0; x < width; x++) 
 		for (int y = 0; y < height; y++) {
