@@ -1,13 +1,11 @@
 #pragma once
+#include <chrono>
 #include "CollisionRect.h"
 
 struct Vector {
 	double x, y;
 };
 
-struct Seconds{
-	double value;
-};
 
 class Sprite {
 public:
@@ -23,7 +21,7 @@ public:
 	
 	Entity(const CollisionRect r, Sprite* s) :rect(r), sprite(s) {}
 
-	void update(Seconds);
+	void update(std::chrono::milliseconds);
 	//virtual void update() = 0;
 	void draw();
 

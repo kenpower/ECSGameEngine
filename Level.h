@@ -20,7 +20,7 @@ public:
 	Level(const char*, int, int, SpriteFactory&);
 	Entity* getByName(string name) ;
 	void addEntity(Entity*, string);
-	void update(Seconds);
+	void update(chrono::milliseconds);
 	void draw();	
 };
 

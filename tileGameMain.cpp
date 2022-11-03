@@ -84,9 +84,10 @@ int main()
 	//float x = 0;
 	while (!bGameOver) // Main Loop
 	{
+		chrono::milliseconds frameLength = 50ms;
 		
 		// Timing =======================
-		this_thread::sleep_for(50ms); // Small Step = 1 Game Tick
+		this_thread::sleep_for(frameLength); // Small Step = 1 Game Tick
 
 		// Input ========================
 		for (int k = 0; k < 4; k++)								// R   L   D    up
@@ -98,7 +99,7 @@ int main()
 		e.vel.y = bKey[2] ? speed : bKey[3] ? -speed : 0;
 
 
-		level.update(Seconds{ 0.05 });
+		level.update(frameLength);
 
 		//crw.Draw((int)x, (int)y, 'X');
 		//e.rect = CollisionRect{ x,y,1,1 };

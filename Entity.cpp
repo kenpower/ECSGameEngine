@@ -2,10 +2,10 @@
 
 
 
-void Entity::update(Seconds seconds)
+void Entity::update(std::chrono::milliseconds ms)
 {
-	rect.x += vel.x * seconds.value;
-	rect.y += vel.y * seconds.value;
+	rect.x += vel.x * ms.count()/1000.0;
+	rect.y += vel.y * ms.count()/1000.0;
 }
 
 void Entity::draw()

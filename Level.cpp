@@ -20,9 +20,9 @@ Entity* Level::getByName(string name)  {
 	return entities.find(name)->second;
 }
 
-void Level::update(Seconds seconds) {
+void Level::update(chrono::milliseconds delta) {
 	for (auto& kv : entities)
-		kv.second->update(seconds);
+		kv.second->update(delta);
 
 	std::vector<Entity*> checked;
 	for (auto& kv : entities) {
