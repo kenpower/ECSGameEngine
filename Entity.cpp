@@ -10,5 +10,5 @@ void Entity::update(Seconds seconds)
 
 void Entity::draw()
 {
-	sprite.draw(position.x, position.y);
+	sprite->draw(round(rect.x), round(rect.y));
 }

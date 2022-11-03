@@ -54,7 +54,7 @@ int main()
 
 	ConsoleSpriteFactory csf(crw);
 
-	Level level("abcdefghijkl", 3, 4, csf);
+	Level level("aabcdefghijkl", 3, 4, csf);
 
 	level.addEntity(&e, "player");
 
