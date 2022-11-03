@@ -1,13 +1,14 @@
 #pragma once
-#include"../Entity.h"
+#include "../Entity.h"
 #include "../Level.h"
+
+using namespace std::chrono_literals;
 
 class MockSprite : public Sprite {
 public:
 	virtual void draw(int x, int y) {};
 };
 
-using namespace std::chrono_literals;
 
 class MockSpriteFactory: public SpriteFactory {
 public:

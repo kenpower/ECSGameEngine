@@ -1,10 +1,12 @@
 #include "pch.h"
 
-#include "mocks.h"
 #include "../Level.h"
+
+#include "mocks.h"
 
 const double epsilon = 0.0001;
 MockSpriteFactory spriteFactory;
+MockSprite sprite;
 
 void EXPECT_VEQ(Vector a, Vector b) {
 
@@ -17,8 +19,6 @@ void EXPECT_VEQ(CollisionRect a, CollisionRect b) {
 	EXPECT_NEAR(a.x, b.x, epsilon);
 	EXPECT_NEAR(a.y, b.y, epsilon);
 }
-
-
 
 TEST(Level, CanGetEntityByName) {
 
@@ -68,4 +68,32 @@ TEST(Level, ResolveCollision) {
 
 	EXPECT_VEQ(lvl.getByName("A0-0")->rect, CollisionRect{ 0, 0, 1, 1 });
 	EXPECT_VEQ(lvl.getByName("B0-1")->rect, CollisionRect{ 0, 1, 1, 1 });
+}
+
+TEST(Level, DontGoThroughCorner) {
+
+	Entity e(CollisionRect(1, 1, 1, 1), &sprite);
+	e.vel = { 0,0 };
+
+	Level lvl(
+		"..|..."
+		"..|..."
+		"--+..."
+		"......", 6, 4, &spriteFactory);
+
+	lvl.addEntity(&e, "player");
+
+	double speed = 15.0;
+	e.vel.x = speed;
+
+	e.vel.y = speed;
+
+	for(int i=0;i<10;i++)
+		lvl.update(50ms);
+
+	EXPECT_NEAR(e.rect.x, 1, epsilon);
+	EXPECT_NEAR(e.rect.y, 1, epsilon);
+
+
+
 }

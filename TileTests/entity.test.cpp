@@ -2,12 +2,13 @@
 
 #include "../Entity.h"
 #include "mocks.h"
+
 const double epsilon = 0.0001;
 
 
-MockSprite sprite;
 
 TEST(Level, EntityMoves) {
+	MockSprite sprite;
 
 	Entity e(CollisionRect(10, 10, 1, 1), &sprite);
 	
