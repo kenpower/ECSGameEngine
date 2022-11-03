@@ -26,8 +26,14 @@ void Level::update(chrono::milliseconds delta) {
 
 	std::vector<Entity*> checked;
 	for (auto& kv : entities) {
-		for (auto& e : checked)
-			resolveCollision(kv.second->rect, e->rect );
+		for (auto& e : checked) {
+			if (e->vel >= kv.second->vel)
+				resolveCollision(e->rect, kv.second->rect);
+			else 
+				resolveCollision(kv.second->rect, e->rect);
+
+
+		}
 		checked.push_back(kv.second);
 	}
 	

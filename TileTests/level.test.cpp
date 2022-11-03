@@ -72,7 +72,7 @@ TEST(Level, ResolveCollision) {
 
 TEST(Level, DontGoThroughCorner) {
 
-	Entity e(CollisionRect(1, 1, 1, 1), &sprite);
+	Entity e(CollisionRect(1, 0.9, 1, 1), &sprite);
 	e.vel = { 0,0 };
 
 	Level lvl(
@@ -83,13 +83,14 @@ TEST(Level, DontGoThroughCorner) {
 
 	lvl.addEntity(&e, "player");
 
+
 	double speed = 15.0;
 	e.vel.x = speed;
 
 	e.vel.y = speed;
 
 	for(int i=0;i<10;i++)
-		lvl.update(50ms);
+		lvl.update(10ms);
 
 	EXPECT_NEAR(e.rect.x, 1, epsilon);
 	EXPECT_NEAR(e.rect.y, 1, epsilon);

@@ -33,7 +33,6 @@ void resolveCollision(CollisionRect& a, CollisionRect& b) {
 		// resolve the collision
 		if (overlapX < overlapY) {
 			a.x += (a.x > b.x) ? overlapX : -overlapX;
-
 		}
 		else {
 			a.y += (a.y > b.y) ? overlapY : -overlapY;

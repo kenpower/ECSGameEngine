@@ -4,7 +4,14 @@
 
 struct Vector {
 	double x, y;
+
+	double lensq() const { return x * x + y * y; }
+
+	bool operator>=(const Vector& b) const{
+		return lensq() >= b.lensq() ? true : false;
+	}
 };
+
 
 
 class Sprite {
@@ -18,6 +25,7 @@ public:
 	CollisionRect rect;
 	Vector vel{0,0};
 	Sprite* sprite;
+
 	
 	Entity(const CollisionRect r, Sprite* s) :rect(r), sprite(s) {}
 

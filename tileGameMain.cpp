@@ -84,7 +84,7 @@ int main()
 	//float x = 0;
 	while (!bGameOver) // Main Loop
 	{
-		chrono::milliseconds frameLength = 50ms;
+		chrono::milliseconds frameLength = 10ms;
 		
 		// Timing =======================
 		this_thread::sleep_for(frameLength); // Small Step = 1 Game Tick
