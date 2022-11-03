@@ -17,7 +17,7 @@ class Level
 	std::map<std::string, Entity*> entities;
 		
 public:
-	Level(const char*, int, int, SpriteFactory&);
+	Level(const char*, int, int, SpriteFactory*);
 	Entity* getByName(string name) ;
 	void addEntity(Entity*, string);
 	void update(chrono::milliseconds);

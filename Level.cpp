@@ -1,13 +1,13 @@
 #include "Level.h"
 #include<vector>
 
-Level::Level(const char* map, int width, int height, SpriteFactory& spriteFactory) {
+Level::Level(const char* map, int width, int height, SpriteFactory* spriteFactory) {
 	for (int x = 0; x < width; x++) 
 		for (int y = 0; y < height; y++) {
 			char tag = map[x + y * width];
 			if (tag != '.')
 				entities.emplace(string(1, tag)+to_string(x)+string("-")+ to_string(y),
-					new Entity(CollisionRect(x, y, 1, 1), spriteFactory.create(tag)));
+					new Entity(CollisionRect(x, y, 1, 1), spriteFactory->create(tag)));
 		}
 		
 }
