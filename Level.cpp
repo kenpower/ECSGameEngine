@@ -7,7 +7,8 @@ Level::Level(const char* map, int width, int height, SpriteFactory& spriteFactor
 		for (int y = 0; y < height; y++) {
 			char tag = map[x + y * width];
 			if (tag != '.')
-				entities.emplace(string(1, tag), new Entity(CollisionRect(x, y, 1, 1), spriteFactory.create(tag)));
+				entities.emplace(string(1, tag)+to_string(x)+string("-")+ to_string(y),
+					new Entity(CollisionRect(x, y, 1, 1), spriteFactory.create(tag)));
 		}
 		
 }
