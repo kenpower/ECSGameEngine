@@ -18,14 +18,14 @@ class Entity
 {
 public:
 	CollisionRect rect;
-	Vector vel;
-	Vector position;
-	Sprite& sprite;
+	Vector vel{0,0};
+	Sprite* sprite;
 	
-	Entity(const CollisionRect r, Sprite& s) :rect(r), sprite(s) {}
+	Entity(const CollisionRect r, Sprite* s) :rect(r), sprite(s) {}
 
 	void update(Seconds);
 	//virtual void update() = 0;
 	void draw();
+
 };
 

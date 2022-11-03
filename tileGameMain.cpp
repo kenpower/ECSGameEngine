@@ -21,6 +21,15 @@ public:
 	}
 };
 
+class ConsoleSpriteFactory : public SpriteFactory {
+	ConsoleRenderWindow& crw;
+public:
+	ConsoleSpriteFactory(ConsoleRenderWindow& crw) :crw(crw) {}
+	Sprite* create(char tag) {
+		return new ConsoleSprite(crw, tag);
+	}
+};
+
 int main()
 {
 	int nScreenWidth = 120;			// Console Screen Size X (columns)
@@ -33,19 +42,21 @@ int main()
 	ConsoleRenderWindow crw;
 	crw.ConstructConsole(50, 50, 10, 10);
 
-	ConsoleSprite s(crw, 'Z');
+	ConsoleSprite es(crw, 'E');
+	ConsoleSprite fs(crw, 'F');
+	ConsoleSprite gs(crw, 'G');
 
-	Entity e(CollisionRect(10,10,1,1),s);
-	e.position = { 10,10 };
-	e.vel = { 0.1,0.1 };
+	Entity e(CollisionRect(10,10,1,1),&es);
+	e.vel = { 0,0 };
 
-	
-	// Create Screen Buffer
-	wchar_t* screen = new wchar_t[nScreenWidth * nScreenHeight];
-	//for (int i = 0; i < nScreenWidth * nScreenHeight; i++) screen[i] = L' ';
-	//HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	//SetConsoleActiveScreenBuffer(hConsole);
-	//DWORD dwBytesWritten = 0;
+	Entity f(CollisionRect(11, 11, 1, 1), &fs);
+	f.vel = { 0.1,0.1 };
+
+	ConsoleSpriteFactory csf(crw);
+
+	Level level("abcdefghijkl", 3, 4, csf);
+
+	level.addEntity(&e, "player");
 
 	bool bGameOver = false;
 	bool bKey[4];
@@ -62,15 +73,21 @@ int main()
 		for (int k = 0; k < 4; k++)								// R   L   D    up
 			bKey[k] = (0x8000 & GetAsyncKeyState((unsigned char)("\x27\x25\x28\x26"[k]))) != 0;
 
-		double speed = 0.5;
-		x += bKey[0] ? speed : 0;
-		x -= bKey[1] ? speed : 0;
-		y += bKey[2] ? speed : 0;
-		y -= bKey[3] ? speed : 0;
+		double speed = 15.0;
+		e.vel.x = bKey[0] ? speed : bKey[1] ? -speed : 0;
 
-		crw.Draw((int)x, (int)y, 'X');
+		e.vel.y = bKey[2] ? speed : bKey[3] ? -speed : 0;
+
+
+		level.update(Seconds{ 0.05 });
+
+		//crw.Draw((int)x, (int)y, 'X');
+		//e.rect = CollisionRect{ x,y,1,1 };
+		//f.rect = CollisionRect{ x+1,y+1,1,1 };
+
 		crw.DrawString(8, 8, L"Hello");
-		e.draw();
+		//f.draw();
+		level.draw();
 
 		crw.Show();
 		crw.Clear();

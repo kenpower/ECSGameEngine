@@ -7,14 +7,20 @@
 
 using namespace std;
 
+class SpriteFactory {
+public:
+	virtual Sprite* create(char) = 0;
+};
+
 class Level
 {
-	std::map<std::string, Entity> entities;
+	std::map<std::string, Entity*> entities;
 		
 public:
-	Level(const char*, int, int);
-	Entity& getByName(string name) ;
+	Level(const char*, int, int, SpriteFactory&);
+	Entity* getByName(string name) ;
+	void addEntity(Entity*, string);
 	void update(Seconds);
-	void draw();
+	void draw();	
 };
 
