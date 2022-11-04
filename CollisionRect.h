@@ -1,6 +1,7 @@
 #pragma once
 
 #include<string>
+#include "vector.h"
 
 class CollisionRect
 {
@@ -17,4 +18,4 @@ public:
 
 bool isColliding(CollisionRect& a, CollisionRect& b, double epsilon = 0.001);
 
-void resolveCollision(CollisionRect& a, CollisionRect& b);
+bool resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment);

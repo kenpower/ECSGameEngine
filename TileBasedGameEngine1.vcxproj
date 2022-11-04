@@ -140,6 +140,7 @@
     <ClInclude Include="ConsoleRenderWindow.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="vector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

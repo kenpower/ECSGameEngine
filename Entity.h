@@ -1,18 +1,7 @@
 #pragma once
 #include <chrono>
+#include "vector.h"
 #include "CollisionRect.h"
-
-struct Vector {
-	double x, y;
-
-	double lensq() const { return x * x + y * y; }
-
-	bool operator>=(const Vector& b) const{
-		return lensq() >= b.lensq() ? true : false;
-	}
-};
-
-
 
 class Sprite {
 public:
@@ -32,6 +21,7 @@ public:
 	void update(std::chrono::milliseconds);
 	//virtual void update() = 0;
 	void draw();
+	virtual void collideWith(Entity*, Vector) {}
 
 };
 

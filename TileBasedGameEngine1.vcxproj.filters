@@ -44,6 +44,9 @@
     <ClInclude Include="Level.h">
       <Filter>TileEngine</Filter>
     </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>TileEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

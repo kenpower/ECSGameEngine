@@ -30,6 +30,18 @@ public:
 	}
 };
 
+class Ball :public Entity {
+public:
+	using Entity::Entity;
+
+	void collideWith(Entity* other, Vector adjustment) {
+		if (vel.x > 0 && adjustment.x < 0) vel.x *= -1;
+		if (vel.x < 0 && adjustment.x > 0) vel.x *= -1;
+		if (vel.y > 0 && adjustment.y < 0) vel.y *= -1;
+		if (vel.y < 0 && adjustment.y > 0) vel.y *= -1;
+	}
+};
+
 int main()
 {
 	int nScreenWidth = 120;			// Console Screen Size X (columns)
@@ -44,11 +56,13 @@ int main()
 
 	ConsoleSprite es(crw, 'E');
 	ConsoleSprite fs(crw, 'F');
-	ConsoleSprite gs(crw, 'G');
+	ConsoleSprite ballSprite(crw, '0');
 
 	Entity e(CollisionRect(10,10,1,1),&es);
 	e.vel = { 0,0 };
 
+	Ball ball(CollisionRect(10, 18, 1, 1), &ballSprite);
+	ball.vel = { 10,-10 };
 
 	ConsoleSpriteFactory csf(crw);
 
@@ -76,6 +90,7 @@ int main()
 		, 20, 20, &csf);
 
 	level.addEntity(&e, "player");
+	level.addEntity(&ball, "ball");
 
 	bool bGameOver = false;
 	bool bKey[4];

@@ -10,8 +10,8 @@ bool isColliding(CollisionRect& a, CollisionRect& b, double epsilon) {
 	return true;
 }
 
-void resolveCollision(CollisionRect& a, CollisionRect& b) {
-	{
+bool resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment) {
+	
 		// calculate the distance vector
 		double dx = (a.x + a.w / 2) - (b.x + b.w / 2);
 		double dy = (a.y + a.h / 2) - (b.y + b.h / 2);
@@ -28,14 +28,19 @@ void resolveCollision(CollisionRect& a, CollisionRect& b) {
 		double overlapX = minDistX - dx;
 		double overlapY = minDistY - dy;
 
-		if (overlapX <= 0 || overlapY <= 0) return;
+		if (overlapX <= 0 || overlapY <= 0) return false;
 
 		// resolve the collision
 		if (overlapX < overlapY) {
-			a.x += (a.x > b.x) ? overlapX : -overlapX;
+			adjustment.x += (a.x > b.x) ? overlapX : -overlapX;
+			a.x += adjustment.x;
 		}
 		else {
-			a.y += (a.y > b.y) ? overlapY : -overlapY;
+			adjustment.y += (a.y > b.y) ? overlapY : -overlapY;
+			a.y += adjustment.y;
 		}
-	}
+
+		return true;
+
+	
 }
