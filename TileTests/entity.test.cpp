@@ -1,10 +1,6 @@
 #include "pch.h"
 
-#include "../Entity.h"
-#include "mocks.h"
-
-const double epsilon = 0.0001;
-
+#include "testhelpers.h"
 
 
 TEST(Level, EntityMoves) {

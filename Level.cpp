@@ -41,6 +41,9 @@ void Level::update(chrono::milliseconds delta) {
 		}
 		checked.push_back(kv.second);
 	}
+
+	for (auto& kv : entities)
+		kv.second->postCollisionUpdate();
 	
 }
 

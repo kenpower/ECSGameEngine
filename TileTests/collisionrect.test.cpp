@@ -26,16 +26,17 @@ TEST(CollisionRect, CollisionResolution) {
 	CollisionRect e(10, 0, 10, 10);
 	CollisionRect f(5, 10, 10, 10);
 
-	resolveCollision(a, b);
+	Vector adjustment{ 0,0 };
+	resolveCollision(a, b, adjustment);
 	EXPECT_FALSE(isColliding(a, b)) << a.toString() << " " << b.toString();
 
-	resolveCollision(e, b);
+	resolveCollision(e, b, adjustment);
 	EXPECT_FALSE(isColliding(a, b)) << a.toString() << " " << b.toString();
 
-	resolveCollision(f, b);
+	resolveCollision(f, b, adjustment);
 	EXPECT_FALSE(isColliding(a, b)) << a.toString() << " " << b.toString();
 
-	resolveCollision(b1, b);
+	resolveCollision(b1, b, adjustment);
 	EXPECT_FALSE(isColliding(a, b)) << a.toString() << " " << b.toString();
 
 }
@@ -44,8 +45,8 @@ TEST(CollisionRect, CollisionResolutionFractional) {
 	CollisionRect a(0, 0, 1, 1);
 	CollisionRect b(0, 0.75, 1, 1);
 
-
-	resolveCollision(b, a);
+	Vector adjustment{ 0,0 };
+	resolveCollision(b, a, adjustment);
 	EXPECT_FALSE(isColliding(a, b)) << a.toString() << " " << b.toString();
 
 	EXPECT_EQ(1, b.y) << a.toString() << " " << b.toString();

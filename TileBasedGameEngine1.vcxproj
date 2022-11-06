@@ -136,6 +136,7 @@
     <ClCompile Include="tileGameMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="CollisionRect.h" />
     <ClInclude Include="ConsoleRenderWindow.h" />
     <ClInclude Include="Entity.h" />

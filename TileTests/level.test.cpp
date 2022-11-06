@@ -1,31 +1,17 @@
 #include "pch.h"
 
-#include "../Level.h"
+#include "testhelpers.h"
 
-#include "mocks.h"
+MockSpriteFactory mockSpriteFactory;
+MockSprite mockSprite;
 
-const double epsilon = 0.0001;
-MockSpriteFactory spriteFactory;
-MockSprite sprite;
-
-void EXPECT_VEQ(Vector a, Vector b) {
-
-	EXPECT_NEAR(a.x, b.x, epsilon);
-	EXPECT_NEAR(a.y, b.y, epsilon);
-}
-
-void EXPECT_VEQ(CollisionRect a, CollisionRect b) {
-
-	EXPECT_NEAR(a.x, b.x, epsilon);
-	EXPECT_NEAR(a.y, b.y, epsilon);
-}
 
 TEST(Level, CanGetEntityByName) {
 
 	Level lvl(
 		"A....."
 		"B....."
-		".....C" , 6,3, &spriteFactory);
+		".....C" , 6,3, &mockSpriteFactory);
 
 	EXPECT_NEAR(0, lvl.getByName("A0-0")->rect.x, epsilon);
 	EXPECT_NEAR(1, lvl.getByName("B0-1")->rect.y, epsilon);
@@ -38,7 +24,7 @@ TEST(Level, CanUpdateAll) {
 	Level lvl(
 		"A....."
 		"B....."
-		".....C", 6, 3, &spriteFactory);
+		".....C", 6, 3, &mockSpriteFactory);
 
 	lvl.getByName("A0-0")->vel = Vector{ 0.2, 0.0 };
 	lvl.getByName("B0-1")->vel = Vector{ 0.0, 0.3 };
@@ -59,7 +45,7 @@ TEST(Level, ResolveCollision) {
 	Level lvl(
 		"A....."
 		"B....."
-		"......", 6, 3, &spriteFactory);
+		"......", 6, 3, &mockSpriteFactory);
 
 	lvl.getByName("A0-0")->vel = Vector{ 0.0, 0.0 };
 	lvl.getByName("B0-1")->vel = Vector{ 0.0, -0.5 };
@@ -72,14 +58,14 @@ TEST(Level, ResolveCollision) {
 
 TEST(Level, DontGoThroughCorner) {
 
-	Entity e(CollisionRect(1, 0.9, 1, 1), &sprite);
+	Entity e(CollisionRect(1, 0.9, 1, 1), &mockSprite);
 	e.vel = { 0,0 };
 
 	Level lvl(
 		"..|..."
 		"..|..."
 		"--+..."
-		"......", 6, 4, &spriteFactory);
+		"......", 6, 4, &mockSpriteFactory);
 
 	lvl.addEntity(&e, "player");
 

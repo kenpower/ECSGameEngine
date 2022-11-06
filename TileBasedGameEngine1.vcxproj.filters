@@ -47,6 +47,9 @@
     <ClInclude Include="vector.h">
       <Filter>TileEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

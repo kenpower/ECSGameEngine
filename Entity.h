@@ -18,10 +18,10 @@ public:
 	
 	Entity(const CollisionRect r, Sprite* s) :rect(r), sprite(s) {}
 
-	void update(std::chrono::milliseconds);
-	//virtual void update() = 0;
-	void draw();
+	virtual void update(std::chrono::milliseconds);
+	virtual void postCollisionUpdate() {};
 	virtual void collideWith(Entity*, Vector) {}
 
+	void draw();
 };
 
