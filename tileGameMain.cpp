@@ -14,11 +14,16 @@ using namespace std;
 
 class ConsoleSprite:public Sprite {
 	ConsoleRenderWindow& crw;
-	char image;
+	const char* image;
+	int width;
+	int height;
 public:
-	ConsoleSprite(ConsoleRenderWindow& crw, char image):crw(crw), image(image) {}
+	ConsoleSprite(ConsoleRenderWindow& crw, char image) :crw(crw), image{ new char[1]{image} }, width{ 1 }, height{ 1 } {}
+	ConsoleSprite(ConsoleRenderWindow& crw, const char* image, int width, int height) :crw(crw), image(image), width{ width }, height{ height } {}
 	void draw(int x, int y) {
-		crw.Draw(x, y, image);
+		for (int i = 0; i < width; i++)
+			for (int j = 0; j < height; j++)
+				crw.Draw(x + i, y + j, image[i + j * width]);
 	}
 };
 
@@ -45,11 +50,11 @@ int main()
 	ConsoleRenderWindow crw;
 	crw.ConstructConsole(50, 50, 10, 10);
 
-	ConsoleSprite es(crw, 'E');
+	ConsoleSprite es(crw, "<=>", 3,1);
 	ConsoleSprite fs(crw, 'F');
-	ConsoleSprite ballSprite(crw, '0');
+	ConsoleSprite ballSprite(crw, "O",1,1);
 
-	Entity e(CollisionRect(10,10,1,1),&es);
+	Entity e(CollisionRect(10,16,3,1),&es);
 	e.vel = { 0,0 };
 
 	Ball ball(CollisionRect(10, 18, 1, 1), &ballSprite);
@@ -126,7 +131,7 @@ int main()
 		level.draw();
 
 		crw.Show();
-		//crw.Clear();
+		crw.Clear();
 	}
 
 	cout << "Game Over!! Score:"  << endl;
