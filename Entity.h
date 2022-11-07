@@ -14,8 +14,8 @@ public:
 	CollisionRect rect;
 	Vector vel{0,0};
 	Sprite* sprite;
+	bool active{ true };
 
-	
 	Entity(const CollisionRect r, Sprite* s) :rect(r), sprite(s) {}
 
 	virtual void update(std::chrono::milliseconds);

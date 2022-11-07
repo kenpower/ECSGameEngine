@@ -18,6 +18,7 @@ class Level
 		
 public:
 	Level(const char*, int, int, SpriteFactory*);
+	Level() {};
 	Entity* getByName(string name) ;
 	void addEntity(Entity*, string);
 	void update(chrono::milliseconds);

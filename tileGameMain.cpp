@@ -36,7 +36,17 @@ public:
 	}
 };
 
+class Block :public Entity {
 
+public:
+	using Entity::Entity; //use parent constructor
+
+	void collideWith(Entity* other, Vector adjustment) {
+		active = false;
+	}
+
+
+};
 
 int main()
 {
@@ -47,56 +57,98 @@ int main()
 	int nFieldHeight = 18;
 	unsigned char* pField = nullptr;
 
+
+
+	int worldHeight = 60;
+	int worldWidth = 30;
+
 	ConsoleRenderWindow crw;
-	crw.ConstructConsole(50, 50, 10, 10);
+	crw.ConstructConsole(worldWidth, worldHeight, 10, 10);
 
-	ConsoleSprite es(crw, "<=>", 3,1);
+	ConsoleSprite es(crw, "<===>", 5, 1);
 	ConsoleSprite fs(crw, 'F');
-	ConsoleSprite ballSprite(crw, "O",1,1);
+	ConsoleSprite ballSprite(crw, "O", 1, 1);
 
-	Entity e(CollisionRect(10,16,3,1),&es);
+	Entity e(CollisionRect((worldWidth - 5) / 2, worldHeight * 0.9, 5, 1), &es);
 	e.vel = { 0,0 };
 
-	Ball ball(CollisionRect(10, 18, 1, 1), &ballSprite);
-	ball.vel = { 10,-10 };
+	Ball ball(CollisionRect(10, 22, 1, 1), &ballSprite);
+	ball.vel = { 75,-75 };
 
 	ConsoleSpriteFactory csf(crw);
 
-	Level level(
-		"===================="
-		"=..................="
-		"=..................="
-		"=.....=.=..........="
-		"=.....=.=..........="
-		"=.....=.=..........="
-		"=======.=====......="
-		"=..................="
-		"==============.....="
-		"=..........=.......="
-		"=........===.......="
-		"=..................="
-		"=........===.......="
-		"=..........=.......="
-		"=.....======.......="
-		"=..................="
-		"=..................="
-		"=..................="
-		"=..................="
-		"=..................="
-		"=..................="
-		"=......=...........="
-		"=......=...........="
-		"=......=...........="
-		"=......=...........="
-		"=..................="
-		"=..................="
-		"=..................."
-		"=..................="
-		"===================="
-		, 20, 30, &csf);
+	//Level level(
+	//	"===================="
+	//	"=..................="
+	//	"=..................="
+	//	"=.....=.=..........="
+	//	"=.....=.=..........="
+	//	"=.....=.=..........="
+	//	"=======.=====......="
+	//	"=..................="
+	//	"==============.....="
+	//	"=..........=.......="
+	//	"=........===.......="
+	//	"=..................="
+	//	"=........===.......="
+	//	"=..........=.......="
+	//	"=.....======.......="
+	//	"=..................="
+	//	"=..................="
+	//	"=..................="
+	//	"=..................="
+	//	"=..................="
+	//	"=..................="
+	//	"=......=...........="
+	//	"=......=...........="
+	//	"=......=...........="
+	//	"=......=...........="
+	//	"=..................="
+	//	"=..................="
+	//	"=..................."
+	//	"=..................="
+	//	"===================="
+	//	, worldWidth, worldHeight, &csf);
 
+	Level level;
 	level.addEntity(&e, "player");
 	level.addEntity(&ball, "ball");
+
+	Entity* wall;
+	ConsoleSprite hWalls(crw, '=');
+	int wallCount = 0;
+	for (int x = 0; x < worldWidth; x++) {
+		wall = new Entity(CollisionRect(x, 0, 1, 1), &hWalls);
+		level.addEntity(wall, "wall" + to_string(wallCount++));
+		wall = new Entity(CollisionRect(x, 25 /*worldHeight - 1*/, 1, 1), &hWalls);
+		level.addEntity(wall, "wall" + to_string(wallCount++));
+
+	}
+	ConsoleSprite vWalls(crw, '|');
+	for (int y = 1; y <  worldHeight - 1; y++) {
+		wall = new Entity(CollisionRect(0, y, 1, 1), &vWalls);
+		level.addEntity(wall, "wall" + to_string(wallCount++));
+		wall = new Entity(CollisionRect(worldWidth - 1, y, 1, 1), &vWalls);
+		level.addEntity(wall, "wall" + to_string(wallCount++));
+
+	}
+
+	ConsoleSprite block1(crw, "XXX", 3, 1);
+	ConsoleSprite block2(crw, "###", 3, 1);
+	Block* block;
+	int firstBlock = 0;
+	for (int x = 3; x < worldWidth - 4; x += 3) {
+		int blockColor = firstBlock % 2;
+		for (int y = 5; y < 20; y += 1) {
+			block = blockColor % 2
+				? new Block(CollisionRect(x, y, 3, 1), &block1)
+				: new Block(CollisionRect(x, y, 3, 1), &block2);
+			level.addEntity(block, "block" + to_string(x)+"-"+to_string(y));
+			blockColor++;
+		}
+		firstBlock++;
+	}
+
 
 	bool bGameOver = false;
 	bool bKey[4];
@@ -126,7 +178,7 @@ int main()
 		//e.rect = CollisionRect{ x,y,1,1 };
 		//f.rect = CollisionRect{ x+1,y+1,1,1 };
 
-		crw.DrawString(8, 8, L"Hello");
+		//crw.DrawString(8, 8, L"Hello");
 		//f.draw();
 		level.draw();
 

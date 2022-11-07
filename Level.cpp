@@ -26,18 +26,23 @@ void Level::update(chrono::milliseconds delta) {
 
 	std::vector<Entity*> checked;
 	for (auto& kv : entities) {
+		if (!kv.second->active) continue;
 		for (auto& e : checked) {
 			bool wasCollision = false;
 			Vector adj{ 0,0 };
-			if (e->vel >= kv.second->vel) {
+			//if (e->vel >= kv.second->vel) {
 				wasCollision = resolveCollision(e->rect, kv.second->rect, adj);
-				if(wasCollision) e->collideWith(kv.second, adj);
-				
-			}
-			else {
-				wasCollision = resolveCollision(kv.second->rect, e->rect, adj);
-				if (wasCollision) kv.second->collideWith(e, adj);
-			}
+				if (wasCollision) {
+					e->collideWith(kv.second, adj);
+					kv.second->collideWith(e, adj);
+
+				}
+			//}
+			//else {
+			//	wasCollision = resolveCollision(kv.second->rect, e->rect, adj);
+			//	if (wasCollision) 
+			//		kv.second->collideWith(e, adj);
+			//}
 		}
 		checked.push_back(kv.second);
 	}
@@ -49,5 +54,6 @@ void Level::update(chrono::milliseconds delta) {
 
 void Level::draw() {
 	for (auto& kv : entities)
-		kv.second->draw();
+		if(kv.second->active)
+			kv.second->draw();
 }
