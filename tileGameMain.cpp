@@ -60,8 +60,6 @@ int main() {
 	int nFieldHeight = 18;
 	unsigned char* pField = nullptr;
 
-
-
 	int worldHeight = 60;
 	int worldWidth = 30;
 
@@ -82,7 +80,7 @@ void newGame(ConsoleRenderWindow& crw) {
 	int worldWidth = 30;
 	int worldHeight = 60;
 
-	UnitCollisionBoxComponent unitBox;
+	CollisionBoxComponent unitBox;
 	std::vector<PureEntity*> entities;
 
 	
@@ -96,32 +94,29 @@ void newGame(ConsoleRenderWindow& crw) {
 		CharSpriteComponent cc{ 'O' };
 		ball.addComponent(&cc);
 
+		BounceComponent bc;
+		ball.addComponent(&bc);
+
+
 		ball.addComponent(&unitBox);
 		entities.push_back(&ball);
-	
-
 	
 		PureEntity paddle("paddle");
 
 		PositionComponent ppc{ 10,25 };
 		paddle.addComponent(&ppc);
 
-		CharSpriteComponent pcc{ '=' };
+		StringSpriteComponent pcc{ "<====>" };
 		paddle.addComponent(&pcc);
+
+		CollisionBoxComponent paddleCollision(6, 1);
+		paddle.addComponent(&paddleCollision);
+
 
 		LeftRightControlComponent plr{ 15 };
 		paddle.addComponent(&plr);
 
 		entities.push_back(&paddle);
-	
-		//CharSpriteComponent pWall('+');
-		//PositionComponent* pos;
-		//PureEntity* e;
-		//e = new PureEntity("wall-test");
-		//pos = new PositionComponent(10.5, 10.5);
-		//e->addComponent(pos);
-		//e->addComponent(&pWall);
-		//entities.push_back(e);
 
 	CharSpriteComponent hWall('=');
 	for (int x = 0; x < worldWidth; x++) {
@@ -140,11 +135,6 @@ void newGame(ConsoleRenderWindow& crw) {
 		e->addComponent(&hWall);
 		e->addComponent(&unitBox);
 		entities.push_back(e);
-
-		//wall = new Entity(CollisionRect(x, 0, 1, 1), &hWalls);
-		//level.addEntity(wall, "wall" + to_string(wallCount++));
-		//wall = new Entity(CollisionRect(x, 25 /*worldHeight - 1*/, 1, 1), &hWalls);
-
 	}
 	
 	CharSpriteComponent vWall('|');
@@ -165,10 +155,6 @@ void newGame(ConsoleRenderWindow& crw) {
 		e->addComponent(&vWall);
 		e->addComponent(&unitBox);
 		entities.push_back(e);
-		//wall = new Entity(CollisionRect(0, y, 1, 1), &vWalls);
-		//level.addEntity(wall, "wall" + to_string(wallCount++));
-		//wall = new Entity(CollisionRect(worldWidth - 1, y, 1, 1), &vWalls);
-		//level.addEntity(wall, "wall" + to_string(wallCount++));
 
 	}
 
@@ -177,12 +163,22 @@ void newGame(ConsoleRenderWindow& crw) {
 
 	double x = 20, y = 20;
 	//float x = 0;
-	while (!bGameOver) // Main Loop
-	{
+	long count = 0;
+	auto begin = std::chrono::high_resolution_clock::now();
+	auto start = std::chrono::high_resolution_clock::now();
+
+
+	while (!bGameOver){ // Main Loop
+		auto end = std::chrono::high_resolution_clock::now();
+		auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+		
+		
+		begin = std::chrono::high_resolution_clock::now();
+
 		chrono::milliseconds frameLength = 10ms;
 
 		// Timing =======================
-		this_thread::sleep_for(frameLength); // Small Step = 1 Game Tick
+		//this_thread::sleep_for(frameLength); // Small Step = 1 Game Tick
 
 		// Input ========================
 		for (int k = 0; k < 4; k++)								// R   L   D    up
@@ -193,6 +189,7 @@ void newGame(ConsoleRenderWindow& crw) {
 
 		//e.vel.y = bKey[2] ? speed : bKey[3] ? -speed : 0;
 
+		MovedComponent* movedComponent = new MovedComponent;
 		double deltaSeconds = frameLength.count() / 1000.0;
 		for (auto e : entities){
 			auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
@@ -201,6 +198,7 @@ void newGame(ConsoleRenderWindow& crw) {
 			if (vel && pos) {
 				pos->x += vel->x * deltaSeconds;
 				pos->y += vel->y * deltaSeconds;
+				e->addComponent(movedComponent);
 			}
 		}
 
@@ -213,18 +211,19 @@ void newGame(ConsoleRenderWindow& crw) {
 					pos->x += lrc->speed * deltaSeconds;
 				if (bKey[1])
 					pos->x -= lrc->speed * deltaSeconds;
+				e->addComponent(movedComponent);
 			}
 		}
 
 		for (auto e : entities) {
-			auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
-			auto* box = dynamic_cast<UnitCollisionBoxComponent*>(e->getComponent(UnitCollisionBoxComponent::NAME));
+			auto* moved = dynamic_cast<MovedComponent*>(e->getComponent(MovedComponent::NAME));
+			auto* box = dynamic_cast<CollisionBoxComponent*>(e->getComponent(CollisionBoxComponent::NAME));
 			auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
-			if(vel && box && pos)
+			if(moved && box && pos)
 				for (auto  other: entities) {
 					if (other == e) continue;
 					auto* other_pos = dynamic_cast<PositionComponent*>(other->getComponent(PositionComponent::NAME));
-					auto* other_box = dynamic_cast<UnitCollisionBoxComponent*>(other->getComponent(UnitCollisionBoxComponent::NAME));
+					auto* other_box = dynamic_cast<CollisionBoxComponent*>(other->getComponent(CollisionBoxComponent::NAME));
 					if (other_pos && other_box) {
 						CollisionRect moving{ pos->x, pos->y, box->w, box->h };
 						CollisionRect other_r{ other_pos->x, other_pos->y, other_box->w, other_box->h };
@@ -233,13 +232,28 @@ void newGame(ConsoleRenderWindow& crw) {
 						if (collision) {
 							pos->x += adj.x;
 							pos->y += adj.y;
+							Vector bn;
+							if (fabs(adj.x) > fabs(adj.y))
+								bn = (adj.x > 0) ? Vector{ 1, 0 } : Vector{ -1, 0 };
+							else
+								bn = (adj.y > 0) ? Vector{ 0,1 } : Vector{ 0,-1 };
+							CollisionResolvedComponent* crc = new CollisionResolvedComponent(bn.x, bn.y);
+							e->addComponent(crc);
 						}
-						if (collision)
-							e->addComponent(new CollisionResolvedComponent(adj.x, adj.y));
 					}
 				}
 		}
 
+		for (auto e : entities) {
+			auto* bounce = dynamic_cast<BounceComponent*>(e->getComponent(BounceComponent::NAME));
+			auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
+			auto* collision = dynamic_cast<CollisionResolvedComponent*>(e->getComponent(CollisionResolvedComponent::NAME));
+
+			if (bounce && vel && collision) {
+				if (abs(lround(collision->x)) == 1) vel->x *= -1; //vertical   wall
+				if (abs(lround(collision->y)) == 1) vel->y *= -1; //horizontal wall
+			}
+		}
 
 
 		for (auto e : entities) {
@@ -251,8 +265,39 @@ void newGame(ConsoleRenderWindow& crw) {
 			}
 		}
 
+		for (auto e : entities) {
+			auto* sprite = dynamic_cast<StringSpriteComponent*>(e->getComponent(StringSpriteComponent::NAME));
+			auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
+
+			if (sprite && pos) {
+				for (int i = 0; sprite->c[i] != '\0';i++)
+					crw.Draw(round(pos->x+i), round(pos->y), sprite->c[i]);
+			}
+		}
+
+		//remove temp components
+		for (auto e : entities) {
+			e->removeComponent(CollisionResolvedComponent::NAME);
+			e->removeComponent(MovedComponent::NAME);
+		}
+
+		if (count++ % 1000 == 0) {
+			auto now = std::chrono::high_resolution_clock::now();
+			auto elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(now - start);
+			wchar_t w_s[100];
+			char s[100];
+			size_t len=0;
+			int framesPerSec = (float)count / elapsed_time.count();
+			
+			_itoa_s(framesPerSec,s, 10);
+			mbstowcs_s(&len, w_s, (size_t)30, s, (size_t)30);
+			crw.DrawString(1, 40, L"         frames per sec  ");
+
+			crw.DrawString(1, 40, w_s);
+		}
+
 		crw.Show();
-		crw.Clear();
+		//crw.Clear();
 	}
 
 }

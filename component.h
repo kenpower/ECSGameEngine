@@ -32,6 +32,14 @@ struct CharSpriteComponent : public Component {
 	char c;
 };
 
+struct StringSpriteComponent : public Component {
+	static constexpr const char* NAME = "stringsprite";
+	virtual std::string name() { return std::string(NAME); }
+
+	StringSpriteComponent(const char* c) :c(c) {}
+	const char* c;
+};
+
 struct LeftRightControlComponent : public Component {
 	static constexpr const char* NAME = "leftrightcontrol";
 	virtual std::string name() { return std::string(NAME); }
@@ -40,11 +48,17 @@ struct LeftRightControlComponent : public Component {
 	char speed;
 };
 
-struct UnitCollisionBoxComponent : public Component {
-	static constexpr const char* NAME = "unitcollisionbox";
+struct MovedComponent : public Component {
+	static constexpr const char* NAME = "moved";
+	virtual std::string name() { return std::string(NAME); }
+};
+
+struct CollisionBoxComponent : public Component {
+	static constexpr const char* NAME = "collisionbox";
 	virtual std::string name() { return std::string(NAME); }
 
-	const double w=1, h=1;
+	CollisionBoxComponent(double w = 1, double h =1) :w(w), h(h) {}
+	const double w, h;
 };
 
 struct CollisionResolvedComponent : public Component {
@@ -53,4 +67,11 @@ struct CollisionResolvedComponent : public Component {
 
 	CollisionResolvedComponent(double x, double y) :x(x), y(y) {}
 	double x, y;
+};
+
+struct BounceComponent : public Component {
+	static constexpr const char* NAME = "bouncecollision";
+	virtual std::string name() { return std::string(NAME); }
+
+	BounceComponent() {}
 };
