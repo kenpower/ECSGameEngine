@@ -30,6 +30,9 @@
     <ClCompile Include="Level.cpp">
       <Filter>TileEngine</Filter>
     </ClCompile>
+    <ClCompile Include="PureEntity.cpp">
+      <Filter>TileEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleRenderWindow.h">
@@ -49,6 +52,12 @@
     </ClInclude>
     <ClInclude Include="Ball.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PureEntity.h">
+      <Filter>TileEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="component.h">
+      <Filter>TileEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
