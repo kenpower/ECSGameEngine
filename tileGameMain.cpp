@@ -158,6 +158,28 @@ void newGame(ConsoleRenderWindow& crw) {
 
 	}
 
+	StringSpriteComponent block1("XXX");
+	StringSpriteComponent block2("###");
+	CollisionBoxComponent blockCollision(3, 1);
+	BlockComponent block;
+
+	int firstBlock = 0;
+	for (int x = 3; x < worldWidth - 4; x += 3) {
+		int blockColor = firstBlock % 2;
+		for (int y = 5; y < 20; y += 1) {
+			PureEntity* e = new PureEntity("block");
+			PositionComponent* pos = new PositionComponent(x,y);
+			e->addComponent(pos);
+			e->addComponent(blockColor % 2 ? &block1: &block2);
+			e->addComponent(&blockCollision);
+			e->addComponent(&block);
+
+			entities.push_back(e);
+			blockColor++;
+		}
+		firstBlock++;
+	}
+
 	bool bGameOver = false;
 	bool bKey[4];
 
@@ -215,6 +237,7 @@ void newGame(ConsoleRenderWindow& crw) {
 			}
 		}
 
+		CollidedComponent collided;
 		for (auto e : entities) {
 			auto* moved = dynamic_cast<MovedComponent*>(e->getComponent(MovedComponent::NAME));
 			auto* box = dynamic_cast<CollisionBoxComponent*>(e->getComponent(CollisionBoxComponent::NAME));
@@ -239,6 +262,7 @@ void newGame(ConsoleRenderWindow& crw) {
 								bn = (adj.y > 0) ? Vector{ 0,1 } : Vector{ 0,-1 };
 							CollisionResolvedComponent* crc = new CollisionResolvedComponent(bn.x, bn.y);
 							e->addComponent(crc);
+							other->addComponent(&collided);
 						}
 					}
 				}
@@ -275,10 +299,24 @@ void newGame(ConsoleRenderWindow& crw) {
 			}
 		}
 
+		for (auto e = entities.begin(); e != entities.end();)
+		{
+			
+			auto* collided = dynamic_cast<CollidedComponent*>((*e)->getComponent(CollidedComponent::NAME));
+			auto* block = dynamic_cast<BlockComponent*>((*e)->getComponent(BlockComponent::NAME));
+
+			if (collided && block)
+				e = entities.erase(e);
+			else
+				++e;
+		}
+
 		//remove temp components
 		for (auto e : entities) {
 			e->removeComponent(CollisionResolvedComponent::NAME);
 			e->removeComponent(MovedComponent::NAME);
+			e->removeComponent(CollidedComponent::NAME);
+
 		}
 
 		if (count++ % 1000 == 0) {
@@ -297,7 +335,7 @@ void newGame(ConsoleRenderWindow& crw) {
 		}
 
 		crw.Show();
-		//crw.Clear();
+		crw.Clear();
 	}
 
 }

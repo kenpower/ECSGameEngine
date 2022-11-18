@@ -75,3 +75,17 @@ struct BounceComponent : public Component {
 
 	BounceComponent() {}
 };
+
+struct BlockComponent : public Component {
+	static constexpr const char* NAME = "block";
+	virtual std::string name() { return std::string(NAME); }
+
+	BlockComponent() {}
+};
+
+struct CollidedComponent : public Component {
+	static constexpr const char* NAME = "collided";
+	virtual std::string name() { return std::string(NAME); }
+
+	CollidedComponent() {}
+};
