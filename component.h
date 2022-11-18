@@ -39,3 +39,18 @@ struct LeftRightControlComponent : public Component {
 	LeftRightControlComponent(double speed) :speed(speed) {}
 	char speed;
 };
+
+struct UnitCollisionBoxComponent : public Component {
+	static constexpr const char* NAME = "unitcollisionbox";
+	virtual std::string name() { return std::string(NAME); }
+
+	const double w=1, h=1;
+};
+
+struct CollisionResolvedComponent : public Component {
+	static constexpr const char* NAME = "resolvedcollision";
+	virtual std::string name() { return std::string(NAME); }
+
+	CollisionResolvedComponent(double x, double y) :x(x), y(y) {}
+	double x, y;
+};

@@ -33,6 +33,9 @@
     <ClCompile Include="PureEntity.cpp">
       <Filter>TileEngine</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionResolutionSystem.cpp">
+      <Filter>TileEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleRenderWindow.h">

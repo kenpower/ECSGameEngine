@@ -18,4 +18,4 @@ public:
 
 bool isColliding(CollisionRect& a, CollisionRect& b, double epsilon = 0.001);
 
-bool resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment);
+bool _resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment);

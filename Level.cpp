@@ -31,7 +31,7 @@ void Level::update(chrono::milliseconds delta) {
 			bool wasCollision = false;
 			Vector adj{ 0,0 };
 			//if (e->vel >= kv.second->vel) {
-				wasCollision = resolveCollision(e->rect, kv.second->rect, adj);
+				wasCollision = _resolveCollision(e->rect, kv.second->rect, adj);
 				if (wasCollision) {
 					e->collideWith(kv.second, adj);
 					kv.second->collideWith(e, adj);

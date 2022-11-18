@@ -1,17 +1,7 @@
-#include "CollisionRect.h"
+#include"CollisionRect.h"
 
-bool isColliding(CollisionRect& a, CollisionRect& b, double epsilon) {
+bool resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment) {
 
-	if (a.x + a.w < b.x + epsilon) return false;
-	if (a.x + epsilon > b.x + b.w) return false;
-	if (a.y + a.h < b.y + epsilon) return false;
-	if (a.y + epsilon > b.y + b.h) return false;
-
-	return true;
-}
-
-bool _resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment) {
-	
 	// calculate the distance vector
 	double dx = (a.x + a.w / 2) - (b.x + b.w / 2);
 	double dy = (a.y + a.h / 2) - (b.y + b.h / 2);
@@ -32,12 +22,12 @@ bool _resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment) {
 
 	// resolve the collision
 	if (overlapX < overlapY) {
-		adjustment.x += (a.x > b.x) ? overlapX : -overlapX;
-		a.x += adjustment.x;
+		adjustment.x = (a.x > b.x) ? overlapX : -overlapX;
+		//a.x += adjustment.x;
 	}
 	else {
-		adjustment.y += (a.y > b.y) ? overlapY : -overlapY;
-		a.y += adjustment.y;
+		adjustment.y = (a.y > b.y) ? overlapY : -overlapY;
+		//a.y += adjustment.y;
 	}
 
 	return true;

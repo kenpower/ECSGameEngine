@@ -12,6 +12,7 @@ using namespace std;
 #include "Ball.h"
 #include "PureEntity.h"
 
+bool resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment);
 
 class ConsoleSprite:public Sprite {
 	ConsoleRenderWindow& crw;
@@ -81,46 +82,63 @@ void newGame(ConsoleRenderWindow& crw) {
 	int worldWidth = 30;
 	int worldHeight = 60;
 
+	UnitCollisionBoxComponent unitBox;
 	std::vector<PureEntity*> entities;
 
-	PureEntity ball;
-	VelocityComponent vc{ 10,10 };
-	ball.addComponent(&vc);
-
-	PositionComponent pc{ 10,10 };
-	ball.addComponent(&pc);
-
-	CharSpriteComponent cc{ 'O' };
-	ball.addComponent(&cc);
-	entities.push_back(&ball);
-
-	PureEntity paddle;
-
-	PositionComponent ppc{ 10,25 };
-	paddle.addComponent(&ppc);
-
-	CharSpriteComponent pcc{ '=' };
-	paddle.addComponent(&cc);
-
-	LeftRightControlComponent plr{15 };
-	paddle.addComponent(&plr);
-
-	entities.push_back(&paddle); 
 	
+		PureEntity ball("ball");
+		VelocityComponent vc{ 10,10 };
+		ball.addComponent(&vc);
+
+		PositionComponent pc{ 10,10 };
+		ball.addComponent(&pc);
+
+		CharSpriteComponent cc{ 'O' };
+		ball.addComponent(&cc);
+
+		ball.addComponent(&unitBox);
+		entities.push_back(&ball);
+	
+
+	
+		PureEntity paddle("paddle");
+
+		PositionComponent ppc{ 10,25 };
+		paddle.addComponent(&ppc);
+
+		CharSpriteComponent pcc{ '=' };
+		paddle.addComponent(&pcc);
+
+		LeftRightControlComponent plr{ 15 };
+		paddle.addComponent(&plr);
+
+		entities.push_back(&paddle);
+	
+		//CharSpriteComponent pWall('+');
+		//PositionComponent* pos;
+		//PureEntity* e;
+		//e = new PureEntity("wall-test");
+		//pos = new PositionComponent(10.5, 10.5);
+		//e->addComponent(pos);
+		//e->addComponent(&pWall);
+		//entities.push_back(e);
+
 	CharSpriteComponent hWall('=');
 	for (int x = 0; x < worldWidth; x++) {
 		PureEntity* e;
 		PositionComponent* pos;
-		e = new PureEntity;
+		e = new PureEntity("wall-top");
 		pos = new PositionComponent(x, 0);
 		e->addComponent(pos);
 		e->addComponent(&hWall);
+		e->addComponent(&unitBox);
 		entities.push_back(e);
 
-		e = new PureEntity;
+		e = new PureEntity("wall-bottom");
 		pos = new PositionComponent(x, 35);
 		e->addComponent(pos);
 		e->addComponent(&hWall);
+		e->addComponent(&unitBox);
 		entities.push_back(e);
 
 		//wall = new Entity(CollisionRect(x, 0, 1, 1), &hWalls);
@@ -134,16 +152,18 @@ void newGame(ConsoleRenderWindow& crw) {
 	for (int y = 1; y < worldHeight - 1; y++) {
 		PureEntity* e;
 		PositionComponent* pos;
-		e = new PureEntity;
+		e = new PureEntity("wall-left");
 		pos = new PositionComponent(0, y);
 		e->addComponent(pos);
 		e->addComponent(&vWall);
+		e->addComponent(&unitBox);
 		entities.push_back(e);
 
-		e = new PureEntity;
+		e = new PureEntity("wall-right");
 		pos = new PositionComponent(worldWidth - 1, y);
 		e->addComponent(pos);
 		e->addComponent(&vWall);
+		e->addComponent(&unitBox);
 		entities.push_back(e);
 		//wall = new Entity(CollisionRect(0, y, 1, 1), &vWalls);
 		//level.addEntity(wall, "wall" + to_string(wallCount++));
@@ -196,7 +216,31 @@ void newGame(ConsoleRenderWindow& crw) {
 			}
 		}
 
-		//level.update(frameLength);
+		for (auto e : entities) {
+			auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
+			auto* box = dynamic_cast<UnitCollisionBoxComponent*>(e->getComponent(UnitCollisionBoxComponent::NAME));
+			auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
+			if(vel && box && pos)
+				for (auto  other: entities) {
+					if (other == e) continue;
+					auto* other_pos = dynamic_cast<PositionComponent*>(other->getComponent(PositionComponent::NAME));
+					auto* other_box = dynamic_cast<UnitCollisionBoxComponent*>(other->getComponent(UnitCollisionBoxComponent::NAME));
+					if (other_pos && other_box) {
+						CollisionRect moving{ pos->x, pos->y, box->w, box->h };
+						CollisionRect other_r{ other_pos->x, other_pos->y, other_box->w, other_box->h };
+						Vector adj{0,0};
+						bool collision = resolveCollision(moving, other_r, adj);
+						if (collision) {
+							pos->x += adj.x;
+							pos->y += adj.y;
+						}
+						if (collision)
+							e->addComponent(new CollisionResolvedComponent(adj.x, adj.y));
+					}
+				}
+		}
+
+
 
 		for (auto e : entities) {
 			auto* sprite = dynamic_cast<CharSpriteComponent*>(e->getComponent(CharSpriteComponent::NAME));
