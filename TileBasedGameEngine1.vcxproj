@@ -130,6 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Breakoutcpp.cpp" />
     <ClCompile Include="CollisionRect.cpp" />
     <ClCompile Include="CollisionResolutionSystem.cpp" />
     <ClCompile Include="Entity.cpp" />
