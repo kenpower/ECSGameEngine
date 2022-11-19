@@ -33,6 +33,9 @@
     <ClCompile Include="Breakoutcpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BreakoutSystems.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleRenderWindow.h">
@@ -48,6 +51,12 @@
       <Filter>Source Files\TileEngine</Filter>
     </ClInclude>
     <ClInclude Include="component.h">
+      <Filter>Source Files\TileEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakoutSystems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS.h">
       <Filter>Source Files\TileEngine</Filter>
     </ClInclude>
   </ItemGroup>

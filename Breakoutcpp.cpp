@@ -4,7 +4,8 @@
 
 #include "ConsoleRenderWindow.h"
 #include "CollisionRect.h"
-#include "Entity.h"
+#include "ECS.h"
+#include "BreakoutSystems.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -25,11 +26,10 @@ shared_ptr<Entity> wallEntity(const char* name, double x, double y, WallDirectio
 	static auto hWall = make_shared<CharSpriteComponent>('=');
 	static auto vWall = make_shared<CharSpriteComponent>('|');
 	static auto unitBox = make_shared<CollisionBoxComponent>(1, 1);
-
 	
 	auto e = make_shared<Entity>(name);
 	e->addComponent(make_shared<PositionComponent>(x, y));
-	e->addComponent(wd==WallDirection::horizontal ? hWall : vWall);
+	e->addComponent(wd == WallDirection::horizontal ? hWall : vWall);
 	e->addComponent(unitBox);
 	return e;
 }
@@ -38,7 +38,7 @@ void game(ConsoleRenderWindow& crw) {
 
 	int worldWidth = 30;
 	int worldHeight = 60;
-	std::vector<shared_ptr<Entity>> entities;
+	Entities entities;
 
 	auto unitBox = make_shared<CollisionBoxComponent>(1,1);
 
@@ -123,18 +123,7 @@ void game(ConsoleRenderWindow& crw) {
 		auto movedComponent = make_shared<MovedComponent>();
 		double deltaSeconds = frameLength.count() / 1000.0;
 
-		for (auto e : entities) {
-			//auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
-			//auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
-			auto vel = e->getComponent<VelocityComponent>();
-			auto pos = e->getComponent<PositionComponent>();
-
-			if (vel && pos) {
-				pos->x += vel->x * deltaSeconds;
-				pos->y += vel->y * deltaSeconds;
-				e->addComponent(movedComponent);
-			}
-		}
+		movementSystem(entities, deltaSeconds);
 
 		for (auto e : entities) {
 			auto lrc = dynamic_pointer_cast<LeftRightControlComponent>(e->getComponent(LeftRightControlComponent::NAME));

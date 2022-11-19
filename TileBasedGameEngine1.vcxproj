@@ -131,15 +131,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Breakoutcpp.cpp" />
+    <ClCompile Include="BreakoutSystems.cpp" />
     <ClCompile Include="CollisionRect.cpp" />
     <ClCompile Include="CollisionResolutionSystem.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="tileGameMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BreakoutSystems.h" />
     <ClInclude Include="CollisionRect.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="ConsoleRenderWindow.h" />
+    <ClInclude Include="ECS.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="vector.h" />
   </ItemGroup>
