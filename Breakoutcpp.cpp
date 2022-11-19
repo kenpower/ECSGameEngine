@@ -126,23 +126,15 @@ void game(ConsoleRenderWindow& crw) {
 
 		bounceSystem(entities);
 
+		removeDeadBlocks(entities);
+
 		renderCharOnConsoleSystem(entities, crw);
 
 		renderStringOnConsoleSystem(entities, crw);
 
-		for (auto e = entities.begin(); e != entities.end();)
-		{
+		
 
-			auto collided = dynamic_pointer_cast<CollidedComponent>((*e)->getComponent(CollidedComponent::NAME));
-			auto block = dynamic_pointer_cast<BlockComponent>((*e)->getComponent(BlockComponent::NAME));
-
-			if (collided && block)
-				e = entities.erase(e);
-			else
-				++e;
-		}
-
-		//remove temp components
+		//remove temporary components
 		for (auto e : entities) {
 			e->removeComponent(CollisionResolvedComponent::NAME);
 			e->removeComponent(MovedComponent::NAME);
