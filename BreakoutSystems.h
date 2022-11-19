@@ -6,7 +6,7 @@ void movementSystem(Entities&, double);
 void userControlSystem(Entities&, double);
 void collisionSystem(Entities&);
 void bounceSystem(Entities&);
-void removeDeadBlocks(Entities&);
+void deadBlocksSystem(Entities&);
 
 void renderCharOnConsoleSystem(Entities&, ConsoleRenderWindow&); 
 void renderStringOnConsoleSystem(Entities&, ConsoleRenderWindow&);

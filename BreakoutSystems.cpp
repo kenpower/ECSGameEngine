@@ -74,7 +74,7 @@ void renderStringOnConsoleSystem(Entities& entities, ConsoleRenderWindow& crw) {
 	}
 }
 
-void removeDeadBlocks(Entities& entities) {
+void deadBlocksSystem(Entities& entities) {
 	for (auto e = entities.begin(); e != entities.end();) 
 	//can't use Range-based loop as we need to remove some items
 	{

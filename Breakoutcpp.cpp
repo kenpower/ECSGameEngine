@@ -42,7 +42,7 @@ void game(ConsoleRenderWindow& crw) {
 
 	entities.push_back(wallEntity("", -1, -1, 1, worldHeight));
 	entities.push_back(wallEntity("", worldWidth, -1, 1, worldHeight));
-	entities.push_back(wallEntity("", -1, -1, worldWidth+1, 1));
+	entities.push_back(wallEntity("", -1, 0, worldWidth+1, 1)); //leave top line clear for dev info
 	entities.push_back(wallEntity("", -1, worldHeight,  worldWidth + 1, worldHeight));
 
 
@@ -73,40 +73,28 @@ void game(ConsoleRenderWindow& crw) {
 	double x = 20, y = 20;
 	//float x = 0;
 	long count = 0;
-	auto begin = std::chrono::high_resolution_clock::now();
-	auto start = std::chrono::high_resolution_clock::now();
+	//auto begin = std::chrono::high_resolution_clock::now();
+	auto startOfFrame = std::chrono::high_resolution_clock::now();
+	auto startFrameTimer = std::chrono::high_resolution_clock::now();
+
+	std::wstring wFPSstring;
 
 
-	while (!bGameOver) { // Main Loop
-		auto end = std::chrono::high_resolution_clock::now();
-		auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+	while (!bGameOver) {
+		auto now = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> secondsSinceLastFrame = now - startOfFrame;
+		startOfFrame = std::chrono::high_resolution_clock::now();
 
 
-		begin = std::chrono::high_resolution_clock::now();
+		movementSystem(entities, secondsSinceLastFrame.count());
 
-		chrono::milliseconds frameLength = 10ms;
-
-		// Timing =======================
-		//this_thread::sleep_for(frameLength); // Small Step = 1 Game Tick
-
-		// Input ========================
-
-
-		double speed = 15.0;
-
-
-		auto movedComponent = make_shared<MovedComponent>();
-		double deltaSeconds = frameLength.count() / 1000.0;
-
-		movementSystem(entities, deltaSeconds);
-
-		userControlSystem(entities, deltaSeconds);
+		userControlSystem(entities, secondsSinceLastFrame.count());
 
 		collisionSystem(entities);
 
 		bounceSystem(entities);
 
-		removeDeadBlocks(entities);
+		deadBlocksSystem(entities);
 
 		renderCharOnConsoleSystem(entities, crw);
 
@@ -119,24 +107,23 @@ void game(ConsoleRenderWindow& crw) {
 			e->removeComponent(CollisionResolvedComponent::NAME);
 			e->removeComponent(MovedComponent::NAME);
 			e->removeComponent(CollidedComponent::NAME);
-
 		}
 
-		if (count++ % 1000 == 0) {
+
+		if (count++ % 100 == 0) {
 			auto now = std::chrono::high_resolution_clock::now();
-			auto elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(now - start);
-			wchar_t w_s[100];
-			char s[100];
-			size_t len = 0;
-			int framesPerSec = (float)count / elapsed_time.count();
+			std::chrono::duration<double> elapsed_time = now - startFrameTimer;
 
-			_itoa_s(framesPerSec, s, 10);
-			mbstowcs_s(&len, w_s, (size_t)30, s, (size_t)30);
-			crw.DrawString(1, 40, L"         frames per sec  ");
+			startFrameTimer = std::chrono::high_resolution_clock::now();
+		
+			int framesPerSec = 100 / elapsed_time.count();
 
-			crw.DrawString(1, 40, w_s);
+			const std::string s = "FPS:" + to_string(framesPerSec);
+			wFPSstring = std::wstring(s.begin(), s.end());
+		
 		}
 
+		crw.DrawString(0, 0, wFPSstring.c_str());
 		crw.Show();
 		crw.Clear();
 	}
