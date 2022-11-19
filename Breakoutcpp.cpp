@@ -2,74 +2,70 @@
 #include <chrono>
 #include <memory>
 
-using namespace std;
-
 #include "ConsoleRenderWindow.h"
 #include "CollisionRect.h"
 #include "Entity.h"
 
+using namespace std;
 using namespace std::chrono;
 
 bool resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment);
 
-//unique_ptr<Entity> createBall() {
-//	unique_ptr<Entity> e(new Entity("ball"));
-//}
+enum WallDirection {
+	vertical,
+	horizontal
+};
+
+shared_ptr<Entity> wallEntity(const char* name, double x, double y, WallDirection wd) {
+	// TODO use a map
+	//auto wall = map<WallDirection, shared_ptr<CharSpriteComponent>>() = {
+	//	{WallDirection::horizontal, make_shared<CharSpriteComponent>('=')},
+	//	{WallDirection::vertical, make_shared<CharSpriteComponent>('|')},
+	//};
+	static auto hWall = make_shared<CharSpriteComponent>('=');
+	static auto vWall = make_shared<CharSpriteComponent>('|');
+	static auto unitBox = make_shared<CollisionBoxComponent>(1, 1);
+
+	
+	auto e = make_shared<Entity>(name);
+	e->addComponent(make_shared<PositionComponent>(x, y));
+	e->addComponent(wd==WallDirection::horizontal ? hWall : vWall);
+	e->addComponent(unitBox);
+	return e;
+}
 
 void game(ConsoleRenderWindow& crw) {
 
 	int worldWidth = 30;
 	int worldHeight = 60;
-	std::vector<Entity*> entities;
+	std::vector<shared_ptr<Entity>> entities;
 
 	auto unitBox = make_shared<CollisionBoxComponent>(1,1);
 
-	Entity ball("ball");
-	ball.addComponent(make_shared<VelocityComponent>(10, 10));
-	ball.addComponent(make_shared<PositionComponent>(1, 20));
-	ball.addComponent(make_shared<CharSpriteComponent>('O'));
-	ball.addComponent(make_shared<BounceComponent>());
-	ball.addComponent(unitBox);
-	entities.push_back(&ball);
+	auto ball = make_shared<Entity>("ball");
+	ball->addComponent(make_shared<VelocityComponent>(10, 10));
+	ball->addComponent(make_shared<PositionComponent>(1, 20));
+	ball->addComponent(make_shared<CharSpriteComponent>('O'));
+	ball->addComponent(make_shared<BounceComponent>());
+	ball->addComponent(unitBox);
+	entities.push_back(ball);
 
-	Entity paddle("paddle");
-	paddle.addComponent(make_shared<PositionComponent>(10, 35));
-	paddle.addComponent(make_shared<StringSpriteComponent>("<====>"));
-	paddle.addComponent(make_shared<CollisionBoxComponent>(6,1));
-	paddle.addComponent(make_shared<LeftRightControlComponent>(15));
-	entities.push_back(&paddle);
+	auto paddle = make_shared<Entity>("paddle");
+	paddle->addComponent(make_shared<PositionComponent>(10, 35));
+	paddle->addComponent(make_shared<StringSpriteComponent>("<====>"));
+	paddle->addComponent(make_shared<CollisionBoxComponent>(6,1));
+	paddle->addComponent(make_shared<LeftRightControlComponent>(15));
+	entities.push_back(paddle);
 
-	auto hWall = make_shared<CharSpriteComponent>('=');
-	auto vWall = make_shared<CharSpriteComponent>('|');
+
 	for (int x = 0; x < worldWidth; x++) {
-		Entity* e;
-		e = new Entity("wall-top");
-		e->addComponent(make_shared<PositionComponent>(x, 0));
-		e->addComponent(hWall);
-		e->addComponent(unitBox);
-		entities.push_back(e);
-
-		e = new Entity("wall-bottom");
-		e->addComponent(make_shared<PositionComponent>(x, 35));
-		e->addComponent(hWall);
-		e->addComponent(unitBox);
-		entities.push_back(e);
+		entities.push_back(wallEntity("wall-top", x, 0, WallDirection::horizontal));
+		entities.push_back(wallEntity("wall-bottom", x, 35, WallDirection::horizontal));
 	}
 
 	for (int y = 1; y < worldHeight - 1; y++) {
-		Entity* e;
-		e = new Entity("wall-left");
-		e->addComponent(make_shared<PositionComponent>(0, y));
-		e->addComponent(vWall);
-		e->addComponent(unitBox);
-		entities.push_back(e);
-
-		e = new Entity("wall-right");
-		e->addComponent(make_shared<PositionComponent>(worldWidth - 1, y));
-		e->addComponent(vWall);
-		e->addComponent(unitBox);
-		entities.push_back(e);
-
+		entities.push_back(wallEntity("wall-left", 0, y, WallDirection::vertical));
+		entities.push_back(wallEntity("wall-right", worldWidth - 1, y, WallDirection::vertical));
 	}
 
 	auto block1 = make_shared<StringSpriteComponent>("XXX");
@@ -81,7 +77,7 @@ void game(ConsoleRenderWindow& crw) {
 	for (int x = 3; x < worldWidth - 4; x += 3) {
 		int blockColor = firstBlock % 2;
 		for (int y = 5; y < 20; y += 1) {
-			Entity* e = new Entity("block");
+			auto e = make_shared<Entity>("block");
 			e->addComponent(make_shared<PositionComponent>(x, y));
 			e->addComponent(blockColor % 2 ? block1 : block2);
 			e->addComponent(blockCollision);
