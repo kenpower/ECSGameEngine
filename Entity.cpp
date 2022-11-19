@@ -19,6 +19,9 @@ void Entity::removeComponent(const std::string name) {
         else
             ++it;
     }
-
 }
+
+
+
+
 

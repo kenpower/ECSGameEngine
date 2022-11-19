@@ -2,9 +2,10 @@
 #include "../Entity.h"
 #include "../vector.h"
 #include "../CollisionRect.h"
+#include <chrono>
 
 
-using namespace std::chrono_literals;
+using namespace std::chrono;
 
 
 const double epsilon = 0.0001;

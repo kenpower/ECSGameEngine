@@ -1,7 +1,5 @@
 #include "pch.h"
 
-#include "../ball.h"
-
 #include "testhelpers.h"
 
 

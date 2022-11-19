@@ -36,6 +36,7 @@ int main() {
 
 }
 
+
 void game(ConsoleRenderWindow& crw) {
 
 	int worldWidth = 30;
@@ -49,7 +50,7 @@ void game(ConsoleRenderWindow& crw) {
 		VelocityComponent vc{ 10,10 };
 		ball.addComponent(&vc);
 
-		PositionComponent pc{ 10,10 };
+		PositionComponent pc{ 1,20 };
 		ball.addComponent(&pc);
 
 		CharSpriteComponent cc{ 'O' };
@@ -64,7 +65,7 @@ void game(ConsoleRenderWindow& crw) {
 	
 		Entity paddle("paddle");
 
-		PositionComponent ppc{ 10,25 };
+		PositionComponent ppc{ 10,35 };
 		paddle.addComponent(&ppc);
 
 		StringSpriteComponent pcc{ "<====>" };
@@ -174,9 +175,12 @@ void game(ConsoleRenderWindow& crw) {
 
 		MovedComponent* movedComponent = new MovedComponent;
 		double deltaSeconds = frameLength.count() / 1000.0;
+
 		for (auto e : entities){
-			auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
-			auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
+			//auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
+			//auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
+			auto vel = e->getComponent<VelocityComponent>();
+			auto pos = e->getComponent<PositionComponent>();
 
 			if (vel && pos) {
 				pos->x += vel->x * deltaSeconds;
@@ -186,8 +190,8 @@ void game(ConsoleRenderWindow& crw) {
 		}
 
 		for (auto e : entities) {
-			auto* lrc = dynamic_cast<LeftRightControlComponent*>(e->getComponent(LeftRightControlComponent::NAME));
-			auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
+			auto lrc = dynamic_cast<LeftRightControlComponent*>(e->getComponent(LeftRightControlComponent::NAME));
+			auto pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
 
 			if (lrc && pos) {
 				if(bKey[0])
@@ -200,9 +204,9 @@ void game(ConsoleRenderWindow& crw) {
 
 		CollidedComponent collided;
 		for (auto e : entities) {
-			auto* moved = dynamic_cast<MovedComponent*>(e->getComponent(MovedComponent::NAME));
-			auto* box = dynamic_cast<CollisionBoxComponent*>(e->getComponent(CollisionBoxComponent::NAME));
-			auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
+			auto moved = dynamic_cast<MovedComponent*>(e->getComponent(MovedComponent::NAME));
+			auto box = dynamic_cast<CollisionBoxComponent*>(e->getComponent(CollisionBoxComponent::NAME));
+			auto pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
 			if(moved && box && pos)
 				for (auto  other: entities) {
 					if (other == e) continue;
@@ -230,9 +234,9 @@ void game(ConsoleRenderWindow& crw) {
 		}
 
 		for (auto e : entities) {
-			auto* bounce = dynamic_cast<BounceComponent*>(e->getComponent(BounceComponent::NAME));
-			auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
-			auto* collision = dynamic_cast<CollisionResolvedComponent*>(e->getComponent(CollisionResolvedComponent::NAME));
+			auto bounce = dynamic_cast<BounceComponent*>(e->getComponent(BounceComponent::NAME));
+			auto vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
+			auto collision = dynamic_cast<CollisionResolvedComponent*>(e->getComponent(CollisionResolvedComponent::NAME));
 
 			if (bounce && vel && collision) {
 				if (abs(lround(collision->x)) == 1) vel->x *= -1; //vertical   wall
@@ -242,8 +246,8 @@ void game(ConsoleRenderWindow& crw) {
 
 
 		for (auto e : entities) {
-			auto* sprite = dynamic_cast<CharSpriteComponent*>(e->getComponent(CharSpriteComponent::NAME));
-			auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
+			auto sprite = dynamic_cast<CharSpriteComponent*>(e->getComponent(CharSpriteComponent::NAME));
+			auto pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
 
 			if (sprite && pos) {
 				crw.Draw(round(pos->x), round(pos->y), sprite->c);
@@ -251,8 +255,8 @@ void game(ConsoleRenderWindow& crw) {
 		}
 
 		for (auto e : entities) {
-			auto* sprite = dynamic_cast<StringSpriteComponent*>(e->getComponent(StringSpriteComponent::NAME));
-			auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
+			auto sprite = dynamic_cast<StringSpriteComponent*>(e->getComponent(StringSpriteComponent::NAME));
+			auto pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
 
 			if (sprite && pos) {
 				for (int i = 0; sprite->c[i] != '\0';i++)
@@ -263,8 +267,8 @@ void game(ConsoleRenderWindow& crw) {
 		for (auto e = entities.begin(); e != entities.end();)
 		{
 			
-			auto* collided = dynamic_cast<CollidedComponent*>((*e)->getComponent(CollidedComponent::NAME));
-			auto* block = dynamic_cast<BlockComponent*>((*e)->getComponent(BlockComponent::NAME));
+			auto collided = dynamic_cast<CollidedComponent*>((*e)->getComponent(CollidedComponent::NAME));
+			auto block = dynamic_cast<BlockComponent*>((*e)->getComponent(BlockComponent::NAME));
 
 			if (collided && block)
 				e = entities.erase(e);
