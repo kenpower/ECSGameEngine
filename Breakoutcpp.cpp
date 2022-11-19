@@ -10,25 +10,10 @@ using namespace std;
 using namespace std::chrono;
 
 
-enum WallDirection {
-	vertical,
-	horizontal
-};
-
-shared_ptr<Entity> wallEntity(const char* name, double x, double y, WallDirection wd) {
-	// TODO use a map
-	//auto wall = map<WallDirection, shared_ptr<CharSpriteComponent>>() = {
-	//	{WallDirection::horizontal, make_shared<CharSpriteComponent>('=')},
-	//	{WallDirection::vertical, make_shared<CharSpriteComponent>('|')},
-	//};
-	static auto hWall = make_shared<CharSpriteComponent>('=');
-	static auto vWall = make_shared<CharSpriteComponent>('|');
-	static auto unitBox = make_shared<CollisionBoxComponent>(1, 1);
-	
+shared_ptr<Entity> wallEntity(const char* name, double x, double y, double w, double h) {	
 	auto e = make_shared<Entity>(name);
 	e->addComponent(make_shared<PositionComponent>(x, y));
-	e->addComponent(wd == WallDirection::horizontal ? hWall : vWall);
-	e->addComponent(unitBox);
+	e->addComponent(make_shared<CollisionBoxComponent>(w, h));
 	return e;
 }
 
@@ -55,16 +40,11 @@ void game(ConsoleRenderWindow& crw) {
 	paddle->addComponent(make_shared<LeftRightControlComponent>(15));
 	entities.push_back(paddle);
 
+	entities.push_back(wallEntity("", -1, -1, 1, worldHeight));
+	entities.push_back(wallEntity("", worldWidth, -1, 1, worldHeight));
+	entities.push_back(wallEntity("", -1, -1, worldWidth+1, 1));
+	entities.push_back(wallEntity("", -1, worldHeight,  worldWidth + 1, worldHeight));
 
-	for (int x = 0; x < worldWidth; x++) {
-		entities.push_back(wallEntity("wall-top", x, 0, WallDirection::horizontal));
-		entities.push_back(wallEntity("wall-bottom", x, 35, WallDirection::horizontal));
-	}
-
-	for (int y = 1; y < worldHeight - 1; y++) {
-		entities.push_back(wallEntity("wall-left", 0, y, WallDirection::vertical));
-		entities.push_back(wallEntity("wall-right", worldWidth - 1, y, WallDirection::vertical));
-	}
 
 	auto block1 = make_shared<StringSpriteComponent>("XXX");
 	auto block2 = make_shared<StringSpriteComponent>("###");
