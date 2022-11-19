@@ -3,14 +3,12 @@
 #include <memory>
 
 #include "ConsoleRenderWindow.h"
-#include "CollisionRect.h"
 #include "ECS.h"
 #include "BreakoutSystems.h"
 
 using namespace std;
 using namespace std::chrono;
 
-bool resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment);
 
 enum WallDirection {
 	vertical,
@@ -124,36 +122,8 @@ void game(ConsoleRenderWindow& crw) {
 
 		userControlSystem(entities, deltaSeconds);
 
-		auto collided = make_shared<CollidedComponent>();
-		for (auto e : entities) {
-			auto moved = dynamic_pointer_cast<MovedComponent>(e->getComponent(MovedComponent::NAME));
-			auto box = dynamic_pointer_cast<CollisionBoxComponent>(e->getComponent(CollisionBoxComponent::NAME));
-			auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
-			if (moved && box && pos)
-				for (auto other : entities) {
-					if (other == e) continue;
-					auto other_pos = dynamic_pointer_cast<PositionComponent>(other->getComponent(PositionComponent::NAME));
-					auto other_box = dynamic_pointer_cast<CollisionBoxComponent>(other->getComponent(CollisionBoxComponent::NAME));
-					if (other_pos && other_box) {
-						CollisionRect moving{ pos->x, pos->y, box->w, box->h };
-						CollisionRect other_r{ other_pos->x, other_pos->y, other_box->w, other_box->h };
-						Vector adj{ 0,0 };
-						bool collision = resolveCollision(moving, other_r, adj);
-						if (collision) {
-							pos->x += adj.x;
-							pos->y += adj.y;
-							Vector bn;
-							if (fabs(adj.x) > fabs(adj.y))
-								bn = (adj.x > 0) ? Vector{ 1, 0 } : Vector{ -1, 0 };
-							else
-								bn = (adj.y > 0) ? Vector{ 0,1 } : Vector{ 0,-1 };
-							auto crc = make_shared<CollisionResolvedComponent>(bn.x, bn.y);
-							e->addComponent(crc);
-							other->addComponent(collided);
-						}
-					}
-				}
-		}
+		collisionSystem(entities);
+
 
 		for (auto e : entities) {
 			auto bounce = dynamic_pointer_cast<BounceComponent>(e->getComponent(BounceComponent::NAME));

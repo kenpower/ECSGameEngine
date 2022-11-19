@@ -3,3 +3,4 @@
 
 void movementSystem(Entities&, double);
 void userControlSystem(Entities&, double);
+void collisionSystem(Entities&);

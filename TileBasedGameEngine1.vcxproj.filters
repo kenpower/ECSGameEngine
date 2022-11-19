@@ -21,13 +21,7 @@
     <ClCompile Include="tileGameMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionRect.cpp">
-      <Filter>Source Files\TileEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
-      <Filter>Source Files\TileEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionResolutionSystem.cpp">
       <Filter>Source Files\TileEngine</Filter>
     </ClCompile>
     <ClCompile Include="Breakoutcpp.cpp">
@@ -36,13 +30,13 @@
     <ClCompile Include="BreakoutSystems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleRenderWindow.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionRect.h">
-      <Filter>Source Files\TileEngine</Filter>
     </ClInclude>
     <ClInclude Include="vector.h">
       <Filter>Source Files\TileEngine</Filter>
