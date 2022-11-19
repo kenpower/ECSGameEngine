@@ -7,7 +7,7 @@ struct testComponent: public Component {
 	virtual std::string name() { return std::string(NAME); }
 };
 
-TEST(Entity, _AddComponent) {
+TEST(Entity, AddComponent) {
 
 	Entity e("");
 
@@ -31,7 +31,7 @@ TEST(Entity, _AddComponent) {
 #include <thread>
 
 
-TEST(Entity, TIMECALC) {
+TEST(Entity, timecalc) {
 	
 	auto t1 = std::chrono::high_resolution_clock::now();
 	std::this_thread::sleep_for(std::chrono::milliseconds(750));

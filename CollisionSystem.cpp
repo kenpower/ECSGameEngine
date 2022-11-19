@@ -45,12 +45,12 @@ bool resolveCollision(CollisionRect& a, CollisionRect& b, Vector& adjustment) {
 
 void collisionSystem(Entities& entities) {
 	static auto collided = make_shared<CollidedComponent>();
-	for (auto e : entities) {
+	for (auto& e : entities) {
 		auto moved = dynamic_pointer_cast<MovedComponent>(e->getComponent(MovedComponent::NAME));
 		auto box = dynamic_pointer_cast<CollisionBoxComponent>(e->getComponent(CollisionBoxComponent::NAME));
 		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
 		if (moved && box && pos)
-			for (auto other : entities) {
+			for (auto& other : entities) {
 				if (other == e) continue;
 				auto other_pos = dynamic_pointer_cast<PositionComponent>(other->getComponent(PositionComponent::NAME));
 				auto other_box = dynamic_pointer_cast<CollisionBoxComponent>(other->getComponent(CollisionBoxComponent::NAME));
