@@ -1,27 +1,15 @@
 #pragma once
-#include <chrono>
-#include "vector.h"
-#include "CollisionRect.h"
+#include<string>
+#include<map>
+#include"component.h"
 
-class Sprite {
+struct Entity {
+	std::map<std::string, Component*> components;
+	const std::string name;
 public:
-	virtual void draw(int x, int y) = 0;
+	Entity(const std::string name) :name(name) {}
+	void addComponent(Component* c);
+	void removeComponent(const std::string name);
+
+	Component* getComponent(const std::string name);
 };
-
-class Entity
-{
-public:
-	CollisionRect rect;
-	Vector vel{0,0};
-	Sprite* sprite;
-	bool active{ true };
-
-	Entity(const CollisionRect r, Sprite* s) :rect(r), sprite(s) {}
-
-	virtual void update(std::chrono::milliseconds);
-	virtual void postCollisionUpdate() {};
-	virtual void collideWith(Entity*, Vector) {}
-
-	void draw();
-};
-

@@ -3,9 +3,6 @@
 
 //const double epsilon = 0.0001;
 
-void MockSprite::draw(int x, int y){};
-Sprite* MockSpriteFactory::create(char c) { return new MockSprite(); };
-
 
 void EXPECT_VEQ(Vector a, Vector b) {
 

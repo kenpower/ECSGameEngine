@@ -27,12 +27,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>TileEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>TileEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="PureEntity.cpp">
-      <Filter>TileEngine</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionResolutionSystem.cpp">
       <Filter>TileEngine</Filter>
     </ClCompile>
@@ -44,19 +38,10 @@
     <ClInclude Include="CollisionRect.h">
       <Filter>TileEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>TileEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>TileEngine</Filter>
-    </ClInclude>
     <ClInclude Include="vector.h">
       <Filter>TileEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Ball.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PureEntity.h">
+    <ClInclude Include="Entity.h">
       <Filter>TileEngine</Filter>
     </ClInclude>
     <ClInclude Include="component.h">

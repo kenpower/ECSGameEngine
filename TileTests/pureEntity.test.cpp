@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "../PureEntity.h"
+#include "../Entity.h"
 
 struct testComponent: public Component {
 	static constexpr const char* NAME = "test";
@@ -9,7 +9,7 @@ struct testComponent: public Component {
 
 TEST(Entity, AddComponent) {
 
-	PureEntity e;
+	Entity e("");
 
 	testComponent tc;
 

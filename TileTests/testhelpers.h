@@ -1,18 +1,11 @@
 #pragma once
 #include "../Entity.h"
-#include "../Level.h"
+#include "../vector.h"
+#include "../CollisionRect.h"
+
 
 using namespace std::chrono_literals;
 
-class MockSprite : public Sprite {
-public:
-	virtual void draw(int, int);
-};
-
-class MockSpriteFactory : public SpriteFactory {
-public:
-	virtual Sprite* create(char);
-};
 
 const double epsilon = 0.0001;
 
