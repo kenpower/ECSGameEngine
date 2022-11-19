@@ -90,7 +90,7 @@ void game(ConsoleRenderWindow& crw) {
 	}
 
 	bool bGameOver = false;
-	bool bKey[4];
+
 
 	double x = 20, y = 20;
 	//float x = 0;
@@ -112,31 +112,17 @@ void game(ConsoleRenderWindow& crw) {
 		//this_thread::sleep_for(frameLength); // Small Step = 1 Game Tick
 
 		// Input ========================
-		for (int k = 0; k < 4; k++)								// R   L   D    up
-			bKey[k] = (0x8000 & GetAsyncKeyState((unsigned char)("\x27\x25\x28\x26"[k]))) != 0;
+
 
 		double speed = 15.0;
-		//e.vel.x = bKey[0] ? speed : bKey[1] ? -speed : 0;
 
-		//e.vel.y = bKey[2] ? speed : bKey[3] ? -speed : 0;
 
 		auto movedComponent = make_shared<MovedComponent>();
 		double deltaSeconds = frameLength.count() / 1000.0;
 
 		movementSystem(entities, deltaSeconds);
 
-		for (auto e : entities) {
-			auto lrc = dynamic_pointer_cast<LeftRightControlComponent>(e->getComponent(LeftRightControlComponent::NAME));
-			auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
-
-			if (lrc && pos) {
-				if (bKey[0])
-					pos->x += lrc->speed * deltaSeconds;
-				if (bKey[1])
-					pos->x -= lrc->speed * deltaSeconds;
-				e->addComponent(movedComponent);
-			}
-		}
+		userControlSystem(entities, deltaSeconds);
 
 		auto collided = make_shared<CollidedComponent>();
 		for (auto e : entities) {

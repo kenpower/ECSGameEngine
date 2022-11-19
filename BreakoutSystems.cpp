@@ -1,3 +1,4 @@
+#include<windows.h>
 #include"BreakoutSystems.h"
 
 void movementSystem(Entities& entities, double deltaSeconds) {
@@ -14,5 +15,26 @@ void movementSystem(Entities& entities, double deltaSeconds) {
 			pos->y += vel->y * deltaSeconds;
 			e->addComponent(movedComponent);
 		}
+	}
+}
+
+bool isKeyDown(int keyCode) {
+	short leftMostBit = 0x8000;
+	//most significant bit is set if key is down
+	return  leftMostBit & GetAsyncKeyState((unsigned char)(keyCode));
+}
+
+void userControlSystem(Entities& entities, double deltaSeconds) {
+	static auto movedComponent = make_shared<MovedComponent>();
+	for (auto e : entities) {
+		auto lrc = dynamic_pointer_cast<LeftRightControlComponent>(e->getComponent(LeftRightControlComponent::NAME));
+		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
+		if (!lrc || !pos) continue; 
+
+		if (isKeyDown(VK_RIGHT))
+			pos->x += lrc->speed * deltaSeconds;
+		if (isKeyDown(VK_LEFT))
+			pos->x -= lrc->speed * deltaSeconds;
+		e->addComponent(movedComponent);
 	}
 }
