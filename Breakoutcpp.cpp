@@ -17,10 +17,8 @@ shared_ptr<Entity> wallEntity(const char* name, double x, double y, double w, do
 	return e;
 }
 
-void game(ConsoleRenderWindow& crw) {
+void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
-	int worldWidth = 30;
-	int worldHeight = 60;
 	Entities entities;
 
 	auto unitBox = make_shared<CollisionBoxComponent>(1,1);
@@ -70,10 +68,8 @@ void game(ConsoleRenderWindow& crw) {
 	bool bGameOver = false;
 
 
-	double x = 20, y = 20;
-	//float x = 0;
-	long count = 0;
-	//auto begin = std::chrono::high_resolution_clock::now();
+	long frameCounter = 0;
+
 	auto startOfFrame = std::chrono::high_resolution_clock::now();
 	auto startFrameTimer = std::chrono::high_resolution_clock::now();
 
@@ -109,14 +105,14 @@ void game(ConsoleRenderWindow& crw) {
 			e->removeComponent(CollidedComponent::NAME);
 		}
 
-
-		if (count++ % 100 == 0) {
+		int frameCountWindow = 100;
+		if (frameCounter++ % frameCountWindow == 0) {
 			auto now = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> elapsed_time = now - startFrameTimer;
 
 			startFrameTimer = std::chrono::high_resolution_clock::now();
 		
-			int framesPerSec = 100 / elapsed_time.count();
+			int framesPerSec = frameCountWindow / elapsed_time.count();
 
 			const std::string s = "FPS:" + to_string(framesPerSec);
 			wFPSstring = std::wstring(s.begin(), s.end());
