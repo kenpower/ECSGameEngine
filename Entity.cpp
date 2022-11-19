@@ -1,14 +1,20 @@
 #include "Entity.h"
 
-void Entity::addComponent(Component* c) {
-	components[c->name()] = c;
+void Entity::oldaddComponent(Component* c) {
+	__components[c->name()] = c;
 
 }
 
-Component* Entity::getComponent(const std::string name) {
-	auto component = components.find(name);
+Component* Entity::oldgetComponent(const std::string name) {
+	auto component = __components.find(name);
 
-	return component == components.end() ? NULL : component->second;
+	return component == __components.end() ? NULL : component->second;
+}
+
+shared_ptr<Component> Entity::getComponent(const std::string name) {
+    auto component = components.find(name);
+
+    return component == components.end() ? NULL : component->second;
 }
 
 void Entity::removeComponent(const std::string name) {

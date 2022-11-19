@@ -1,19 +1,26 @@
 #include "pch.h"
 
-#include "testhelpers.h"
+#include "../Entity.h"
 
+struct testComponent: public Component {
+	static constexpr const char* NAME = "test";
+	virtual std::string name() { return std::string(NAME); }
+};
 
-TEST(Level, EntityMoves) {
-	//MockSprite sprite;
+TEST(Entity, _AddComponent) {
 
-	//Entity e(CollisionRect(10, 10, 1, 1), &sprite);
-	//
-	//e.vel = Vector{ 2, -3 };
-	//
-	//e.update(3800ms);
-	//e.update(200ms);
-	//
-	//EXPECT_NEAR(18, e.rect.x, epsilon);
-	//EXPECT_NEAR(-2, e.rect.y, epsilon);
+	Entity e("");
+
+	auto tc =make_shared<testComponent>();
+
+	EXPECT_EQ("test", tc->name());
+
+	e.addComponent(tc);
+
+	auto c = e.getComponent("test");
+	EXPECT_EQ("test", c->name());
+
+	shared_ptr<testComponent> sc = e.getComponent<testComponent>();
+	EXPECT_EQ("test", sc->name());
 
 }
