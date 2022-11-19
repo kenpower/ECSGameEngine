@@ -124,37 +124,11 @@ void game(ConsoleRenderWindow& crw) {
 
 		collisionSystem(entities);
 
+		bounceSystem(entities);
 
-		for (auto e : entities) {
-			auto bounce = dynamic_pointer_cast<BounceComponent>(e->getComponent(BounceComponent::NAME));
-			auto vel = dynamic_pointer_cast<VelocityComponent>(e->getComponent(VelocityComponent::NAME));
-			auto collision = dynamic_pointer_cast<CollisionResolvedComponent>(e->getComponent(CollisionResolvedComponent::NAME));
+		renderCharOnConsoleSystem(entities, crw);
 
-			if (bounce && vel && collision) {
-				if (abs(lround(collision->x)) == 1) vel->x *= -1; //vertical   wall
-				if (abs(lround(collision->y)) == 1) vel->y *= -1; //horizontal wall
-			}
-		}
-
-
-		for (auto e : entities) {
-			auto sprite = dynamic_pointer_cast<CharSpriteComponent>(e->getComponent(CharSpriteComponent::NAME));
-			auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
-
-			if (sprite && pos) {
-				crw.Draw(round(pos->x), round(pos->y), sprite->c);
-			}
-		}
-
-		for (auto e : entities) {
-			auto sprite = dynamic_pointer_cast<StringSpriteComponent>(e->getComponent(StringSpriteComponent::NAME));
-			auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
-
-			if (sprite && pos) {
-				for (int i = 0; sprite->c[i] != '\0'; i++)
-					crw.Draw(round(pos->x + i), round(pos->y), sprite->c[i]);
-			}
-		}
+		renderStringOnConsoleSystem(entities, crw);
 
 		for (auto e = entities.begin(); e != entities.end();)
 		{
