@@ -33,37 +33,34 @@ struct Collider{
 	Entity* entity;
 };
 
+Vector getAxisAlignedNormal(Vector& v) {
+	if (fabs(v.x) > fabs(v.y))
+		return (v.x > 0) ? Vector{ 1, 0 } : Vector{ -1, 0 };
+	return (v.y > 0) ? Vector{ 0, 1 } : Vector{ 0, -1 };
+}
 void resolveCollision(Collider& moving, Collider& other, Vector& mtv) {
 	moving.position->x += mtv.x;
 	moving.position->y += mtv.y;
 	moving.collisionRect.x = moving.position->x;
 	moving.collisionRect.y = moving.position->y;
 
-	Vector bn;
-	if (fabs(mtv.x) > fabs(mtv.y))
-		bn = (mtv.x > 0) ? Vector{ 1, 0 } : Vector{ -1, 0 };
-	else
-		bn = (mtv.y > 0) ? Vector{ 0, 1 } : Vector{ 0, -1 };
+	Vector axisAlignedNormal = getAxisAlignedNormal(mtv);
 
-	auto crc = make_shared<CollisionResolvedComponent>(bn.x, bn.y);
+	auto crc = make_shared<CollisionResolvedComponent>(axisAlignedNormal.x, axisAlignedNormal.y);
 	moving.entity->addComponent(crc);
 
 	static auto collided = make_shared<CollidedComponent>();
 	other.entity->addComponent(collided);
 }
 
-
-void collisionSystem(Entities& entities) {
-	vector<Collider> movingColliders;
-	vector<Collider> allColliders;
-
+void getColliders(Entities& entities, vector<Collider>& movingColliders, vector<Collider>& allColliders) {
 	for (auto& e : entities) {
 		auto moved = dynamic_pointer_cast<MovedComponent>(e->getComponent(MovedComponent::NAME));
 		auto box = dynamic_pointer_cast<CollisionBoxComponent>(e->getComponent(CollisionBoxComponent::NAME));
 		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
 
 		Collider collider;
-		if (box && pos){
+		if (box && pos) {
 			collider.collisionRect = CollisionRect{ pos->x, pos->y, box->w, box->h };
 			collider.position = pos.get();
 			collider.entity = e.get();
@@ -71,9 +68,16 @@ void collisionSystem(Entities& entities) {
 
 		if (moved)
 			movingColliders.push_back(collider);
-		
+
 		allColliders.push_back(collider);
 	}
+}
+
+void collisionSystem(Entities& entities) {
+	vector<Collider> movingColliders;
+	vector<Collider> allColliders;
+
+	getColliders(entities, movingColliders, allColliders);
 
 	for (auto& moving : movingColliders) 
 		for (auto& other : allColliders) {
