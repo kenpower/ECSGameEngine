@@ -25,7 +25,7 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 	auto ball = make_shared<Entity>("ball");
 	ball->addComponent(make_shared<VelocityComponent>(10, 10));
-	ball->addComponent(make_shared<PositionComponent>(1, 20));
+	ball->addComponent(make_shared<PositionComponent>(10, 20));
 	ball->addComponent(make_shared<CharSpriteComponent>('O'));
 	ball->addComponent(make_shared<BounceComponent>());
 	ball->addComponent(unitBox);
@@ -38,10 +38,10 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	paddle->addComponent(make_shared<LeftRightControlComponent>(15));
 	entities.push_back(paddle);
 
-	entities.push_back(wallEntity("", -1, -1, 1, worldHeight));
-	entities.push_back(wallEntity("", worldWidth, -1, 1, worldHeight));
-	entities.push_back(wallEntity("", -1, 0, worldWidth+1, 1)); //leave top line clear for dev info
-	entities.push_back(wallEntity("", -1, worldHeight,  worldWidth + 1, worldHeight));
+	entities.push_back(wallEntity("", -1, -1, 1, worldHeight+2));
+	entities.push_back(wallEntity("", worldWidth, -1, 1, worldHeight+2));
+	entities.push_back(wallEntity("", -1, 0, worldWidth+2, 1)); //leave top line clear for dev info
+	entities.push_back(wallEntity("", -1, worldHeight,  worldWidth + 2, worldHeight+1));
 
 
 	auto block1 = make_shared<StringSpriteComponent>("XXX");
