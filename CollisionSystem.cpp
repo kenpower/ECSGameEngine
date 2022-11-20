@@ -9,37 +9,22 @@ struct CollisionRect
 	double h;
 };
 
-Vector getOverLapBetween(CollisionRect& a, CollisionRect& b) {
+double MTV_oneAxis(double aStart, double aEnd, double bStart, double bEnd) {
+	double left = bStart - aEnd;
+	double right = bEnd - aStart;
 
-	double halfWidthA = a.w / 2;
-	double halfWidthB = b.w / 2;
-	double halfHeightA = a.h / 2;
-	double halfHeightB = b.h / 2;
+	if (left > 0 or right < 0) return 0;
 
-	double distancex = (a.x + halfWidthA) - (b.x + halfWidthB);
-	double distancey = (a.y + halfHeightA) - (b.y + halfHeightB);
+	return fabs(left) < fabs(right) ? left : right;
 
-	// can't have negative distance
-	if (distancex < 0) distancex = -distancex;
-	if (distancey < 0) distancey = -distancey;
+}
+//Minimum translation Vector (MTV) is the smallest distance needed to move an overlapping
+//rectangle so they are no longer overlapping
+Vector getMinimumTranslationVector(const CollisionRect& a, const CollisionRect& b) {
+	double xMTV = MTV_oneAxis(a.x, a.x + a.w, b.x, b.x + b.w);
+	double yMTV = MTV_oneAxis(a.y, a.y + a.h, b.y, b.y + b.h);
 
-	// calculate the minimum distance before a collision
-	double minDistX = halfWidthA + halfWidthB;
-	double minDistY = halfHeightA + halfHeightB;
-
-	// calculate the depth of the collision
-	double overlapX = minDistX - distancex;
-	double overlapY = minDistY - distancey;
-
-	Vector smallestOverlap{ 0,0 };
-
-	if (overlapX > 0 && overlapY > 0)
-		if (overlapX < overlapY)
-			smallestOverlap.x = (a.x > b.x) ? overlapX : -overlapX;
-		else
-			smallestOverlap.y = (a.y > b.y) ? overlapY : -overlapY;
-
-	return smallestOverlap;
+	return fabs(xMTV) < fabs(yMTV) ? Vector{xMTV,0} : Vector{0, yMTV};
 }
 
 struct Collider{
@@ -48,15 +33,17 @@ struct Collider{
 	Entity* entity;
 };
 
-void resolveCollision(Collider& moving, Collider& other, Vector& overlap) {
-	moving.position->x += overlap.x;
-	moving.position->y += overlap.y;
+void resolveCollision(Collider& moving, Collider& other, Vector& mtv) {
+	moving.position->x += mtv.x;
+	moving.position->y += mtv.y;
+	moving.collisionRect.x = moving.position->x;
+	moving.collisionRect.y = moving.position->y;
 
 	Vector bn;
-	if (fabs(overlap.x) > fabs(overlap.y))
-		bn = (overlap.x > 0) ? Vector{ 1, 0 } : Vector{ -1, 0 };
+	if (fabs(mtv.x) > fabs(mtv.y))
+		bn = (mtv.x > 0) ? Vector{ 1, 0 } : Vector{ -1, 0 };
 	else
-		bn = (overlap.y > 0) ? Vector{ 0, 1 } : Vector{ 0, -1 };
+		bn = (mtv.y > 0) ? Vector{ 0, 1 } : Vector{ 0, -1 };
 
 	auto crc = make_shared<CollisionResolvedComponent>(bn.x, bn.y);
 	moving.entity->addComponent(crc);
@@ -88,14 +75,14 @@ void collisionSystem(Entities& entities) {
 		allColliders.push_back(collider);
 	}
 
-	for (auto& moving : movingColliders) {
+	for (auto& moving : movingColliders) 
 		for (auto& other : allColliders) {
 			if (other.entity == moving.entity) continue;
 
-			Vector overlap = getOverLapBetween(moving.collisionRect, other.collisionRect);
-			bool intersecting = overlap.x != 0 or overlap.y != 0;
+			Vector mtv = getMinimumTranslationVector(moving.collisionRect, other.collisionRect);
+			bool intersecting = mtv.x != 0 or mtv.y != 0;
 			if (intersecting)
-				resolveCollision(moving, other, overlap);
+				resolveCollision(moving, other, mtv);
 		}
-	}
+	
 }

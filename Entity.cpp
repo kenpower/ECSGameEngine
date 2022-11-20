@@ -1,15 +1,15 @@
 #include "Entity.h"
 
-void Entity::oldaddComponent(Component* c) {
-	__components[c->name()] = c;
-
-}
-
-Component* Entity::oldgetComponent(const std::string name) {
-	auto component = __components.find(name);
-
-	return component == __components.end() ? NULL : component->second;
-}
+//void Entity::oldaddComponent(Component* c) {
+//	__components[c->name()] = c;
+//
+//}
+//
+//Component* Entity::oldgetComponent(const std::string name) {
+//	auto component = __components.find(name);
+//
+//	return component == __components.end() ? NULL : component->second;
+//}
 
 shared_ptr<Component> Entity::getComponent(const std::string name) {
     auto component = components.find(name);
