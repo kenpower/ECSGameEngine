@@ -9,7 +9,6 @@ struct CollisionRect
 	double h;
 };
 
-
 Vector getOverLapBetween(CollisionRect& a, CollisionRect& b) {
 
 	double halfWidthA = a.w / 2;
@@ -43,9 +42,15 @@ Vector getOverLapBetween(CollisionRect& a, CollisionRect& b) {
 	return smallestOverlap;
 }
 
-void resolveCollision(Entity* moving, Entity* other, PositionComponent* position, Vector& overlap) {
-	position->x += overlap.x;
-	position->y += overlap.y;
+struct Collider{
+	CollisionRect collisionRect;
+	PositionComponent* position;
+	Entity* entity;
+};
+
+void resolveCollision(Collider& moving, Collider& other, Vector& overlap) {
+	moving.position->x += overlap.x;
+	moving.position->y += overlap.y;
 
 	Vector bn;
 	if (fabs(overlap.x) > fabs(overlap.y))
@@ -54,33 +59,43 @@ void resolveCollision(Entity* moving, Entity* other, PositionComponent* position
 		bn = (overlap.y > 0) ? Vector{ 0, 1 } : Vector{ 0, -1 };
 
 	auto crc = make_shared<CollisionResolvedComponent>(bn.x, bn.y);
-	moving->addComponent(crc);
+	moving.entity->addComponent(crc);
 
 	static auto collided = make_shared<CollidedComponent>();
-	other->addComponent(collided);
+	other.entity->addComponent(collided);
 }
 
+
 void collisionSystem(Entities& entities) {
+	vector<Collider> movingColliders;
+	vector<Collider> allColliders;
 
 	for (auto& e : entities) {
 		auto moved = dynamic_pointer_cast<MovedComponent>(e->getComponent(MovedComponent::NAME));
 		auto box = dynamic_pointer_cast<CollisionBoxComponent>(e->getComponent(CollisionBoxComponent::NAME));
 		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
-		if (!(moved && box && pos)) continue;
-		for (auto& other : entities) {
-			if (other == e) continue;
-			auto other_pos = dynamic_pointer_cast<PositionComponent>(other->getComponent(PositionComponent::NAME));
-			auto other_box = dynamic_pointer_cast<CollisionBoxComponent>(other->getComponent(CollisionBoxComponent::NAME));
-			if (!other_pos || !other_box) continue;
 
-			CollisionRect movingRect{ pos->x, pos->y, box->w, box->h };
-			CollisionRect otherRect{ other_pos->x, other_pos->y, other_box->w, other_box->h };
+		Collider collider;
+		if (box && pos){
+			collider.collisionRect = CollisionRect{ pos->x, pos->y, box->w, box->h };
+			collider.position = pos.get();
+			collider.entity = e.get();
+		}
 
-			Vector overlap = getOverLapBetween(movingRect, otherRect);
+		if (moved)
+			movingColliders.push_back(collider);
+		
+		allColliders.push_back(collider);
+	}
+
+	for (auto& moving : movingColliders) {
+		for (auto& other : allColliders) {
+			if (other.entity == moving.entity) continue;
+
+			Vector overlap = getOverLapBetween(moving.collisionRect, other.collisionRect);
 			bool intersecting = overlap.x != 0 or overlap.y != 0;
 			if (intersecting)
-				resolveCollision(e.get(), other.get(), pos.get(), overlap);
-
+				resolveCollision(moving, other, overlap);
 		}
 	}
 }

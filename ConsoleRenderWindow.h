@@ -714,7 +714,7 @@ public:
 		// Update Title & Present Screen Buffer
 		DWORD events = 0;
 		wchar_t s[256];
-		swprintf_s(s, 256, L"OneLoneCoder.com - Console Game Engine - %s - FPS: %3.2f - %d ", m_sAppName.c_str(), 1.0f / 100, events);
+		swprintf_s(s, 256, L"Breakout!");
 		SetConsoleTitle(s);
 		WriteConsoleOutput(m_hConsole, m_bufScreen, { (short)m_nScreenWidth, (short)m_nScreenHeight }, { 0,0 }, &m_rectWindow);
 

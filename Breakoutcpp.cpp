@@ -46,6 +46,8 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 	auto block1 = make_shared<StringSpriteComponent>("XXX");
 	auto block2 = make_shared<StringSpriteComponent>("###");
+	auto scoreWhenHit = make_shared<ScoreWhenHitComponent>(5);
+
 	auto blockCollision = make_shared<CollisionBoxComponent>(3, 1);
 	auto block = make_shared<BlockComponent>();
 
@@ -58,6 +60,7 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 			e->addComponent(blockColor % 2 ? block1 : block2);
 			e->addComponent(blockCollision);
 			e->addComponent(block);
+			e->addComponent(scoreWhenHit);
 
 			entities.push_back(e);
 			blockColor++;
@@ -67,7 +70,6 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 	bool bGameOver = false;
 
-
 	long frameCounter = 0;
 
 	auto startOfFrame = std::chrono::high_resolution_clock::now();
@@ -75,12 +77,12 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 	std::wstring wFPSstring;
 
+	int gameScore = 0;
 
 	while (!bGameOver) {
 		auto now = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> secondsSinceLastFrame = now - startOfFrame;
-		startOfFrame = std::chrono::high_resolution_clock::now();
-
+		startOfFrame = now;
 
 		movementSystem(entities, secondsSinceLastFrame.count());
 
@@ -90,13 +92,14 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 		bounceSystem(entities);
 
+		scoreBlocksSystem(entities, gameScore);
+		
 		deadBlocksSystem(entities);
 
 		renderCharOnConsoleSystem(entities, crw);
 
 		renderStringOnConsoleSystem(entities, crw);
 
-		
 
 		//remove temporary components
 		for (auto e : entities) {
@@ -105,6 +108,7 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 			e->removeComponent(CollidedComponent::NAME);
 		}
 
+		static int framesPerSec = 0;
 		int frameCountWindow = 100;
 		if (frameCounter++ % frameCountWindow == 0) {
 			auto now = std::chrono::high_resolution_clock::now();
@@ -112,12 +116,12 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 			startFrameTimer = std::chrono::high_resolution_clock::now();
 		
-			int framesPerSec = frameCountWindow / elapsed_time.count();
-
-			const std::string s = "FPS:" + to_string(framesPerSec);
-			wFPSstring = std::wstring(s.begin(), s.end());
+			framesPerSec = frameCountWindow / elapsed_time.count();
 		
 		}
+
+		const std::string s = "FPS:" + to_string(framesPerSec)+ "  Score:" + to_string(gameScore);
+		wFPSstring = std::wstring(s.begin(), s.end());
 
 		crw.DrawString(0, 0, wFPSstring.c_str());
 		crw.Show();

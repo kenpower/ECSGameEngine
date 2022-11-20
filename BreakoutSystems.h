@@ -8,5 +8,7 @@ void collisionSystem(Entities&);
 void bounceSystem(Entities&);
 void deadBlocksSystem(Entities&);
 
+void scoreBlocksSystem(Entities&, int&);
+
 void renderCharOnConsoleSystem(Entities&, ConsoleRenderWindow&); 
 void renderStringOnConsoleSystem(Entities&, ConsoleRenderWindow&);

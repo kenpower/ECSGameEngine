@@ -19,8 +19,7 @@ void movementSystem(Entities& entities, double deltaSeconds) {
 }
 
 bool isKeyDown(int keyCode) {
-	short leftMostBit = 0x8000;
-	//most significant bit is set if key is down
+	short leftMostBit = 0x8000; //most significant bit is set if key is down
 	return  leftMostBit & GetAsyncKeyState((unsigned char)(keyCode));
 }
 
@@ -31,7 +30,8 @@ void userControlSystem(Entities& entities, double deltaSeconds) {
 		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
 		if (!lrc || !pos) continue; 
 
-		if (isKeyDown(VK_RIGHT))
+		// All they other Key codes are here https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+		if (isKeyDown(VK_RIGHT)) 
 			pos->x += lrc->speed * deltaSeconds;
 		if (isKeyDown(VK_LEFT))
 			pos->x -= lrc->speed * deltaSeconds;
@@ -86,5 +86,17 @@ void deadBlocksSystem(Entities& entities) {
 			e = entities.erase(e);
 		else
 			++e;
+	}
+}
+
+void scoreBlocksSystem(Entities& entities, int& gameScore) {
+	for (auto& e : entities) {
+		auto collided = dynamic_pointer_cast<CollidedComponent>(e->getComponent(CollidedComponent::NAME));
+		auto score = dynamic_pointer_cast<ScoreWhenHitComponent>(e->getComponent(ScoreWhenHitComponent::NAME));
+
+		if (!collided || !score) continue;
+		
+		gameScore+=score->score;
+
 	}
 }

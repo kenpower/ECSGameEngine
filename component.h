@@ -89,3 +89,10 @@ struct CollidedComponent : public Component {
 
 	CollidedComponent() {}
 };
+
+struct ScoreWhenHitComponent : public Component {
+	static constexpr const char* NAME = "scorewhenhit";
+	virtual std::string name() { return std::string(NAME); }
+	int score;
+	ScoreWhenHitComponent(int score = 1 ):score(score) {}
+};
