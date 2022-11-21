@@ -4,7 +4,7 @@
 void movementSystem(Entities& entities, double deltaSeconds) {
 	static auto movedComponent = make_shared<MovedComponent>();
 	
-	for (auto e : entities) {
+	for (auto& e : entities) {
 		//auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
 		//auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
 		auto vel = e->getComponent<VelocityComponent>();
@@ -19,13 +19,13 @@ void movementSystem(Entities& entities, double deltaSeconds) {
 }
 
 bool isKeyDown(int keyCode) {
-	short leftMostBit = 0x8000; //most significant bit is set if key is down
+	const short leftMostBit = (short)0x8000; //most significant bit is set if key is down
 	return  leftMostBit & GetAsyncKeyState((unsigned char)(keyCode));
 }
 
 void userControlSystem(Entities& entities, double deltaSeconds) {
 	static auto movedComponent = make_shared<MovedComponent>();
-	for (auto e : entities) {
+	for (auto& e : entities) {
 		auto lrc = dynamic_pointer_cast<LeftRightControlComponent>(e->getComponent(LeftRightControlComponent::NAME));
 		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
 		if (!lrc || !pos) continue; 
@@ -58,7 +58,7 @@ void renderCharOnConsoleSystem(Entities& entities, ConsoleRenderWindow& crw) {
 		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
 		if (!sprite || !pos) continue;
 
-		crw.Draw(round(pos->x), round(pos->y), sprite->c);
+		crw.Draw(lround(pos->x), lround(pos->y), sprite->c);
 		
 	}
 }
@@ -70,7 +70,7 @@ void renderStringOnConsoleSystem(Entities& entities, ConsoleRenderWindow& crw) {
 		if (!sprite || !pos) continue;
 
 		for (int i = 0; sprite->c[i] != '\0'; i++)
-			crw.Draw(round(pos->x + i), round(pos->y), sprite->c[i]);
+			crw.Draw(lround(pos->x + i), lround(pos->y), sprite->c[i]);
 	}
 }
 

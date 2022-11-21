@@ -45,7 +45,7 @@ TEST(MTV, NoOverlap) {
 	};
 	CollisionRect cr{ 0, 0, 1, 1 };
 	
-	for (auto t:td)
+	for (const auto& t:td)
 			EXPECT_VEQ(t.second, getMinimumTranslationVector(t.first, cr));
 }
 
@@ -69,7 +69,7 @@ TEST(MTV, Overlap) {
 	};
 	CollisionRect cr{ 0, 0, 1, 1 };
 
-	for (auto t : td)
+	for (auto& t : td)
 		EXPECT_VEQ(t.second, getMinimumTranslationVector(t.first, cr));
 }
 
@@ -93,7 +93,7 @@ TEST(MTV, FirstIsSmaller) {
 	};
 	CollisionRect cr{ 0, 0, 10, 10 };
 
-	for (auto t : td)
+	for (const auto& t : td)
 		EXPECT_VEQ(t.second, getMinimumTranslationVector(t.first, cr));
 }
 

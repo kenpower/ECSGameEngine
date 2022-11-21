@@ -5,10 +5,12 @@ struct Component {
 	virtual std::string name() = 0;
 };
 
-struct PositionComponent : public Component {
+struct PositionComponent : public Component{ 
 	//TOTO find a better way of doing this
-	// need to be sble to get the name of the class(static)
+	// need to be able to get the name of the class(static)
 	// and polymorphically from the pointer
+	// better would be not to need name
+
 	static constexpr const char* NAME = "position";
 	virtual std::string name() { return std::string(NAME); }
 
@@ -45,7 +47,7 @@ struct LeftRightControlComponent : public Component {
 	virtual std::string name() { return std::string(NAME); }
 
 	LeftRightControlComponent(double speed) :speed(speed) {}
-	char speed;
+	double speed;
 };
 
 struct MovedComponent : public Component {

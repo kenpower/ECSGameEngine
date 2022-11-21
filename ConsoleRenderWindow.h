@@ -24,7 +24,7 @@ public:
 		m_sAppName = L"Default";
 	}
 
-	int ConstructConsole(int width, int height, int fontw, int fonth)
+	int ConstructConsole(short width, short height, int fontw, int fonth)
 	{
 		if (m_hConsole == INVALID_HANDLE_VALUE)
 			return Error(L"Bad Handle");

@@ -102,7 +102,7 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 
 		//remove temporary components
-		for (auto e : entities) {
+		for (auto& e : entities) {
 			e->removeComponent(CollisionResolvedComponent::NAME);
 			e->removeComponent(MovedComponent::NAME);
 			e->removeComponent(CollidedComponent::NAME);
@@ -116,7 +116,7 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 			startFrameTimer = std::chrono::high_resolution_clock::now();
 		
-			framesPerSec = frameCountWindow / elapsed_time.count();
+			framesPerSec = (int)(frameCountWindow / elapsed_time.count());
 		
 		}
 
