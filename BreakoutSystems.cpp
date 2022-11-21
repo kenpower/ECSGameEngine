@@ -101,3 +101,15 @@ void scoreBlocksSystem(Entities& entities, int& gameScore) {
 
 	}
 }
+
+void ballPaddleBounce(Entities& entities, int& gameScore) {
+	for (auto& e : entities) {
+		auto collided = dynamic_pointer_cast<CollidedComponent>(e->getComponent(CollidedComponent::NAME));
+		auto score = dynamic_pointer_cast<ScoreWhenHitBlockComponent>(e->getComponent(ScoreWhenHitBlockComponent::NAME));
+
+		if (!collided || !score) continue;
+
+		gameScore += score->score;
+
+	}
+}

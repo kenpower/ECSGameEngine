@@ -99,3 +99,10 @@ struct ScoreWhenHitBlockComponent : public Component {
 	int score;
 	ScoreWhenHitBlockComponent(int score = 1 ):score(score) {}
 };
+
+struct PaddleBounceComponent : public Component {
+	static constexpr const char* NAME = "paddlebounce";
+	virtual std::string name() { return std::string(NAME); }
+
+	PaddleBounceComponent() {};
+};
