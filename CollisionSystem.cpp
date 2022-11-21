@@ -43,14 +43,6 @@ void resolveCollision(Collider& moving, Collider& other, Vector& mtv) {
 	moving.position->y += mtv.y;
 	moving.collisionRect.x = moving.position->x;
 	moving.collisionRect.y = moving.position->y;
-
-	Vector axisAlignedNormal = getAxisAlignedNormal(mtv);
-
-	auto crc = make_shared<CollisionResolvedComponent>(axisAlignedNormal.x, axisAlignedNormal.y);
-	moving.entity->addComponent(crc);
-
-	static auto collided = make_shared<CollidedComponent>();
-	other.entity->addComponent(collided);
 }
 
 void getColliders(Entities& entities, vector<Collider>& movingColliders, vector<Collider>& allColliders) {
@@ -85,8 +77,16 @@ void collisionSystem(Entities& entities) {
 
 			Vector mtv = getMinimumTranslationVector(moving.collisionRect, other.collisionRect);
 			bool intersecting = mtv.x != 0 or mtv.y != 0;
-			if (intersecting)
+			if (intersecting) {
 				resolveCollision(moving, other, mtv);
+				Vector axisAlignedNormal = getAxisAlignedNormal(mtv);
+
+				auto ccForMoving = make_shared<CollidedComponent>(other.entity, axisAlignedNormal);
+				moving.entity->addComponent(ccForMoving);
+
+				auto ccForOther = make_shared<CollidedComponent>(moving.entity, -axisAlignedNormal);
+				other.entity->addComponent(ccForOther);
+			}
 		}
 	
 }

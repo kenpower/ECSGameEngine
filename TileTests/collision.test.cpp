@@ -129,9 +129,9 @@ TEST(CollisionSystem, Collisions) {
 	auto pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, 0, epsilon);
 	EXPECT_NEAR(pos->y, 1, epsilon);
-	auto crc = moving->getComponent<CollisionResolvedComponent>();
-	EXPECT_NEAR(crc->x, 0, epsilon);
-	EXPECT_NEAR(crc->y, 1, epsilon);
+	auto crc = moving->getComponent<CollidedComponent>();
+	EXPECT_VEQ(crc->surfaceNormal, Vector{0,1});
+
 
 	pos = stationary->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, 0, epsilon);
@@ -139,40 +139,40 @@ TEST(CollisionSystem, Collisions) {
 
 	
 	moving->addComponent(make_shared<PositionComponent>(0.9, 0));
-	moving->removeComponent(CollisionResolvedComponent::NAME);
+	moving->removeComponent(CollidedComponent::NAME);
 	
 	collisionSystem(entities);
 
 	pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, 1, epsilon);
 	EXPECT_NEAR(pos->y, 0, epsilon);
-	crc = moving->getComponent<CollisionResolvedComponent>();
-	EXPECT_NEAR(crc->x, 1, epsilon);
-	EXPECT_NEAR(crc->y, 0, epsilon);
+	crc = moving->getComponent<CollidedComponent>();
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ 1, 0});
+
 
 	moving->addComponent(make_shared<PositionComponent>(0, -0.9));
-	moving->removeComponent(CollisionResolvedComponent::NAME);
+	moving->removeComponent(CollidedComponent::NAME);
 
 	collisionSystem(entities);
 
 	pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, 0, epsilon);
 	EXPECT_NEAR(pos->y, -1, epsilon);
-	crc = moving->getComponent<CollisionResolvedComponent>();
-	EXPECT_NEAR(crc->x, 0, epsilon);
-	EXPECT_NEAR(crc->y, -1, epsilon);
+	crc = moving->getComponent<CollidedComponent>();
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ 0,-1 });
+
 
 	moving->addComponent(make_shared<PositionComponent>(-0.9, 0));
-	moving->removeComponent(CollisionResolvedComponent::NAME);
+	moving->removeComponent(CollidedComponent::NAME);
 
 	collisionSystem(entities);
 
 	pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, -1, epsilon);
 	EXPECT_NEAR(pos->y, 0, epsilon);
-	crc = moving->getComponent<CollisionResolvedComponent>();
-	EXPECT_NEAR(crc->x, -1, epsilon);
-	EXPECT_NEAR(crc->y, 0, epsilon);
+	crc = moving->getComponent<CollidedComponent>();
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ -1, 0});
+
 }
 
 TEST(CollisionSystem, CollidingWithTwoWalls) {
@@ -199,21 +199,34 @@ TEST(CollisionSystem, CollidingWithTwoWalls) {
 	auto pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, 0.2, epsilon);
 	EXPECT_NEAR(pos->y, 1, epsilon);
-	auto crc = moving->getComponent<CollisionResolvedComponent>();
-	EXPECT_NEAR(crc->x, 0, epsilon);
-	EXPECT_NEAR(crc->y, 1, epsilon);
+	auto crc = moving->getComponent<CollidedComponent>();
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ 0, 1 });
 
-	moving->addComponent(make_shared<PositionComponent>(0.1, 0.8));
+	moving->addComponent(make_shared<PositionComponent>(0.9, 0.8));
 
 	collisionSystem(entities);
 
 	pos = moving->getComponent<PositionComponent>();
-	EXPECT_NEAR(pos->x, 0.1, epsilon);
+	EXPECT_NEAR(pos->x, 1, epsilon);
 	EXPECT_NEAR(pos->y, 1, epsilon);
-	crc = moving->getComponent<CollisionResolvedComponent>();
-	EXPECT_NEAR(crc->x, 0, epsilon);
-	EXPECT_NEAR(crc->y, 1, epsilon);
-	
+	crc = moving->getComponent<CollidedComponent>();
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ 0, 1 });
+
+	moving->addComponent(make_shared<PositionComponent>(-0.9, 0.8));
+
+	collisionSystem(entities);
+
+	pos = moving->getComponent<PositionComponent>();
+	EXPECT_NEAR(pos->x, -1, epsilon);
+	EXPECT_NEAR(pos->y, 0.8, epsilon);
+	crc = moving->getComponent<CollidedComponent>();
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ -1, 0 });
+}
+
+TEST(Vector, Equality) {
+	Vector v{ 1, 0 };
+
+	EXPECT_TRUE((v == Vector{ 1,0 }));
 }
 
 TEST(CollisionSystem, CollidingWithCorner) {
@@ -256,8 +269,10 @@ TEST(CollisionSystem, CollidingWithCorner) {
 	auto pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, -1, epsilon);
 	EXPECT_NEAR(pos->y, -1, epsilon);
-	auto crc = moving->getComponent<CollisionResolvedComponent>();
-	EXPECT_NEAR(crc->x + crc->y, -1, epsilon); // upper left quadrant
+	auto crc = moving->getComponent<CollidedComponent>();
+	EXPECT_TRUE(
+		(crc->surfaceNormal == Vector{-1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
+	); // upper left quadrant
 
 	moving->addComponent(make_shared<PositionComponent>(0.8, 0.8));
 
@@ -266,9 +281,10 @@ TEST(CollisionSystem, CollidingWithCorner) {
 	pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, 1, epsilon);
 	EXPECT_NEAR(pos->y, 1, epsilon);
-	crc = moving->getComponent<CollisionResolvedComponent>();
-	EXPECT_NEAR(crc->x + crc->y, 1, epsilon); // bottom right quadrant
-
+	crc = moving->getComponent<CollidedComponent>();
+	EXPECT_TRUE(
+		(crc->surfaceNormal == Vector{ 1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
+	); // upper right quadrant
 	moving->addComponent(make_shared<PositionComponent>(-0.8, 0.8));
 
 	collisionSystem(entities);
@@ -276,8 +292,10 @@ TEST(CollisionSystem, CollidingWithCorner) {
 	pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, -1, epsilon);
 	EXPECT_NEAR(pos->y, 1, epsilon);
-	crc = moving->getComponent<CollisionResolvedComponent>();
-
+	crc = moving->getComponent<CollidedComponent>();
+	EXPECT_TRUE(
+		(crc->surfaceNormal == Vector{ -1,  0 } || crc->surfaceNormal == Vector{ 0,  1 })
+	); // lower left quadrant
 	moving->addComponent(make_shared<PositionComponent>(0.8, -0.8));
 
 	collisionSystem(entities);
@@ -285,7 +303,9 @@ TEST(CollisionSystem, CollidingWithCorner) {
 	pos = moving->getComponent<PositionComponent>();
 	EXPECT_NEAR(pos->x, 1, epsilon);
 	EXPECT_NEAR(pos->y, -1, epsilon);
-	crc = moving->getComponent<CollisionResolvedComponent>();
-
+	crc = moving->getComponent<CollidedComponent>();
+	EXPECT_TRUE(
+		(crc->surfaceNormal == Vector{ 1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
+	); // upper right quadrant
 
 }

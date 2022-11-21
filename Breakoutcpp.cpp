@@ -46,7 +46,7 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 	auto block1 = make_shared<StringSpriteComponent>("XXX");
 	auto block2 = make_shared<StringSpriteComponent>("###");
-	auto scoreWhenHit = make_shared<ScoreWhenHitComponent>(5);
+	auto scoreWhenHit = make_shared<ScoreWhenHitBlockComponent>(5);
 
 	auto blockCollision = make_shared<CollisionBoxComponent>(3, 1);
 	auto block = make_shared<BlockComponent>();
@@ -103,7 +103,6 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 		//remove temporary components
 		for (auto& e : entities) {
-			e->removeComponent(CollisionResolvedComponent::NAME);
 			e->removeComponent(MovedComponent::NAME);
 			e->removeComponent(CollidedComponent::NAME);
 		}

@@ -1,6 +1,10 @@
 #pragma once
 #include<string>
 
+#include"Vector.h"
+
+struct Entity;
+
 struct Component {
 	virtual std::string name() = 0;
 };
@@ -63,13 +67,6 @@ struct CollisionBoxComponent : public Component {
 	const double w, h;
 };
 
-struct CollisionResolvedComponent : public Component {
-	static constexpr const char* NAME = "resolvedcollision";
-	virtual std::string name() { return std::string(NAME); }
-
-	CollisionResolvedComponent(double x, double y) :x(x), y(y) {}
-	double x, y;
-};
 
 struct BounceComponent : public Component {
 	static constexpr const char* NAME = "bouncecollision";
@@ -89,12 +86,16 @@ struct CollidedComponent : public Component {
 	static constexpr const char* NAME = "collided";
 	virtual std::string name() { return std::string(NAME); }
 
-	CollidedComponent() {}
+	CollidedComponent(Entity* other, Vector surfaceNormal = Vector{ 0, 0 }) :
+		other(other),  surfaceNormal(surfaceNormal) {}
+
+	Vector surfaceNormal;
+	Entity* other;
 };
 
-struct ScoreWhenHitComponent : public Component {
+struct ScoreWhenHitBlockComponent : public Component {
 	static constexpr const char* NAME = "scorewhenhit";
 	virtual std::string name() { return std::string(NAME); }
 	int score;
-	ScoreWhenHitComponent(int score = 1 ):score(score) {}
+	ScoreWhenHitBlockComponent(int score = 1 ):score(score) {}
 };

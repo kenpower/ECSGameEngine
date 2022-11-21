@@ -1,3 +1,4 @@
+#define NOMINMAX //https://stackoverflow.com/a/2789510/488802
 #include<windows.h>
 #include"BreakoutSystems.h"
 
@@ -43,11 +44,11 @@ void bounceSystem(Entities& entities) {
 	for (auto& e : entities) {
 		auto bounce = dynamic_pointer_cast<BounceComponent>(e->getComponent(BounceComponent::NAME));
 		auto vel = dynamic_pointer_cast<VelocityComponent>(e->getComponent(VelocityComponent::NAME));
-		auto collision = dynamic_pointer_cast<CollisionResolvedComponent>(e->getComponent(CollisionResolvedComponent::NAME));
+		auto collision = dynamic_pointer_cast<CollidedComponent>(e->getComponent(CollidedComponent::NAME));
 		if (!bounce || !vel || !collision) continue;
 		
-		if (abs(lround(collision->x)) == 1) vel->x *= -1; //vertical   wall
-		if (abs(lround(collision->y)) == 1) vel->y *= -1; //horizontal wall
+		if (abs(lround(collision->surfaceNormal.x)) == 1) vel->x *= -1; //vertical   wall
+		if (abs(lround(collision->surfaceNormal.y)) == 1) vel->y *= -1; //horizontal wall
 		
 	}
 }
@@ -92,7 +93,7 @@ void deadBlocksSystem(Entities& entities) {
 void scoreBlocksSystem(Entities& entities, int& gameScore) {
 	for (auto& e : entities) {
 		auto collided = dynamic_pointer_cast<CollidedComponent>(e->getComponent(CollidedComponent::NAME));
-		auto score = dynamic_pointer_cast<ScoreWhenHitComponent>(e->getComponent(ScoreWhenHitComponent::NAME));
+		auto score = dynamic_pointer_cast<ScoreWhenHitBlockComponent>(e->getComponent(ScoreWhenHitBlockComponent::NAME));
 
 		if (!collided || !score) continue;
 		

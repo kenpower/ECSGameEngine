@@ -7,24 +7,16 @@
 using namespace std;
 
 struct Entity {
-	//map<string, Component*> __components;
+
 	map<string, shared_ptr<Component>> components;
 	const string name;
 public:
 	Entity(const string name) :name(name) {}
-	//void oldaddComponent(Component* c);
 	void removeComponent(const string name);
 
 	void addComponent(shared_ptr<Component> c) {
 		components[c->name()] = c;
 	}
-
-	//Component* oldgetComponent(const string name);
-	//template<class DerivedComponent>
-	//DerivedComponent* oldgetComponent() {
-	//	Component* c = oldgetComponent(DerivedComponent::NAME);
-	//	return dynamic_cast<DerivedComponent*>(c);
-	//}
 
 	shared_ptr<Component> getComponent(const string name);
 
