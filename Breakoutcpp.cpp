@@ -49,7 +49,7 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	auto scoreWhenHit = make_shared<ScoreWhenHitBlockComponent>(5);
 
 	auto blockCollision = make_shared<CollisionBoxComponent>(3, 1);
-	auto block = make_shared<BlockComponent>();
+	auto block = make_shared<DeleteAfterCollisionComponent>();
 
 	int firstBlock = 0;
 	for (int x = 3; x < worldWidth - 4; x += 3) {

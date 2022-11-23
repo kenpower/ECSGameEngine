@@ -81,7 +81,7 @@ void deadBlocksSystem(Entities& entities) {
 	{
 
 		auto collided = dynamic_pointer_cast<CollidedComponent>((*e)->getComponent(CollidedComponent::NAME));
-		auto block = dynamic_pointer_cast<BlockComponent>((*e)->getComponent(BlockComponent::NAME));
+		auto block = dynamic_pointer_cast<DeleteAfterCollisionComponent>((*e)->getComponent(DeleteAfterCollisionComponent::NAME));
 
 		if (collided && block)
 			e = entities.erase(e);
@@ -110,6 +110,5 @@ void ballPaddleBounce(Entities& entities, int& gameScore) {
 		if (!collided || !score) continue;
 
 		gameScore += score->score;
-
 	}
 }
