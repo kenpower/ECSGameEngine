@@ -2,7 +2,6 @@
 #include "vector"
 #include <utility>
 #include "testhelpers.h"
-#include "../Entity.h"
 #include "../ECS.h"
 #include "../vector.h"
 using namespace std;
@@ -132,94 +131,85 @@ TEST(CollisionSystem, Collisions) {
 	EXPECT_VEQ(crc->surfaceNormal, Vector{0,1});
 
 
-	//pos = stationary->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, 0, epsilon);
-	//EXPECT_NEAR(pos->y, 0, epsilon);
+	pos = components.positions[stationary];
+	EXPECT_NEAR(pos->x, 0, epsilon);
+	EXPECT_NEAR(pos->y, 0, epsilon);
 
-	//
-	//moving->addComponent(make_shared<PositionComponent>(0.9, 0));
-	//moving->removeComponent(CollidedComponent::NAME);
-	//
-	//collisionSystem(entities);
+	components.positions[moving] = new PositionComponent(0.9, 0.0);
+	components.collideds.erase(moving);
+	components.collideds.erase(stationary);
 
-	//pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, 1, epsilon);
-	//EXPECT_NEAR(pos->y, 0, epsilon);
-	//crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_VEQ(crc->surfaceNormal, Vector{ 1, 0});
+	collisionSystem(components);
+	pos = components.positions[moving];
+	EXPECT_NEAR(pos->x, 1, epsilon);
+	EXPECT_NEAR(pos->y, 0, epsilon);
+	crc = components.collideds[moving];
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ 1,0 });
 
+	components.positions[moving] = new PositionComponent(0.0, -0.9);
+	components.collideds.erase(moving);
+	components.collideds.erase(stationary);
 
-	//moving->addComponent(make_shared<PositionComponent>(0, -0.9));
-	//moving->removeComponent(CollidedComponent::NAME);
+	collisionSystem(components);
+	pos = components.positions[moving];
+	EXPECT_NEAR(pos->x, 0, epsilon);
+	EXPECT_NEAR(pos->y, -1, epsilon);
+	crc = components.collideds[moving];
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ 0, -1 });
 
-	//collisionSystem(entities);
+	components.positions[moving] = new PositionComponent(-0.9, 0.0);
+	components.collideds.erase(moving);
+	components.collideds.erase(stationary);
 
-	//pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, 0, epsilon);
-	//EXPECT_NEAR(pos->y, -1, epsilon);
-	//crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_VEQ(crc->surfaceNormal, Vector{ 0,-1 });
-
-
-	//moving->addComponent(make_shared<PositionComponent>(-0.9, 0));
-	//moving->removeComponent(CollidedComponent::NAME);
-
-	//collisionSystem(entities);
-
-	//pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, -1, epsilon);
-	//EXPECT_NEAR(pos->y, 0, epsilon);
-	//crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_VEQ(crc->surfaceNormal, Vector{ -1, 0});
+	collisionSystem(components);
+	pos = components.positions[moving];
+	EXPECT_NEAR(pos->x, -1, epsilon);
+	EXPECT_NEAR(pos->y, 0, epsilon);
+	crc = components.collideds[moving];
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ -1, 0 });
 
 }
 
 TEST(CollisionSystem, CollidingWithTwoWalls) {
-	//Entities entities;
+	Components components;
 
-	//auto stationary1 = make_shared<Entity>("stationary");
-	//stationary1->addComponent(make_shared<PositionComponent>(0, 0));
-	//stationary1->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//entities.push_back(stationary1);
+	EntityID stationary1 = 0;
+	components.positions[stationary1] = new PositionComponent(0, 0);
+	components.collisionBoxes[stationary1] = new CollisionBoxComponent(1, 1);
+	EntityID stationary2 = 1;
+	components.positions[stationary2] = new PositionComponent(1, 0);
+	components.collisionBoxes[stationary2] = new CollisionBoxComponent(1, 1);
 
-	//auto stationary2 = make_shared<Entity>("stationary");
-	//stationary2->addComponent(make_shared<PositionComponent>(1, 0));
-	//stationary2->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//entities.push_back(stationary2);
+	EntityID moving = 2;
+	components.positions[moving] = new PositionComponent(0.2, 0.9);
+	components.collisionBoxes[moving] = new CollisionBoxComponent(1, 1);
+	components.moveds[moving] = new MovedComponent;
 
-	//auto moving = make_shared<Entity>("moving");
-	//moving->addComponent(make_shared<PositionComponent>(0.2, 0.9));
-	//moving->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//moving->addComponent(make_shared<MovedComponent>());
-	//entities.push_back(moving);
+	collisionSystem(components);
 
-	//collisionSystem(entities);
+	auto pos = components.positions[moving];
+	EXPECT_TRUE((pos->x == 1 || pos->y == 1));
+	auto crc = components.collideds[moving];
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ 0,1 });
 
-	//auto pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, 0.2, epsilon);
-	//EXPECT_NEAR(pos->y, 1, epsilon);
-	//auto crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_VEQ(crc->surfaceNormal, Vector{ 0, 1 });
+	components.positions[moving] = new PositionComponent(0.9, 0.8);
 
-	//moving->addComponent(make_shared<PositionComponent>(0.9, 0.8));
+	collisionSystem(components);
 
-	//collisionSystem(entities);
+	pos = components.positions[moving];
+	EXPECT_TRUE((pos->x == 1 || pos->y == 1));
+	crc = components.collideds[moving];
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ 0, 1 });
 
-	//pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, 1, epsilon);
-	//EXPECT_NEAR(pos->y, 1, epsilon);
-	//crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_VEQ(crc->surfaceNormal, Vector{ 0, 1 });
+	components.positions[moving] = new PositionComponent(-0.9, 0.8);
 
-	//moving->addComponent(make_shared<PositionComponent>(-0.9, 0.8));
+	collisionSystem(components);
 
-	//collisionSystem(entities);
+	pos = components.positions[moving];
+	EXPECT_TRUE((pos->x == -1 || pos->y == -1));
+	crc = components.collideds[moving];
+	EXPECT_VEQ(crc->surfaceNormal, Vector{ -1, 0 });
 
-	//pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, -1, epsilon);
-	//EXPECT_NEAR(pos->y, 0.8, epsilon);
-	//crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_VEQ(crc->surfaceNormal, Vector{ -1, 0 });
 }
 
 TEST(Vector, Equality) {

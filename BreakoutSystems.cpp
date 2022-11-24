@@ -85,9 +85,8 @@ void renderStringOnConsoleSystem(Components& components, ConsoleRenderWindow& cr
 }
 
 void deadBlocksSystem(Components& components) {
-	for (auto iter = components.collideds.begin(); iter != components.collideds.end();)
+	for (auto iter = components.collideds.begin(); iter != components.collideds.end();) {
 	//can't use Range-based loop as we need to remove items
-	{
 		EntityID id = iter->first;
 		
 		auto collided = iter->second;
