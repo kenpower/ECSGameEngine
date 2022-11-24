@@ -2,7 +2,7 @@
 #include<string>
 #include"Vector.h"
 
-struct Entity;
+typedef int EntityID;
 
 struct Component {
 	virtual std::string name() = 0;
@@ -84,11 +84,11 @@ struct CollidedComponent : public Component {
 	static constexpr const char* NAME = "collided";
 	virtual std::string name() { return std::string(NAME); }
 
-	CollidedComponent(Entity* other, Vector surfaceNormal = Vector{ 0, 0 }) :
+	CollidedComponent(EntityID other, Vector surfaceNormal = Vector{ 0, 0 }) :
 		other(other),  surfaceNormal(surfaceNormal) {}
 
 	Vector surfaceNormal;
-	Entity* other;
+	EntityID other;
 };
 
 struct ScoreWhenHitBlockComponent : public Component {

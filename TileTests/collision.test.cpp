@@ -16,7 +16,7 @@ struct CollisionRect
 	double h;
 };
 
-//void collisionSystem(Entities&);
+void collisionSystem(Components&);
 Vector getMinimumTranslationVector(const CollisionRect&, const CollisionRect&);
 
 TEST(MTV, NoOverlap) {
@@ -112,25 +112,24 @@ TEST(MTV, FirstIsBigger) {
 }
 
 TEST(CollisionSystem, Collisions) {
-	//Entities entities;
+	Components components;
 
-	//auto stationary = make_shared<Entity>("stationary");
-	//stationary->addComponent(make_shared<PositionComponent>(0, 0));
-	//stationary->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//entities.push_back(stationary);
+	EntityID stationary = 0;
+	components.positions[stationary] = new PositionComponent(0, 0);
+	components.collisionBoxes[stationary] = new CollisionBoxComponent(1, 1);
 
-	//auto moving = make_shared<Entity>("moving");
-	//moving->addComponent(make_shared<PositionComponent>(0, 0.9));
-	//moving->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//moving->addComponent(make_shared<MovedComponent>());
-	//entities.push_back(moving);
-	//collisionSystem(entities);
 
-	//auto pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, 0, epsilon);
-	//EXPECT_NEAR(pos->y, 1, epsilon);
-	//auto crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_VEQ(crc->surfaceNormal, Vector{0,1});
+	EntityID moving = 1;
+	components.positions[moving] = new PositionComponent(0, 0.1);
+	components.collisionBoxes[moving] = new CollisionBoxComponent(1, 1);
+	components.moveds[moving] = new MovedComponent;
+
+	collisionSystem(components);
+	auto pos = components.positions[moving];
+	EXPECT_NEAR(pos->x, 0, epsilon);
+	EXPECT_NEAR(pos->y, 1, epsilon);
+	auto crc = components.collideds[moving];
+	EXPECT_VEQ(crc->surfaceNormal, Vector{0,1});
 
 
 	//pos = stationary->getComponent<PositionComponent>();

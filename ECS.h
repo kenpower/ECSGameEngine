@@ -32,5 +32,5 @@ struct Components {
 		collideds.erase(id);
 		moveds.erase(id);
 
-	}
+	};
 };

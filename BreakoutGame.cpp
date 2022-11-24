@@ -106,7 +106,9 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 
 		//remove temporary components
+		for (auto c : components.moveds) delete c.second;
 		components.moveds.clear();
+		for (auto c : components.collideds) delete c.second;
 		components.collideds.clear();
 
 

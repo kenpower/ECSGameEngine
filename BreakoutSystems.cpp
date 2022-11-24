@@ -43,11 +43,10 @@ void userControlSystem(Components& components, double deltaSeconds) {
 }
 
 void bounceSystem(Components& components) {
-	for (auto& id_bounce : components.leftRightControls) {
+	for (auto& id_bounce : components.collideds) {
 		EntityID id = id_bounce.first;
 		auto bounce = id_bounce.second;
 
-		auto pos = components.positions[id];
 		auto collision = components.collideds[id];
 		auto vel = components.velocitys[id];
 
@@ -86,18 +85,19 @@ void renderStringOnConsoleSystem(Components& components, ConsoleRenderWindow& cr
 }
 
 void deadBlocksSystem(Components& components) {
-	for (auto id_col = components.collideds.begin(); id_col != components.collideds.end();)
+	for (auto iter = components.collideds.begin(); iter != components.collideds.end();)
 	//can't use Range-based loop as we need to remove items
 	{
-		EntityID id = id_col->first;
+		EntityID id = iter->first;
 		
-		auto collided = id_col->second;
+		auto collided = iter->second;
+		++iter;
+
 		auto del = components.deleteAfterCollisions[id];
 
 		if (collided && del)
 			components.deleteEntity(id);
-		else
-			++id_col;
+		
 	}
 }
 

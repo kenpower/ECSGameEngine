@@ -11,23 +11,23 @@
 //	return component == __components.end() ? NULL : component->second;
 //}
 
-shared_ptr<Component> Entity::getComponent(const std::string name) {
-    auto component = components.find(name);
+//shared_ptr<Component> Entity::getComponent(const std::string name) {
+//    auto component = components.find(name);
+//
+//    return component == components.end() ? NULL : component->second;
+//}
 
-    return component == components.end() ? NULL : component->second;
-}
-
-void Entity::removeComponent(const std::string name) {
-    for (auto it = components.begin(); it != components.end();)
-    {
-        if (it->first == name)
-            it = components.erase(it);
-        else
-            ++it;
-    }
-}
-
-
-
+//void Entity::removeComponent(const std::string name) {
+//    for (auto it = components.begin(); it != components.end();)
+//    {
+//        if (it->first == name)
+//            it = components.erase(it);
+//        else
+//            ++it;
+//    }
+//}
+//
+//
+//
 
 

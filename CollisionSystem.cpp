@@ -32,7 +32,7 @@ Vector getMinimumTranslationVector(const CollisionRect& a, const CollisionRect& 
 struct Collider{
 	CollisionRect collisionRect;
 	PositionComponent* position;
-	Entity* entity;
+	EntityID entity;
 };
 
 Vector getAxisAlignedNormal(Vector& v) {
@@ -47,19 +47,15 @@ void resolveCollision(Collider& moving, Collider& other, Vector& mtv) {
 	moving.collisionRect.y = moving.position->y;
 }
 
-void getColliders(Components& components, vector<int>& movingColliders, vector<int>& allColliders) {
-	for (auto& id_mov : components.moveds) {
-		EntityID id = id_mov.first;
+void getCollidableEntities(Components& components, vector<int>& movingColliders, vector<int>& allColliders) {
+	for (auto& id_collisionBoxes : components.collisionBoxes) {
+		EntityID id = id_collisionBoxes.first;
 
-		auto mov = id_mov.second;
+		auto mov = components.moveds[id];
 		auto pos = components.positions[id];
 		auto box = components.collisionBoxes[id];
 
-		Collider collider;
-		if (box && pos) {
-			collider.collisionRect = CollisionRect{ pos->x, pos->y, box->w, box->h };
-			collider.position = pos;
-		}
+		if (!pos or !box) continue;
 
 		if (mov)
 			movingColliders.push_back(id);
@@ -68,33 +64,40 @@ void getColliders(Components& components, vector<int>& movingColliders, vector<i
 	}
 }
 
+Collider makeCollider(PositionComponent* pos, CollisionBoxComponent* box) {
+	Collider collider;
+	collider.collisionRect = CollisionRect{ pos->x, pos->y, box->w, box->h };
+	collider.position = pos;
+	return collider;
+}
+
 void collisionSystem(Components& components) {
-	vector<int> movingColliders;
-	vector<int> allColliders;
+	vector<int> movingEntities;
+	vector<int> allEntitiesWithCollisonBox;
 
-	getColliders(components, movingColliders, allColliders);
+	getCollidableEntities(components, movingEntities, allEntitiesWithCollisonBox);
 
-	for (auto& moving : movingColliders) 
-		for (auto& other : allColliders) {
-			if (other == moving) continue;
+	for (auto& movingEntity : movingEntities) 
+		for (auto& otherEntity : allEntitiesWithCollisonBox) {
+			if (otherEntity == movingEntity) continue;
 
-			auto pos = components.positions[moving];
-			auto box = components.collisionBoxes[moving];
+			auto pos = components.positions[movingEntity];
+			auto box = components.collisionBoxes[movingEntity];
 
+			auto other_pos = components.positions[otherEntity];
+			auto other_box = components.collisionBoxes[otherEntity];
 
-			Vector mtv = getMinimumTranslationVector(moving.collisionRect, other.collisionRect);
+			Collider movingCollider = makeCollider(pos, box);
+			Collider otherCollider = makeCollider(other_pos, other_box);
+
+			Vector mtv = getMinimumTranslationVector(movingCollider.collisionRect, otherCollider.collisionRect);
 			bool intersecting = mtv.x != 0 or mtv.y != 0;
 			if (intersecting) {
-				resolveCollision(moving, other, mtv);
+				resolveCollision(movingCollider, otherCollider, mtv);
 				Vector axisAlignedNormal = getAxisAlignedNormal(mtv);
 
-
-				//auto ccForMoving = make_shared<CollidedComponent>(other.entity, axisAlignedNormal);
-				//moving.entity->addComponent(ccForMoving);
-				components[id]
-
-				//auto ccForOther = make_shared<CollidedComponent>(moving.entity, -axisAlignedNormal);
-				//other.entity->addComponent(ccForOther);
+				components.collideds[movingEntity] = new CollidedComponent(otherEntity, axisAlignedNormal);
+				components.collideds[otherEntity] = new CollidedComponent(movingEntity, -axisAlignedNormal);
 			}
 		}
 	
