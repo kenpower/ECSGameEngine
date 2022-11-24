@@ -2,13 +2,13 @@
 #include"ECS.h"
 #include "ConsoleRenderWindow.h"
 
-void movementSystem(Entities&, double);
-void userControlSystem(Entities&, double);
-void collisionSystem(Entities&);
-void bounceSystem(Entities&);
-void deadBlocksSystem(Entities&);
+void movementSystem(Components&, double);
+void userControlSystem(Components&, double);
+void collisionSystem(Components&);
+void bounceSystem(Components&);
+void deadBlocksSystem(Components&);
 
-void scoreBlocksSystem(Entities&, int&);
+void scoreBlocksSystem(Components&, int&);
 
-void renderCharOnConsoleSystem(Entities&, ConsoleRenderWindow&); 
-void renderStringOnConsoleSystem(Entities&, ConsoleRenderWindow&);
+void renderCharOnConsoleSystem(Components&, ConsoleRenderWindow&); 
+void renderStringOnConsoleSystem(Components&, ConsoleRenderWindow&);

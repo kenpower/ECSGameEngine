@@ -1,5 +1,7 @@
 #include "ECS.h"
+#include <vector>
 #include "vector.h"
+using namespace std;
 
 struct CollisionRect
 {
@@ -45,35 +47,40 @@ void resolveCollision(Collider& moving, Collider& other, Vector& mtv) {
 	moving.collisionRect.y = moving.position->y;
 }
 
-void getColliders(Entities& entities, vector<Collider>& movingColliders, vector<Collider>& allColliders) {
-	for (auto& e : entities) {
-		auto moved = dynamic_pointer_cast<MovedComponent>(e->getComponent(MovedComponent::NAME));
-		auto box = dynamic_pointer_cast<CollisionBoxComponent>(e->getComponent(CollisionBoxComponent::NAME));
-		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
+void getColliders(Components& components, vector<int>& movingColliders, vector<int>& allColliders) {
+	for (auto& id_mov : components.moveds) {
+		EntityID id = id_mov.first;
+
+		auto mov = id_mov.second;
+		auto pos = components.positions[id];
+		auto box = components.collisionBoxes[id];
 
 		Collider collider;
 		if (box && pos) {
 			collider.collisionRect = CollisionRect{ pos->x, pos->y, box->w, box->h };
-			collider.position = pos.get();
-			collider.entity = e.get();
+			collider.position = pos;
 		}
 
-		if (moved)
-			movingColliders.push_back(collider);
+		if (mov)
+			movingColliders.push_back(id);
 
-		allColliders.push_back(collider);
+		allColliders.push_back(id);
 	}
 }
 
-void collisionSystem(Entities& entities) {
-	vector<Collider> movingColliders;
-	vector<Collider> allColliders;
+void collisionSystem(Components& components) {
+	vector<int> movingColliders;
+	vector<int> allColliders;
 
-	getColliders(entities, movingColliders, allColliders);
+	getColliders(components, movingColliders, allColliders);
 
 	for (auto& moving : movingColliders) 
 		for (auto& other : allColliders) {
-			if (other.entity == moving.entity) continue;
+			if (other == moving) continue;
+
+			auto pos = components.positions[moving];
+			auto box = components.collisionBoxes[moving];
+
 
 			Vector mtv = getMinimumTranslationVector(moving.collisionRect, other.collisionRect);
 			bool intersecting = mtv.x != 0 or mtv.y != 0;
@@ -81,11 +88,13 @@ void collisionSystem(Entities& entities) {
 				resolveCollision(moving, other, mtv);
 				Vector axisAlignedNormal = getAxisAlignedNormal(mtv);
 
-				auto ccForMoving = make_shared<CollidedComponent>(other.entity, axisAlignedNormal);
-				moving.entity->addComponent(ccForMoving);
 
-				auto ccForOther = make_shared<CollidedComponent>(moving.entity, -axisAlignedNormal);
-				other.entity->addComponent(ccForOther);
+				//auto ccForMoving = make_shared<CollidedComponent>(other.entity, axisAlignedNormal);
+				//moving.entity->addComponent(ccForMoving);
+				components[id]
+
+				//auto ccForOther = make_shared<CollidedComponent>(moving.entity, -axisAlignedNormal);
+				//other.entity->addComponent(ccForOther);
 			}
 		}
 	

@@ -130,7 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Breakoutcpp.cpp" />
+    <ClCompile Include="BreakoutGame.cpp" />
     <ClCompile Include="BreakoutSystems.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Entity.cpp" />

@@ -9,9 +9,17 @@ using namespace std;
 #include "ConsoleRenderWindow.h"
 
 void game(ConsoleRenderWindow&,int, int);
+#include <map>
 
 int main() {
-			
+		
+	//map<int, int> m;
+	//m[5] = 42;
+	//for (auto i : m)
+	//	std::cout << i.second << '/n';
+
+	//system("pause");
+
 	int charSizePixels = 10;
 
 	int worldHeight = 40;// Console Screen Size X (columns)

@@ -2,19 +2,18 @@
 #include<windows.h>
 #include"BreakoutSystems.h"
 
-void movementSystem(Entities& entities, double deltaSeconds) {
-	static auto movedComponent = make_shared<MovedComponent>();
+void movementSystem(Components& components, double deltaSeconds) {
 	
-	for (auto& e : entities) {
-		//auto* vel = dynamic_cast<VelocityComponent*>(e->getComponent(VelocityComponent::NAME));
-		//auto* pos = dynamic_cast<PositionComponent*>(e->getComponent(PositionComponent::NAME));
-		auto vel = e->getComponent<VelocityComponent>();
-		auto pos = e->getComponent<PositionComponent>();
+	for (auto& id_vel : components.velocitys) {
+		EntityID id = id_vel.first;
+
+		auto vel = id_vel.second;
+		auto pos = components.positions[id];
 
 		if (vel && pos) {
 			pos->x += vel->x * deltaSeconds;
 			pos->y += vel->y * deltaSeconds;
-			e->addComponent(movedComponent);
+			components.moveds[id]= new MovedComponent;
 		}
 	}
 }
@@ -24,27 +23,34 @@ bool isKeyDown(int keyCode) {
 	return  leftMostBit & GetAsyncKeyState((unsigned char)(keyCode));
 }
 
-void userControlSystem(Entities& entities, double deltaSeconds) {
-	static auto movedComponent = make_shared<MovedComponent>();
-	for (auto& e : entities) {
-		auto lrc = dynamic_pointer_cast<LeftRightControlComponent>(e->getComponent(LeftRightControlComponent::NAME));
-		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
-		if (!lrc || !pos) continue; 
+void userControlSystem(Components& components, double deltaSeconds) {
+
+	for (auto& id_lrc : components.leftRightControls) {
+		EntityID id = id_lrc.first;
+
+		auto lrc = id_lrc.second;
+		auto pos = components.positions[id];
+
+		if (!lrc || !pos) continue;
 
 		// All they other Key codes are here https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
 		if (isKeyDown(VK_RIGHT)) 
 			pos->x += lrc->speed * deltaSeconds;
 		if (isKeyDown(VK_LEFT))
 			pos->x -= lrc->speed * deltaSeconds;
-		e->addComponent(movedComponent);
+		components.moveds[id] = new MovedComponent;
 	}
 }
 
-void bounceSystem(Entities& entities) {
-	for (auto& e : entities) {
-		auto bounce = dynamic_pointer_cast<BounceComponent>(e->getComponent(BounceComponent::NAME));
-		auto vel = dynamic_pointer_cast<VelocityComponent>(e->getComponent(VelocityComponent::NAME));
-		auto collision = dynamic_pointer_cast<CollidedComponent>(e->getComponent(CollidedComponent::NAME));
+void bounceSystem(Components& components) {
+	for (auto& id_bounce : components.leftRightControls) {
+		EntityID id = id_bounce.first;
+		auto bounce = id_bounce.second;
+
+		auto pos = components.positions[id];
+		auto collision = components.collideds[id];
+		auto vel = components.velocitys[id];
+
 		if (!bounce || !vel || !collision) continue;
 		
 		if (abs(lround(collision->surfaceNormal.x)) == 1) vel->x *= -1; //vertical   wall
@@ -53,47 +59,54 @@ void bounceSystem(Entities& entities) {
 	}
 }
 
-void renderCharOnConsoleSystem(Entities& entities, ConsoleRenderWindow& crw) {
-	for (auto& e : entities) {
-		auto sprite = dynamic_pointer_cast<CharSpriteComponent>(e->getComponent(CharSpriteComponent::NAME));
-		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
-		if (!sprite || !pos) continue;
+void renderCharOnConsoleSystem(Components& components, ConsoleRenderWindow& crw) {
+	for (auto& id_charSprite : components.charSprites) {
+		EntityID id = id_charSprite.first;
+		auto charSprite = id_charSprite.second;
 
-		crw.Draw(lround(pos->x), lround(pos->y), sprite->c);
-		
+		auto pos = components.positions[id];
+
+		if (!charSprite || !pos) continue;
+
+		crw.Draw(lround(pos->x), lround(pos->y), charSprite->c);
 	}
 }
 
-void renderStringOnConsoleSystem(Entities& entities, ConsoleRenderWindow& crw) {
-	for (auto& e : entities) {
-		auto sprite = dynamic_pointer_cast<StringSpriteComponent>(e->getComponent(StringSpriteComponent::NAME));
-		auto pos = dynamic_pointer_cast<PositionComponent>(e->getComponent(PositionComponent::NAME));
-		if (!sprite || !pos) continue;
+void renderStringOnConsoleSystem(Components& components, ConsoleRenderWindow& crw) {
+	for (auto& id_stringSprite : components.stringSprites) {
+		EntityID id = id_stringSprite.first;
+		auto stringSprite = id_stringSprite.second;
 
-		for (int i = 0; sprite->c[i] != '\0'; i++)
-			crw.Draw(lround(pos->x + i), lround(pos->y), sprite->c[i]);
+		auto pos = components.positions[id];
+		if (!stringSprite || !pos) continue;
+
+		for (int i = 0; stringSprite->c[i] != '\0'; i++)
+			crw.Draw(lround(pos->x + i), lround(pos->y), stringSprite->c[i]);
 	}
 }
 
-void deadBlocksSystem(Entities& entities) {
-	for (auto e = entities.begin(); e != entities.end();) 
-	//can't use Range-based loop as we need to remove some items
+void deadBlocksSystem(Components& components) {
+	for (auto id_col = components.collideds.begin(); id_col != components.collideds.end();)
+	//can't use Range-based loop as we need to remove items
 	{
+		EntityID id = id_col->first;
+		
+		auto collided = id_col->second;
+		auto del = components.deleteAfterCollisions[id];
 
-		auto collided = dynamic_pointer_cast<CollidedComponent>((*e)->getComponent(CollidedComponent::NAME));
-		auto block = dynamic_pointer_cast<DeleteAfterCollisionComponent>((*e)->getComponent(DeleteAfterCollisionComponent::NAME));
-
-		if (collided && block)
-			e = entities.erase(e);
+		if (collided && del)
+			components.deleteEntity(id);
 		else
-			++e;
+			++id_col;
 	}
 }
 
-void scoreBlocksSystem(Entities& entities, int& gameScore) {
-	for (auto& e : entities) {
-		auto collided = dynamic_pointer_cast<CollidedComponent>(e->getComponent(CollidedComponent::NAME));
-		auto score = dynamic_pointer_cast<ScoreWhenHitBlockComponent>(e->getComponent(ScoreWhenHitBlockComponent::NAME));
+void scoreBlocksSystem(Components& components, int& gameScore) {
+	for (auto& id_col : components.collideds) {
+		EntityID id = id_col.first;
+
+		auto collided = id_col.second;
+		auto score = components.scoreWhenHitBlock[id];
 
 		if (!collided || !score) continue;
 		
@@ -102,13 +115,5 @@ void scoreBlocksSystem(Entities& entities, int& gameScore) {
 	}
 }
 
-void ballPaddleBounce(Entities& entities, int& gameScore) {
-	for (auto& e : entities) {
-		auto collided = dynamic_pointer_cast<CollidedComponent>(e->getComponent(CollidedComponent::NAME));
-		auto score = dynamic_pointer_cast<ScoreWhenHitBlockComponent>(e->getComponent(ScoreWhenHitBlockComponent::NAME));
-
-		if (!collided || !score) continue;
-
-		gameScore += score->score;
-	}
+void ballPaddleBounce(Components& components) {
 }
