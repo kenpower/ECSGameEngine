@@ -18,6 +18,8 @@ struct Components {
 	map<EntityID, DeleteAfterCollisionComponent*> deleteAfterCollisions;
 	map<EntityID, CollidedComponent*> collideds;
 	map<EntityID, MovedComponent*> moveds;
+	map<EntityID, PaddleBounceComponent*> paddleBounces;
+
 
 	void deleteEntity(EntityID id) {
 		positions.erase(id);
@@ -31,6 +33,7 @@ struct Components {
 		deleteAfterCollisions.erase(id);
 		collideds.erase(id);
 		moveds.erase(id);
+		paddleBounces.erase(id);
 
 	};
 };
