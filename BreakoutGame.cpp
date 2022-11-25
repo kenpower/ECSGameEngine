@@ -39,7 +39,7 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	components.stringSprites[paddleID] = new StringSpriteComponent("<====>");
 	components.collisionBoxes[paddleID] = new CollisionBoxComponent(6, 1);
 	components.leftRightControls[paddleID] = new LeftRightControlComponent(15);
-	components.paddleBounces[paddleID] = new PaddleBounceComponent();
+	components.paddleBounces[paddleID] = new PaddleBounceComponent(3);
 
 
 	wallEntity(components, -1, -1, 1, worldHeight+2);

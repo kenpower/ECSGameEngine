@@ -51,27 +51,26 @@ void bounceSystem(Components& components) {
 		auto vel = components.velocitys[id];
 		auto pos = components.positions[id];
 		auto paddlePos = components.positions[collision->other];
-
+		auto paddleBounce = components.paddleBounces[collision->other];
 
 		if (!bounce || !vel || !collision) continue;
 
 		if (abs(lround(collision->surfaceNormal.x)) == 1) vel->x *= -1; //vertical   wall
 		if (abs(lround(collision->surfaceNormal.y)) == 1) vel->y *= -1; //horizontal wall
 
-		if (components.paddleBounces[collision->other] && pos && paddlePos) {
+		if (paddleBounce && pos && paddlePos) {
 			double ballx = pos->x;
-			double paddleCentre = paddlePos->x + 3;
-			double ballOffset = (paddleCentre - ballx)/3.0;
+			double paddleCentre = paddlePos->x + paddleBounce->paddleCentre;
+			double percentDeflection = (paddleCentre - ballx)/ paddleBounce->paddleCentre;
 			const double PI = 3.141;
-			double angle = PI / 2 + ballOffset * PI / 3;
+			const double straightUp = PI / 2;
+			const double maxDeflection = PI / 3;
+
+			double angle = straightUp + percentDeflection * maxDeflection;
 			double ballSpeed = sqrt(vel->x * vel->x + vel->y * vel->y);
 			vel->x = ballSpeed * cos(angle);
 			vel->y = ballSpeed * sin(angle) * -1;
-			return;
-
 		}
-		
-		
 	}
 }
 

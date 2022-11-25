@@ -102,5 +102,6 @@ struct PaddleBounceComponent : public Component {
 	static constexpr const char* NAME = "paddlebounce";
 	virtual std::string name() { return std::string(NAME); }
 
-	PaddleBounceComponent() {};
+	PaddleBounceComponent(double centre):paddleCentre(centre) {};
+	double paddleCentre;
 };
