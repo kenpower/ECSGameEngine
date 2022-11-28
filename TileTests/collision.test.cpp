@@ -7,107 +7,101 @@
 using namespace std;
 
 
-struct CollisionRect
-{
-	double x;
-	double y;
-	double w;
-	double h;
-};
+
 
 void collisionSystem(Components&);
-Vector getMinimumTranslationVector(const CollisionRect&, const CollisionRect&);
+Vector getMinimumTranslationVector(const CollisionRectComponent*, const CollisionRectComponent*);
 
 TEST(MTV, NoOverlap) {
 	Vector zero{ 0,0 };
-	vector<pair<CollisionRect, Vector>> td = {
-		{CollisionRect{ -2, 1, 1, 1 }, zero},
-		{CollisionRect{ -1, 1, 1, 1 }, zero},
-		{CollisionRect{ -0.5, 1, 1, 1 }, zero},
-		{CollisionRect{ 0, 1, 1, 1 }, zero},
-		{CollisionRect{ 0.25, 1, 1, 1 }, zero},
-		{CollisionRect{ 1, 1, 1, 1 }, zero},
-		{CollisionRect{ 2, 1, 1, 1 }, zero},
+	vector<pair<CollisionRectComponent, Vector>> td = {
+		{CollisionRectComponent{ -2, 1, 1, 1 }, zero},
+		{CollisionRectComponent{ -1, 1, 1, 1 }, zero},
+		{CollisionRectComponent{ -0.5, 1, 1, 1 }, zero},
+		{CollisionRectComponent{ 0, 1, 1, 1 }, zero},
+		{CollisionRectComponent{ 0.25, 1, 1, 1 }, zero},
+		{CollisionRectComponent{ 1, 1, 1, 1 }, zero},
+		{CollisionRectComponent{ 2, 1, 1, 1 }, zero},
 
-		{CollisionRect{ -2, -1, 1, 1 }, zero},
-		{CollisionRect{ -1, -1, 1, 1 }, zero},
-		{CollisionRect{ -0.5, -1, 1, 1 }, zero},
-		{CollisionRect{ 0, -1, 1, 1 }, zero},
-		{CollisionRect{ 0.25, -1, 1, 1 }, zero},
-		{CollisionRect{ 1, -1, 1, 1 }, zero},
-		{CollisionRect{ 2, -1, 1, 1 }, zero},
+		{CollisionRectComponent{ -2, -1, 1, 1 }, zero},
+		{CollisionRectComponent{ -1, -1, 1, 1 }, zero},
+		{CollisionRectComponent{ -0.5, -1, 1, 1 }, zero},
+		{CollisionRectComponent{ 0, -1, 1, 1 }, zero},
+		{CollisionRectComponent{ 0.25, -1, 1, 1 }, zero},
+		{CollisionRectComponent{ 1, -1, 1, 1 }, zero},
+		{CollisionRectComponent{ 2, -1, 1, 1 }, zero},
 
-		{CollisionRect{ -1, 0, 1, 1 }, zero},
-		{CollisionRect{ 1, 0, 1, 1 }, zero},
-		{CollisionRect{ -2, 0, 1, 1 }, zero},
-		{CollisionRect{ 2, 0, 1, 1 }, zero},
+		{CollisionRectComponent{ -1, 0, 1, 1 }, zero},
+		{CollisionRectComponent{ 1, 0, 1, 1 }, zero},
+		{CollisionRectComponent{ -2, 0, 1, 1 }, zero},
+		{CollisionRectComponent{ 2, 0, 1, 1 }, zero},
 	};
-	CollisionRect cr{ 0, 0, 1, 1 };
+	CollisionRectComponent cr{ 0, 0, 1, 1 };
 	
 	for (const auto& t:td)
-			EXPECT_VEQ(t.second, getMinimumTranslationVector(t.first, cr));
+			EXPECT_VEQ(t.second, getMinimumTranslationVector(&t.first, &cr));
 }
 
 TEST(MTV, Overlap) {
 	Vector zero{ 0,0 };
-	vector<pair<CollisionRect, Vector>> td = {
-		{CollisionRect{ -0.9, 0, 1, 1 }, Vector{-0.1,0}},
-		{CollisionRect{ -0.6, 0, 1, 1 },  Vector{-0.4,0}},
-		{CollisionRect{ +0.6, 0, 1, 1 },  Vector{0.4,0}},
-		{CollisionRect{ +0.9, 0, 1, 1 },  Vector{0.1,0}},
+	vector<pair<CollisionRectComponent, Vector>> td = {
+		{CollisionRectComponent{ -0.9, 0, 1, 1 }, Vector{-0.1,0}},
+		{CollisionRectComponent{ -0.6, 0, 1, 1 },  Vector{-0.4,0}},
+		{CollisionRectComponent{ +0.6, 0, 1, 1 },  Vector{0.4,0}},
+		{CollisionRectComponent{ +0.9, 0, 1, 1 },  Vector{0.1,0}},
 
-		{CollisionRect{ -0.9, -0.6, 1, 1 }, Vector{-0.1,0}},
-		{CollisionRect{ -0.5, -0.6, 1, 1 },  Vector{0,-0.4}},
-		{CollisionRect{ +0.5, -0.6, 1, 1 },  Vector{0,-0.4}},
-		{CollisionRect{ +0.9, -0.6, 1, 1 },  Vector{0.1,0}},
-	
-		{CollisionRect{ -0.9, 0.6, 1, 1 }, Vector{-0.1,0}},
-		{CollisionRect{ -0.5, 0.6, 1, 1 },  Vector{0,+0.4}},
-		{CollisionRect{ +0.5, 0.6, 1, 1 },  Vector{0,+0.4}},
-		{CollisionRect{ +0.9, 0.6, 1, 1 },  Vector{0.1,0}},
+		{CollisionRectComponent{ -0.9, -0.6, 1, 1 }, Vector{-0.1,0}},
+		{CollisionRectComponent{ -0.5, -0.6, 1, 1 },  Vector{0,-0.4}},
+		{CollisionRectComponent{ +0.5, -0.6, 1, 1 },  Vector{0,-0.4}},
+		{CollisionRectComponent{ +0.9, -0.6, 1, 1 },  Vector{0.1,0}},
+
+		{CollisionRectComponent{ -0.9, 0.6, 1, 1 }, Vector{-0.1,0}},
+		{CollisionRectComponent{ -0.5, 0.6, 1, 1 },  Vector{0,+0.4}},
+		{CollisionRectComponent{ +0.5, 0.6, 1, 1 },  Vector{0,+0.4}},
+		{CollisionRectComponent{ +0.9, 0.6, 1, 1 },  Vector{0.1,0}},
 	};
-	CollisionRect cr{ 0, 0, 1, 1 };
+	CollisionRectComponent cr{ 0, 0, 1, 1 };
 
 	for (auto& t : td)
-		EXPECT_VEQ(t.second, getMinimumTranslationVector(t.first, cr));
+		EXPECT_VEQ(t.second, getMinimumTranslationVector(&t.first, &cr)) ;
 }
 
 TEST(MTV, FirstIsSmaller) {
 	Vector zero{ 0,0 };
-	vector<pair<CollisionRect, Vector>> td = {
-		{CollisionRect{ 1, 0, 1, 1 }, Vector{0,-1}},
-		{CollisionRect{ 4, 2, 1, 1 },  Vector{0,-3}},
-		{CollisionRect{ 4, 4.5, 1, 1 },  Vector{-5,0}},
-		{CollisionRect{ 6, 4.5, 1, 1 },  Vector{4,0}},
-		{CollisionRect{ 6, 8, 1, 1 },  Vector{0,2}},
+	vector<pair<CollisionRectComponent, Vector>> td = {
+		{CollisionRectComponent{ 1, 0, 1, 1 }, Vector{0,-1}},
+		{CollisionRectComponent{ 4, 2, 1, 1 },  Vector{0,-3}},
+		{CollisionRectComponent{ 4, 4.5, 1, 1 },  Vector{-5,0}},
+		{CollisionRectComponent{ 6, 4.5, 1, 1 },  Vector{4,0}},
+		{CollisionRectComponent{ 6, 8, 1, 1 },  Vector{0,2}},
 
-		{CollisionRect{ -0.5, -0.9, 1, 1 }, Vector{0, -0.1}},
-		{CollisionRect{ -0.5, 9.9, 1, 1 },  Vector{0, +0.1}},
-		{CollisionRect{ -0.5, 0.1, 1, 1 }, Vector{-0.5, -0}},
-		{CollisionRect{ -0.5, 9.1, 1, 1 },  Vector{-0.5, 0}},
-		{CollisionRect{  9.5, -0.9, 1, 1 }, Vector{0, -0.1}},
-		{CollisionRect{  9.5, 9.9, 1, 1 },  Vector{0, +0.1}},
-		{CollisionRect{  9.5, 0.1, 1, 1 }, Vector{+0.5, -0}},
-		{CollisionRect{  9.5, 9.1, 1, 1 },  Vector{+0.5, 0}},
+		{CollisionRectComponent{ -0.5, -0.9, 1, 1 }, Vector{0, -0.1}},
+		{CollisionRectComponent{ -0.5, 9.9, 1, 1 },  Vector{0, +0.1}},
+		{CollisionRectComponent{ -0.5, 0.1, 1, 1 }, Vector{-0.5, -0}},
+		{CollisionRectComponent{ -0.5, 9.1, 1, 1 },  Vector{-0.5, 0}},
+		{CollisionRectComponent{  9.5, -0.9, 1, 1 }, Vector{0, -0.1}},
+		{CollisionRectComponent{  9.5, 9.9, 1, 1 },  Vector{0, +0.1}},
+		{CollisionRectComponent{  9.5, 0.1, 1, 1 }, Vector{+0.5, -0}},
+		{CollisionRectComponent{  9.5, 9.1, 1, 1 },  Vector{+0.5, 0}},
 	};
-	CollisionRect cr{ 0, 0, 10, 10 };
+	CollisionRectComponent cr{ 0, 0, 10, 10 };
 
 	for (const auto& t : td)
-		EXPECT_VEQ(t.second, getMinimumTranslationVector(t.first, cr));
+		EXPECT_VEQ(t.second, getMinimumTranslationVector(&t.first, &cr));
 }
 
 TEST(MTV, FirstIsBigger) {
 	Vector zero{ 0,0 };
-	vector<pair<CollisionRect, Vector>> td = {
-		{CollisionRect{ 0, -2, 10, 10 }, Vector{1,0}},		
-		{CollisionRect{ -8, -9, 10, 10 }, Vector{0,-1}},
-		{CollisionRect{ -0.5, -0.1, 10, 10 }, Vector{0, +1.1}},
-		{CollisionRect{ -0.5, -0.9, 10, 10 }, Vector{1.5, 0}},
+	vector<pair<CollisionRectComponent, Vector>> td = {
+		{CollisionRectComponent{ 0, -2, 10, 10 }, Vector{1,0}},
+		{CollisionRectComponent{ -8, -9, 10, 10 }, Vector{0,-1}},
+		{CollisionRectComponent{ -0.5, -0.1, 10, 10 }, Vector{0, +1.1}},
+		{CollisionRectComponent{ -0.5, -0.9, 10, 10 }, Vector{1.5, 0}},
 	};
-	CollisionRect cr{ 0, 0, 1, 1 };
+	CollisionRectComponent cr{ 0, 0, 1, 1 };
 
 	for (const auto& t : td)
-		EXPECT_VEQ(t.second, getMinimumTranslationVector(t.first, cr));
+		EXPECT_VEQ(t.second, getMinimumTranslationVector(&t.first, &cr));
 }
 
 TEST(CollisionSystem, Collisions) {
@@ -115,12 +109,12 @@ TEST(CollisionSystem, Collisions) {
 
 	EntityID stationary = 0;
 	components.positions[stationary] = new PositionComponent(0, 0);
-	components.collisionBoxes[stationary] = new CollisionBoxComponent(1, 1);
+	components.collisionRects[stationary] = new CollisionRectComponent(1, 1);
 
 
 	EntityID moving = 1;
 	components.positions[moving] = new PositionComponent(0, 0.1);
-	components.collisionBoxes[moving] = new CollisionBoxComponent(1, 1);
+	components.collisionRects[moving] = new CollisionRectComponent(1, 1);
 	components.moveds[moving] = new MovedComponent;
 
 	collisionSystem(components);
@@ -175,14 +169,14 @@ TEST(CollisionSystem, CollidingWithTwoWalls) {
 
 	EntityID stationary1 = 0;
 	components.positions[stationary1] = new PositionComponent(0, 0);
-	components.collisionBoxes[stationary1] = new CollisionBoxComponent(1, 1);
+	components.collisionRects[stationary1] = new CollisionRectComponent(1, 1);
 	EntityID stationary2 = 1;
 	components.positions[stationary2] = new PositionComponent(1, 0);
-	components.collisionBoxes[stationary2] = new CollisionBoxComponent(1, 1);
+	components.collisionRects[stationary2] = new CollisionRectComponent(1, 1);
 
 	EntityID moving = 2;
 	components.positions[moving] = new PositionComponent(0.2, 0.9);
-	components.collisionBoxes[moving] = new CollisionBoxComponent(1, 1);
+	components.collisionRects[moving] = new CollisionRectComponent(1, 1);
 	components.moveds[moving] = new MovedComponent;
 
 	collisionSystem(components);
@@ -219,82 +213,79 @@ TEST(Vector, Equality) {
 }
 
 TEST(CollisionSystem, CollidingWithCorner) {
-	//Entities entities;
 
-	//auto stationary1 = make_shared<Entity>("stationary");
-	//stationary1->addComponent(make_shared<PositionComponent>(0, 0));
-	//stationary1->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//entities.push_back(stationary1);
+	Components components;
 
-	//auto stationary2 = make_shared<Entity>("stationary");
-	//stationary2->addComponent(make_shared<PositionComponent>(1, 0));
-	//stationary2->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//entities.push_back(stationary2);
+	EntityID stationary1 = 1;
+	components.positions[stationary1] = new PositionComponent(0, 0);
+	components.collisionRects[stationary1] = new CollisionRectComponent(1, 1);
+	EntityID stationary2 = 2;
+	components.positions[stationary2] = new PositionComponent(1, 0);
+	components.collisionRects[stationary2] = new CollisionRectComponent(1, 1);
+	EntityID stationary3 = 3;
+	components.positions[stationary3] = new PositionComponent(-1, 0);
+	components.collisionRects[stationary3] = new CollisionRectComponent(1, 1);
+	EntityID stationary4 = 4;
+	components.positions[stationary4] = new PositionComponent(0, -1);
+	components.collisionRects[stationary4] = new CollisionRectComponent(1, 1);
+	EntityID stationary5 = 5;
+	components.positions[stationary5] = new PositionComponent(0,1);
+	components.collisionRects[stationary5] = new CollisionRectComponent(1, 1);
 
-	//auto stationary3 = make_shared<Entity>("stationary");
-	//stationary3->addComponent(make_shared<PositionComponent>(-1, 0));
-	//stationary3->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//entities.push_back(stationary3);
+	EntityID moving = 0;
+	components.positions[moving] = new PositionComponent(-0.8, -0.9);
+	components.collisionRects[moving] = new CollisionRectComponent(1, 1);
+	components.moveds[moving] = new MovedComponent;
 
-	//auto stationary4 = make_shared<Entity>("stationary");
-	//stationary4->addComponent(make_shared<PositionComponent>(0, -1));
-	//stationary4->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//entities.push_back(stationary4);
+	collisionSystem(components);
+	
+	auto pos = components.positions[moving];
+	EXPECT_NEAR(pos->x, -1, epsilon);
+	EXPECT_NEAR(pos->y, -1, epsilon);
+	auto crc = components.collideds[moving];
+	EXPECT_TRUE(
+		(crc->surfaceNormal == Vector{-1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
+	); // upper left quadrant
 
-	//auto stationary5 = make_shared<Entity>("stationary");
-	//stationary5->addComponent(make_shared<PositionComponent>(0, 1));
-	//stationary5->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//entities.push_back(stationary5);
+
+	components.positions[moving] = new PositionComponent(0.8, 0.8);
+
+	collisionSystem(components);
+
+	pos = components.positions[moving];
+	EXPECT_NEAR(pos->x, 1, epsilon);
+	EXPECT_NEAR(pos->y, 1, epsilon);
+	crc = components.collideds[moving];
+	EXPECT_TRUE(
+		(crc->surfaceNormal == Vector{ 1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
+	); // upper right quadrant
 
 
-	//auto moving = make_shared<Entity>("moving");
-	//moving->addComponent(make_shared<CollisionBoxComponent>(1, 1));
-	//moving->addComponent(make_shared<MovedComponent>());
-	//entities.push_back(moving);
 
-	//moving->addComponent(make_shared<PositionComponent>(-0.8, -0.9));
-	//collisionSystem(entities);
+	components.positions[moving] = new PositionComponent(-0.8, 0.8);
 
-	//auto pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, -1, epsilon);
-	//EXPECT_NEAR(pos->y, -1, epsilon);
-	//auto crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_TRUE(
-	//	(crc->surfaceNormal == Vector{-1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
-	//); // upper left quadrant
+	collisionSystem(components);
 
-	//moving->addComponent(make_shared<PositionComponent>(0.8, 0.8));
+	pos = components.positions[moving];
+	EXPECT_NEAR(pos->x, -1, epsilon);
+	EXPECT_NEAR(pos->y, 1, epsilon);
+	crc = components.collideds[moving];
+	EXPECT_TRUE(
+		(crc->surfaceNormal == Vector{ -1,  0 } || crc->surfaceNormal == Vector{ 0,  1 })
+	); // upper right quadrant
 
-	//collisionSystem(entities);
+	
+	components.positions[moving] = new PositionComponent(0.8, -0.8);
 
-	//pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, 1, epsilon);
-	//EXPECT_NEAR(pos->y, 1, epsilon);
-	//crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_TRUE(
-	//	(crc->surfaceNormal == Vector{ 1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
-	//); // upper right quadrant
-	//moving->addComponent(make_shared<PositionComponent>(-0.8, 0.8));
+	collisionSystem(components);
 
-	//collisionSystem(entities);
+	pos = components.positions[moving];
+	EXPECT_NEAR(pos->x, 1, epsilon);
+	EXPECT_NEAR(pos->y, -1, epsilon);
+	crc = components.collideds[moving];
+	EXPECT_TRUE(
+		(crc->surfaceNormal == Vector{ 1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
+	); // upper right quadrant
 
-	//pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, -1, epsilon);
-	//EXPECT_NEAR(pos->y, 1, epsilon);
-	//crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_TRUE(
-	//	(crc->surfaceNormal == Vector{ -1,  0 } || crc->surfaceNormal == Vector{ 0,  1 })
-	//); // lower left quadrant
-	//moving->addComponent(make_shared<PositionComponent>(0.8, -0.8));
-
-	//collisionSystem(entities);
-
-	//pos = moving->getComponent<PositionComponent>();
-	//EXPECT_NEAR(pos->x, 1, epsilon);
-	//EXPECT_NEAR(pos->y, -1, epsilon);
-	//crc = moving->getComponent<CollidedComponent>();
-	//EXPECT_TRUE(
-	//	(crc->surfaceNormal == Vector{ 1,  0 } || crc->surfaceNormal == Vector{ 0,  -1 })
-	//); // upper right quadrant
-
+	
 }

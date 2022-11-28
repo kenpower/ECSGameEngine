@@ -6,6 +6,6 @@
 
 void EXPECT_VEQ(Vector a, Vector b) {
 
-	EXPECT_NEAR(a.x, b.x, epsilon);
-	EXPECT_NEAR(a.y, b.y, epsilon);
+	EXPECT_NEAR(a.x, b.x, epsilon) << "ax=" << a.x << ", bx=" << b.x;
+	EXPECT_NEAR(a.y, b.y, epsilon) << "ay=" << a.x << ", by=" << b.x;;
 }

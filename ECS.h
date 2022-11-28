@@ -9,7 +9,7 @@ typedef int EntityID;
 struct Components {
 	map<EntityID, PositionComponent*> positions;
 	map<EntityID, VelocityComponent*> velocitys;
-	map<EntityID, CollisionBoxComponent*> collisionBoxes;
+	map<EntityID, CollisionRectComponent*> collisionRects;
 	map<EntityID, CharSpriteComponent*> charSprites;
 	map<EntityID, StringSpriteComponent*> stringSprites;
 	map<EntityID, LeftRightControlComponent*> leftRightControls;
@@ -24,7 +24,7 @@ struct Components {
 	void deleteEntity(EntityID id) {
 		positions.erase(id);
 		velocitys.erase(id);
-		collisionBoxes.erase(id);
+		collisionRects.erase(id);
 		charSprites.erase(id);
 		stringSprites.erase(id);
 		leftRightControls.erase(id);

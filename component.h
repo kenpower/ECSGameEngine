@@ -58,12 +58,14 @@ struct MovedComponent : public Component {
 	virtual std::string name() { return std::string(NAME); }
 };
 
-struct CollisionBoxComponent : public Component {
+struct CollisionRectComponent : public Component {
 	static constexpr const char* NAME = "collisionbox";
 	virtual std::string name() { return std::string(NAME); }
 
-	CollisionBoxComponent(double w = 1, double h =1) :w(w), h(h) {}
-	const double w, h;
+	CollisionRectComponent(double w, double h) :w(w), h(h) {}
+	CollisionRectComponent(double x, double y,double w, double h) :x(x), y(y), w(w), h(h) {}
+	double x, y;
+	double w, h;
 };
 
 struct BounceComponent : public Component {
