@@ -27,11 +27,11 @@
     <ClCompile Include="BreakoutSystems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="tmp.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECSGameEngine\CollisionSystem.cpp">
+      <Filter>Source Files\TileEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +49,12 @@
     </ClInclude>
     <ClInclude Include="ECS.h">
       <Filter>Source Files\TileEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakoutComponents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECSComponents.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

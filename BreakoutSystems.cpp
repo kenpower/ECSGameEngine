@@ -13,7 +13,7 @@ void movementSystem(Components& components, double deltaSeconds) {
 		if (vel && pos) {
 			pos->x += vel->x * deltaSeconds;
 			pos->y += vel->y * deltaSeconds;
-			components.moveds[id]= new MovedComponent;
+			components.moveds[id]= new HasMovedComponent;
 		}
 	}
 }
@@ -38,7 +38,7 @@ void userControlSystem(Components& components, double deltaSeconds) {
 			pos->x += lrc->speed * deltaSeconds;
 		if (isKeyDown(VK_LEFT))
 			pos->x -= lrc->speed * deltaSeconds;
-		components.moveds[id] = new MovedComponent;
+		components.moveds[id] = new HasMovedComponent;
 	}
 }
 

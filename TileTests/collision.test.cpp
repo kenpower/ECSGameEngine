@@ -115,7 +115,7 @@ TEST(CollisionSystem, Collisions) {
 	EntityID moving = 1;
 	components.positions[moving] = new PositionComponent(0, 0.1);
 	components.collisionRects[moving] = new CollisionRectComponent(1, 1);
-	components.moveds[moving] = new MovedComponent;
+	components.moveds[moving] = new HasMovedComponent;
 
 	collisionSystem(components);
 	auto pos = components.positions[moving];
@@ -177,7 +177,7 @@ TEST(CollisionSystem, CollidingWithTwoWalls) {
 	EntityID moving = 2;
 	components.positions[moving] = new PositionComponent(0.2, 0.9);
 	components.collisionRects[moving] = new CollisionRectComponent(1, 1);
-	components.moveds[moving] = new MovedComponent;
+	components.moveds[moving] = new HasMovedComponent;
 
 	collisionSystem(components);
 
@@ -235,7 +235,7 @@ TEST(CollisionSystem, CollidingWithCorner) {
 	EntityID moving = 0;
 	components.positions[moving] = new PositionComponent(-0.8, -0.9);
 	components.collisionRects[moving] = new CollisionRectComponent(1, 1);
-	components.moveds[moving] = new MovedComponent;
+	components.moveds[moving] = new HasMovedComponent;
 
 	collisionSystem(components);
 	

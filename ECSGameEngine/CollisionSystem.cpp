@@ -1,6 +1,6 @@
-#include "ECS.h"
+#include "../ECS.h"
 #include <vector>
-#include "vector.h"
+#include "../vector.h"
 using namespace std;
 
 double MTV_oneAxis(double aStart, double aEnd, double bStart, double bEnd) {
@@ -79,8 +79,8 @@ void collisionSystem(Components& components) {
 				resolveCollision(movingEntity,  mtv, components);
 				
 				Vector axisAlignedNormal = getAxisAlignedNormal(mtv);
-				components.collideds[movingEntity] = new CollidedComponent(otherEntity, axisAlignedNormal);
-				components.collideds[otherEntity] = new CollidedComponent(movingEntity, -axisAlignedNormal);
+				components.collideds[movingEntity] = new HasCollidedComponent(otherEntity, axisAlignedNormal);
+				components.collideds[otherEntity] = new HasCollidedComponent(movingEntity, -axisAlignedNormal);
 			}
 		}
 }

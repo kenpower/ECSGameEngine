@@ -1,6 +1,7 @@
 #pragma once
 #include<map>
-#include "component.h"
+#include"ECSComponents.h"
+#include"BreakoutComponents.h"
 
 using namespace std;
 
@@ -16,8 +17,8 @@ struct Components {
 	map<EntityID, BounceComponent*> bounces;
 	map<EntityID, ScoreWhenHitBlockComponent*> scoreWhenHitBlock;
 	map<EntityID, DeleteAfterCollisionComponent*> deleteAfterCollisions;
-	map<EntityID, CollidedComponent*> collideds;
-	map<EntityID, MovedComponent*> moveds;
+	map<EntityID, HasCollidedComponent*> collideds;
+	map<EntityID, HasMovedComponent*> moveds;
 	map<EntityID, PaddleBounceComponent*> paddleBounces;
 
 
