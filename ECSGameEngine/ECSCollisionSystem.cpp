@@ -1,6 +1,6 @@
-#include "../ECS.h"
+#include "ECS.h"
 #include <vector>
-#include "../vector.h"
+#include "vector.h"
 using namespace std;
 
 double MTV_oneAxis(double aStart, double aEnd, double bStart, double bEnd) {

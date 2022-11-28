@@ -6,7 +6,7 @@ using namespace std;
 #include <stdio.h>
 #include <Windows.h>
 
-#include "ConsoleRenderWindow.h"
+#include "./ECSGameEngine/ConsoleRenderWindow.h"
 
 void game(ConsoleRenderWindow&,int, int);
 #include <map>

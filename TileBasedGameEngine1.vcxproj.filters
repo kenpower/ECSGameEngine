@@ -17,7 +17,7 @@
       <UniqueIdentifier>{56577bcf-8cd0-4cf0-8b31-8d80e495a3fe}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\ECSHeaders">
-      <UniqueIdentifier>{ab759f9b-41fa-4bb3-982f-1646628bd676}</UniqueIdentifier>
+      <UniqueIdentifier>{5b33d100-badb-4b43-8fa9-46461db355fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -44,16 +44,19 @@
     <ClInclude Include="BreakoutComponents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleRenderWindow.h">
+    <ClInclude Include="ECSGameEngine\ConsoleRenderWindow.h">
       <Filter>Header Files\ECSHeaders</Filter>
     </ClInclude>
-    <ClInclude Include="ECS.h">
+    <ClInclude Include="ECSGameEngine\ECS.h">
       <Filter>Header Files\ECSHeaders</Filter>
     </ClInclude>
-    <ClInclude Include="ECSComponents.h">
+    <ClInclude Include="ECSGameEngine\ECSComponents.h">
       <Filter>Header Files\ECSHeaders</Filter>
     </ClInclude>
-    <ClInclude Include="vector.h">
+    <ClInclude Include="ECSGameEngine\Renderer.h">
+      <Filter>Header Files\ECSHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ECSGameEngine\vector.h">
       <Filter>Header Files\ECSHeaders</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,7 @@
 //
 
 #include <iostream>
-#include "olcConsoleGameEngine.h"
+#include "../
 
 class OneLoneCoder_Example :public olcConsoleGameEngine {
 	char c = 'A';

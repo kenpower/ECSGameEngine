@@ -2,8 +2,8 @@
 #include <chrono>
 #include <memory>
 
-#include "ConsoleRenderWindow.h"
-#include "ECS.h"
+#include "./ECSGameEngine/ConsoleRenderWindow.h"
+#include "./ECSGameEngine/ECS.h"
 #include "BreakoutSystems.h"
 
 using namespace std;
@@ -107,11 +107,11 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 
 		//remove temporary components
-		for (auto c : components.moveds) 
+		for (auto& c : components.moveds) 
 			delete c.second;
 		components.moveds.clear();
 		
-		for (auto c : components.collideds) 
+		for (auto& c : components.collideds) 
 			delete c.second;
 		components.collideds.clear();
 
@@ -125,7 +125,6 @@ void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 			startFrameTimer = std::chrono::high_resolution_clock::now();
 		
 			framesPerSec = (int)(frameCountWindow / elapsed_time.count());
-		
 		}
 
 		const std::string s = "FPS:" + to_string(framesPerSec)+ "  Score:" + to_string(gameScore);

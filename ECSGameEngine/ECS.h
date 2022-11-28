@@ -1,7 +1,7 @@
 #pragma once
 #include<map>
 #include"ECSComponents.h"
-#include"BreakoutComponents.h"
+#include"../BreakoutComponents.h"
 
 using namespace std;
 
