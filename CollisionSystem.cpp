@@ -10,7 +10,6 @@ double MTV_oneAxis(double aStart, double aEnd, double bStart, double bEnd) {
 	if (left > 0 or right < 0) return 0;
 
 	return fabs(left) < fabs(right) ? left : right;
-
 }
 
 //Minimum translation Vector (MTV) is the smallest distance needed to move an overlapping
@@ -28,9 +27,10 @@ Vector getAxisAlignedNormal(Vector& v) {
 	return (v.y > 0) ? Vector{ 0, 1 } : Vector{ 0, -1 };
 }
 
-void resolveCollision(PositionComponent* moving, Vector& mtv) {
-	moving->x += mtv.x;
-	moving->y += mtv.y;
+void resolveCollision(int entityID, Vector& mtv, Components& components) {
+	auto position = components.positions[entityID];
+	position->x += mtv.x;
+	position->y += mtv.y;
 }
 
 void getCollidableEntities(Components& components, vector<int>& movingColliders, vector<int>& allColliders) {
@@ -72,10 +72,11 @@ void collisionSystem(Components& components) {
 			auto otherRect = getUpdatedCollisionRectFor(otherEntity, components);
 
 			Vector mtv = getMinimumTranslationVector(movingRect, otherRect);
+			
 			bool intersecting = mtv.x != 0 or mtv.y != 0;
 			if (intersecting) {
-				auto movingPos = components.positions[movingEntity];
-				resolveCollision(movingPos,  mtv);
+
+				resolveCollision(movingEntity,  mtv, components);
 				
 				Vector axisAlignedNormal = getAxisAlignedNormal(mtv);
 				components.collideds[movingEntity] = new CollidedComponent(otherEntity, axisAlignedNormal);
