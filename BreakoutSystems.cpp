@@ -129,6 +129,3 @@ void scoreBlocksSystem(Components& components, int& gameScore) {
 
 	}
 }
-
-void ballPaddleBounce(Components& components) {
-}
