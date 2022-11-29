@@ -1,3 +1,4 @@
+#define NOMINMAX //https://stackoverflow.com/a/2789510/488802
 #include<windows.h>
 #include"ECSGameEngine/ECS.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 #include<string>
-#include"./ECSGameEngine/vector.h"
+//#include"./ECSGameEngine/vector.h"
 
 //typedef int EntityID;
 
