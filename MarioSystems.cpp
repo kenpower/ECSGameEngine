@@ -22,15 +22,32 @@ void jumpSystem(Components& components, double deltaSeconds) {
 		EntityID id = id_jmp.first;
 
 		auto jmp = id_jmp.second;
-		auto pos = components.positions[id];
+		auto vel = components.velocitys[id];
 		auto col = components.collideds[id]; //only jump if colliding
 
-		if (!jmp || !pos || !col) continue;
+		if (!jmp || !vel || !col) continue;
 
 		// All they other Key codes are here https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
 		if (isKeyDown(VK_UP))
-			pos->y -= 5;// jmp->force * deltaSeconds;
+			vel->y = - jmp->force;
 
-		components.moveds[id] = new HasMovedComponent;
+	}
+}
+
+void hitWallSystem(Components& components) {
+
+	for (auto& id_col : components.collideds) {
+		EntityID id = id_col.first;
+
+		auto col = id_col.second;
+		auto normal = col->surfaceNormal;
+		auto vel = components.velocitys[id];
+		
+		if (!col || !vel) continue;
+			
+		if (normal.x == 1 && vel->x <  0 ) vel->x = 0;
+		if (normal.x == -1 && vel->x > 0) vel->x = 0;
+		if (normal.y == 1 && vel->y < 0) vel->y = 0;
+		if (normal.y == -1 && vel->y > 0) vel->y = 0;
 	}
 }

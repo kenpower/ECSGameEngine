@@ -4,5 +4,5 @@
 
 void gravitySystem(Components&, double);
 void jumpSystem(Components& components, double deltaSeconds);
-//void onFloorSystem(Components & components);
+void hitWallSystem(Components & components);
 	

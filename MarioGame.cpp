@@ -22,23 +22,15 @@ void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	Components components;
 
 	auto unitBox = make_shared<CollisionRectComponent>(1, 1);
-
-	auto ballID = newEntityID();
-	components.velocitys[ballID] = new VelocityComponent(10, 10);
-	components.positions[ballID] = new PositionComponent(10, 20);
-	components.charSprites[ballID] = new CharSpriteComponent('O');
-	components.bounces[ballID] = new BounceComponent();
-	components.collisionRects[ballID] = new CollisionRectComponent(1, 1);
-
-
+	
 	auto marioID = newEntityID();
 	components.velocitys[marioID] = new VelocityComponent(0,0);
 	components.positions[marioID] = new PositionComponent(20, 5);
 	components.stringSprites[marioID] = new StringSpriteComponent("M");
 	components.collisionRects[marioID] = new CollisionRectComponent(1, 1);
-	components.gravities[marioID] = new GravityComponent(10);
+	components.gravities[marioID] = new GravityComponent(15);
 	components.leftRightControls[marioID] = new LeftRightControlComponent(15);
-	components.jumps[marioID] = new JumpComponent(15);
+	components.jumps[marioID] = new JumpComponent(10);
 
 
 	_wallEntity(components, -1, -1, 1, worldHeight + 2);
@@ -94,6 +86,8 @@ void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 		userControlSystem(components, secondsSinceLastFrame.count());
 
 		collisionSystem(components);
+		
+		hitWallSystem(components);
 
 		jumpSystem(components, secondsSinceLastFrame.count());
 		
