@@ -33,6 +33,8 @@ struct Components {
 	//Mario
 	map<EntityID, GravityComponent*> gravities;
 	map<EntityID, JumpComponent*> jumps;
+	//map<EntityID, OnFloorComponent*> onFloors;
+
 
 
 
@@ -40,17 +42,22 @@ struct Components {
 		positions.erase(id);
 		velocitys.erase(id);
 		collisionRects.erase(id);
+		collideds.erase(id);
 		charSprites.erase(id);
 		stringSprites.erase(id);
-		leftRightControls.erase(id);
+		moveds.erase(id);
+
+		//Breakout
 		bounces.erase(id);
+		leftRightControls.erase(id);
 		scoreWhenHitBlock.erase(id);
 		deleteAfterCollisions.erase(id);
-		collideds.erase(id);
-		moveds.erase(id);
 		paddleBounces.erase(id);
+		
+		//Mario
 		gravities.erase(id);
 		jumps.erase(id);
+		//onFloors.erase(id);
 
 	};
 };

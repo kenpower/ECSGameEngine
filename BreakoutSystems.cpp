@@ -2,24 +2,6 @@
 #include<windows.h>
 #include"BreakoutSystems.h"
 
-void movementSystem(Components& components, double deltaSeconds) {
-	
-	for (auto& id_vel : components.velocitys) {
-		EntityID id = id_vel.first;
-
-		auto vel = id_vel.second;
-		auto pos = components.positions[id];
-
-		if (vel && pos) {
-			pos->x += vel->x * deltaSeconds;
-			pos->y += vel->y * deltaSeconds;
-			components.moveds[id]= new HasMovedComponent;
-		}
-	}
-}
-
-
-
 void userControlSystem(Components& components, double deltaSeconds) {
 
 	for (auto& id_lrc : components.leftRightControls) {
@@ -47,10 +29,14 @@ void bounceSystem(Components& components) {
 		auto collision = components.collideds[id];
 		auto vel = components.velocitys[id];
 		auto pos = components.positions[id];
+
+		if (!bounce || !vel || !collision) continue;
+
 		auto paddlePos = components.positions[collision->other];
 		auto paddleBounce = components.paddleBounces[collision->other];
 
-		if (!bounce || !vel || !collision) continue;
+		if (!paddlePos || !paddleBounce) continue;
+
 
 		if (abs(lround(collision->surfaceNormal.x)) == 1) vel->x *= -1; //vertical   wall
 		if (abs(lround(collision->surfaceNormal.y)) == 1) vel->y *= -1; //horizontal wall

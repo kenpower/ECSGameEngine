@@ -31,12 +31,14 @@ void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	components.collisionRects[ballID] = new CollisionRectComponent(1, 1);
 
 
-	auto paddleID = newEntityID();
-	components.positions[paddleID] = new PositionComponent(20, 5);
-	components.stringSprites[paddleID] = new StringSpriteComponent("K");
-	components.collisionRects[paddleID] = new CollisionRectComponent(1, 1);
-	components.gravities[paddleID] = new GravityComponent(10);
-	components.leftRightControls[paddleID] = new LeftRightControlComponent(15);
+	auto marioID = newEntityID();
+	components.velocitys[marioID] = new VelocityComponent(0,0);
+	components.positions[marioID] = new PositionComponent(20, 5);
+	components.stringSprites[marioID] = new StringSpriteComponent("M");
+	components.collisionRects[marioID] = new CollisionRectComponent(1, 1);
+	components.gravities[marioID] = new GravityComponent(10);
+	components.leftRightControls[marioID] = new LeftRightControlComponent(15);
+	components.jumps[marioID] = new JumpComponent(15);
 
 
 	_wallEntity(components, -1, -1, 1, worldHeight + 2);
@@ -87,12 +89,14 @@ void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 		movementSystem(components, secondsSinceLastFrame.count());
 		
-		gravitySystem(components, secondsSinceLastFrame.count());
+ 		gravitySystem(components, secondsSinceLastFrame.count());
 
 		userControlSystem(components, secondsSinceLastFrame.count());
 
 		collisionSystem(components);
 
+		jumpSystem(components, secondsSinceLastFrame.count());
+		
 		bounceSystem(components);
 
 		scoreBlocksSystem(components, gameScore);

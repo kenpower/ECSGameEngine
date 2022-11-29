@@ -2,6 +2,22 @@
 #include<windows.h>
 #include"ECSSystems.h"
 
+void movementSystem(Components& components, double deltaSeconds) {
+
+	for (auto& id_vel : components.velocitys) {
+		EntityID id = id_vel.first;
+
+		auto vel = id_vel.second;
+		auto pos = components.positions[id];
+
+		if (vel && pos) {
+			pos->x += vel->x * deltaSeconds;
+			pos->y += vel->y * deltaSeconds;
+			components.moveds[id] = new HasMovedComponent;
+		}
+	}
+}
+
 void renderCharOnConsoleSystem(Components& components, ConsoleRenderWindow& crw) {
 	for (auto& id_charSprite : components.charSprites) {
 		EntityID id = id_charSprite.first;

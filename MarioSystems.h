@@ -3,3 +3,6 @@
 //#include "./ECSGameEngine/ConsoleRenderWindow.h"
 
 void gravitySystem(Components&, double);
+void jumpSystem(Components& components, double deltaSeconds);
+//void onFloorSystem(Components & components);
+	
