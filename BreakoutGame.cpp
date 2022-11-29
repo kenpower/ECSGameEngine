@@ -20,7 +20,7 @@ void wallEntity(Components& components, int x, int y, int w, int h) {
 	components.collisionRects[wallID] = new CollisionRectComponent(w, h);
 }
 
-void game(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
+void breakoutGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 	Components components;
 

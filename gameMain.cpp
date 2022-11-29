@@ -8,29 +8,28 @@ using namespace std;
 
 #include "./ECSGameEngine/ConsoleRenderWindow.h"
 
-void game(ConsoleRenderWindow&,int, int);
+void breakoutGame(ConsoleRenderWindow&,int, int);
 #include <map>
 
-int main() {
-		
-	//map<int, int> m;
-	//m[5] = 42;
-	//for (auto i : m)
-	//	std::cout << i.second << '/n';
+ConsoleRenderWindow crw;
 
-	//system("pause");
+void playBreaout() {
 
 	int charSizePixels = 10;
 
 	int worldHeight = 40;// Console Screen Size X (columns)
 	int worldWidth = 30;// Console Screen Size Y (rows)
 
-	ConsoleRenderWindow crw;
 	crw.ConstructConsole(worldWidth, worldHeight, charSizePixels, charSizePixels);
 
-	game(crw, worldWidth, worldHeight);
+	breakoutGame(crw, worldWidth, worldHeight);
+}
 
-	cout << "Game Over!! Score:" << endl;
+int main() {
+
+	playBreaout();
+
+	cout << "Game Over!!" << endl;
 	system("pause");
 	return 0;
 
