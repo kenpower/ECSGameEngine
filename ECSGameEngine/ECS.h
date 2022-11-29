@@ -1,5 +1,6 @@
 #pragma once
 #include<map>
+
 #include"ECSComponents.h"
 #include"../BreakoutComponents.h"
 #include"../MarioComponents.h"
@@ -10,6 +11,8 @@ using namespace std;
 typedef int EntityID;
 
 EntityID newEntityID();
+
+bool isKeyDown(int keyCode);
 
 struct Components {
 	map<EntityID, PositionComponent*> positions;
@@ -29,6 +32,8 @@ struct Components {
 
 	//Mario
 	map<EntityID, GravityComponent*> gravities;
+	map<EntityID, JumpComponent*> jumps;
+
 
 
 	void deleteEntity(EntityID id) {
@@ -45,6 +50,7 @@ struct Components {
 		moveds.erase(id);
 		paddleBounces.erase(id);
 		gravities.erase(id);
+		jumps.erase(id);
 
 	};
 };

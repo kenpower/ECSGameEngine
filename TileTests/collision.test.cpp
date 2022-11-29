@@ -2,8 +2,8 @@
 #include "vector"
 #include <utility>
 #include "testhelpers.h"
-#include "../ECS.h"
-#include "../vector.h"
+#include "../ECSGameEngine/ECS.h"
+#include "../ECSGameEngine/vector.h"
 using namespace std;
 
 

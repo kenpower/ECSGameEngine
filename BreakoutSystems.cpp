@@ -18,10 +18,7 @@ void movementSystem(Components& components, double deltaSeconds) {
 	}
 }
 
-bool isKeyDown(int keyCode) {
-	const short leftMostBit = (short)0x8000; //most significant bit is set if key is down
-	return  leftMostBit & GetAsyncKeyState((unsigned char)(keyCode));
-}
+
 
 void userControlSystem(Components& components, double deltaSeconds) {
 

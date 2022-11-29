@@ -16,3 +16,22 @@ void gravitySystem(Components& components, double deltaSeconds) {
 		}
 	}
 }
+
+void jumpSystem(Components& components, double deltaSeconds) {
+
+	for (auto& id_jmp : components.jumps) {
+		EntityID id = id_jmp.first;
+
+		auto jmp = id_jmp.second;
+		auto pos = components.positions[id];
+		auto col = components.collideds[id]; //only jump if 
+
+		if (!jmp || !pos || !col) continue;
+
+		// All they other Key codes are here https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+		if (isKeyDown(VK_UP))
+			pos->y += jmp->force * deltaSeconds;
+
+		components.moveds[id] = new HasMovedComponent;
+	}
+}
