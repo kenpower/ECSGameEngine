@@ -17,6 +17,46 @@ void _wallEntity(Components& components, int x, int y, int w, int h) {
 	components.collisionRects[wallID] = new CollisionRectComponent(w, h);
 }
 
+const char* level =
+"......................................................................................................................................"
+"..........................oOo.............................................oOOo.........................................oOo............"
+".............oO................................o00o0o.................................................oOOoOo.........................."
+"......................................................................................................................................"
+"..............................?.................................................BBBBBBBBBBBB...BBB?..................................."
+"......................................................................................................................................"
+"......................................................................................................................................"
+".......................?....B?B?B......................P........P................................................Z..Z................."
+"..^.............................................P......P........P............B?B..................B.......B.....ZZ..ZZ................"
+"./.\\.................................P..........P......P........P..............................................ZZZ..ZZZ....P.........."
+"/...\\..........(^^)..................P..........P......P........P.............................................ZZZZ..ZZZZ...P.........."
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXX....XXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXX"
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXX....XXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXX"
+;
+
+int mapWidth = 134;
+int windowWidth = 50;
+int mapHeight = 13;
+
+void makeLevel(Components& components){
+	int firstBlock = 0;
+	for (int x = 0; x < windowWidth; x++) {
+		for (int y = 0; y < mapHeight; y++) {
+			auto blockID = newEntityID();
+			components.positions[blockID] = new PositionComponent(x, y+1);
+			char c = level[x + mapWidth * y];
+			if (c == '.') continue;
+			
+			components.charSprites[blockID] = new CharSpriteComponent(c);
+
+			if (c == 'X' || c=='P' || c=='Z' ||c=='B' || c='?')
+				components.collisionRects[blockID] = new CollisionRectComponent(1, 1);
+			//components.scoreWhenHitBlock[blockID] = new ScoreWhenHitBlockComponent();
+
+			//blockColor++;
+		}
+	}
+}
+
 void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 	Components components;
@@ -46,22 +86,7 @@ void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	auto blockCollision = make_shared<CollisionRectComponent>(3, 1);
 	auto block = make_shared<DeleteAfterCollisionComponent>();
 
-	int firstBlock = 0;
-	for (int x = 3; x < worldWidth - 4; x += 3) {
-		int blockColor = firstBlock % 2;
-		for (int y = 15; y < 20; y += 1) {
-			auto blockID = newEntityID();
-			components.positions[blockID] = new PositionComponent(x, y);
-			components.stringSprites[blockID] = blockColor % 2
-				? new StringSpriteComponent("XXX")
-				: new StringSpriteComponent("###");
-			components.collisionRects[blockID] = new CollisionRectComponent(3, 1);
-			components.scoreWhenHitBlock[blockID] = new ScoreWhenHitBlockComponent();
-
-			blockColor++;
-		}
-		firstBlock++;
-	}
+	makeLevel(components);
 
 	bool bGameOver = false;
 

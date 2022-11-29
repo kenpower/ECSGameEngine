@@ -27,10 +27,10 @@ void playBreaout() {
 
 void playMario() {
 
-	int charSizePixels = 10;
+	int charSizePixels = 20;
 
-	int worldHeight = 40;// Console Screen Size X (columns)
-	int worldWidth = 120;// Console Screen Size Y (rows)
+	int worldHeight = 15;// Console Screen Size X (columns)
+	int worldWidth = 50;// Console Screen Size Y (rows)
 
 	crw.ConstructConsole(worldWidth, worldHeight, charSizePixels, charSizePixels);
 
