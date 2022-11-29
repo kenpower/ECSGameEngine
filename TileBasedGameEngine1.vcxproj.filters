@@ -36,6 +36,18 @@
     <ClCompile Include="ECSGameEngine\ECSCollisionSystem.cpp">
       <Filter>Source Files\ECSEngine</Filter>
     </ClCompile>
+    <ClCompile Include="MarioGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS.cpp">
+      <Filter>Source Files\ECSEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MarioSystems.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECSSystems.cpp">
+      <Filter>Source Files\ECSEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BreakoutSystems.h">
@@ -57,6 +69,15 @@
       <Filter>Header Files\ECSHeaders</Filter>
     </ClInclude>
     <ClInclude Include="ECSGameEngine\vector.h">
+      <Filter>Header Files\ECSHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioSystems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioComponents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECSSystems.h">
       <Filter>Header Files\ECSHeaders</Filter>
     </ClInclude>
   </ItemGroup>

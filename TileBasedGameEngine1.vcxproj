@@ -132,8 +132,14 @@
   <ItemGroup>
     <ClCompile Include="BreakoutGame.cpp" />
     <ClCompile Include="BreakoutSystems.cpp" />
+    <ClCompile Include="ECS.cpp" />
     <ClCompile Include="ECSGameEngine\ECSCollisionSystem.cpp" />
+    <ClCompile Include="ECSSystems.cpp" />
     <ClCompile Include="gameMain.cpp" />
+    <ClInclude Include="ECSSystems.h" />
+    <ClInclude Include="MarioComponents.h" />
+    <ClCompile Include="MarioGame.cpp" />
+    <ClCompile Include="MarioSystems.cpp" />
     <ClCompile Include="tmp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +150,7 @@
     <ClInclude Include="ECSGameEngine\ECSComponents.h" />
     <ClInclude Include="ECSGameEngine\Renderer.h" />
     <ClInclude Include="ECSGameEngine\vector.h" />
+    <ClInclude Include="MarioSystems.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

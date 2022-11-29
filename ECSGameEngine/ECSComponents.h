@@ -1,6 +1,6 @@
 #pragma once
 #include<string>
-#include"Vector.h"
+#include"vector.h"
 
 typedef int EntityID;
 
@@ -27,11 +27,6 @@ struct StringSpriteComponent : public Component {
 	const char* c;
 };
 
-//struct LeftRightControlComponent : public Component {
-//	LeftRightControlComponent(double speed) :speed(speed) {}
-//	double speed;
-//};
-
 struct HasMovedComponent : public Component {
 };
 
@@ -42,12 +37,6 @@ struct CollisionRectComponent : public Component {
 	double w, h;
 };
 
-//struct BounceComponent : public Component {
-//};
-
-//struct DeleteAfterCollisionComponent : public Component {
-//};
-
 struct HasCollidedComponent : public Component {
 	HasCollidedComponent(EntityID other, Vector surfaceNormal = Vector{ 0, 0 }) :
 		other(other),  surfaceNormal(surfaceNormal) {}
@@ -56,12 +45,3 @@ struct HasCollidedComponent : public Component {
 	EntityID other;
 };
 
-//struct ScoreWhenHitBlockComponent : public Component {
-//	int score;
-//	ScoreWhenHitBlockComponent(int score = 1 ):score(score) {}
-//};
-
-//struct PaddleBounceComponent : public Component {
-//	PaddleBounceComponent(double centre):paddleCentre(centre) {};
-//	double paddleCentre;
-//};

@@ -2,10 +2,14 @@
 #include<map>
 #include"ECSComponents.h"
 #include"../BreakoutComponents.h"
+#include"../MarioComponents.h"
+
 
 using namespace std;
 
 typedef int EntityID;
+
+EntityID newEntityID();
 
 struct Components {
 	map<EntityID, PositionComponent*> positions;
@@ -13,13 +17,18 @@ struct Components {
 	map<EntityID, CollisionRectComponent*> collisionRects;
 	map<EntityID, CharSpriteComponent*> charSprites;
 	map<EntityID, StringSpriteComponent*> stringSprites;
+	map<EntityID, HasCollidedComponent*> collideds;
+	map<EntityID, HasMovedComponent*> moveds;
+	
+	//Breakout
+	map<EntityID, DeleteAfterCollisionComponent*> deleteAfterCollisions;
 	map<EntityID, LeftRightControlComponent*> leftRightControls;
 	map<EntityID, BounceComponent*> bounces;
 	map<EntityID, ScoreWhenHitBlockComponent*> scoreWhenHitBlock;
-	map<EntityID, DeleteAfterCollisionComponent*> deleteAfterCollisions;
-	map<EntityID, HasCollidedComponent*> collideds;
-	map<EntityID, HasMovedComponent*> moveds;
 	map<EntityID, PaddleBounceComponent*> paddleBounces;
+
+	//Mario
+	map<EntityID, GravityComponent*> gravities;
 
 
 	void deleteEntity(EntityID id) {
@@ -35,6 +44,7 @@ struct Components {
 		collideds.erase(id);
 		moveds.erase(id);
 		paddleBounces.erase(id);
+		gravities.erase(id);
 
 	};
 };

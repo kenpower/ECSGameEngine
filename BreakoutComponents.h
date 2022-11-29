@@ -1,8 +1,8 @@
 #pragma once
 #include<string>
-#include"Vector.h"
+#include"./ECSGameEngine/vector.h"
 
-typedef int EntityID;
+//typedef int EntityID;
 
 //struct Component {
 //};

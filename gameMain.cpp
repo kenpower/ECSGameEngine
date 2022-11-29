@@ -8,8 +8,8 @@ using namespace std;
 
 #include "./ECSGameEngine/ConsoleRenderWindow.h"
 
-void breakoutGame(ConsoleRenderWindow&,int, int);
-#include <map>
+void breakoutGame(ConsoleRenderWindow&, int, int);
+void marioGame(ConsoleRenderWindow&, int, int);
 
 ConsoleRenderWindow crw;
 
@@ -25,9 +25,22 @@ void playBreaout() {
 	breakoutGame(crw, worldWidth, worldHeight);
 }
 
+void playMario() {
+
+	int charSizePixels = 10;
+
+	int worldHeight = 40;// Console Screen Size X (columns)
+	int worldWidth = 120;// Console Screen Size Y (rows)
+
+	crw.ConstructConsole(worldWidth, worldHeight, charSizePixels, charSizePixels);
+
+	marioGame(crw, worldWidth, worldHeight);
+}
+
 int main() {
 
-	playBreaout();
+	//playBreaout();
+	playMario();
 
 	cout << "Game Over!!" << endl;
 	system("pause");
