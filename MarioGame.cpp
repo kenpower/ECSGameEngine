@@ -48,7 +48,7 @@ void makeLevel(Components& components){
 			
 			components.charSprites[blockID] = new CharSpriteComponent(c);
 
-			if (c == 'X' || c=='P' || c=='Z' ||c=='B' || c='?')
+			if (c == 'X' || c=='P' || c=='Z' || c=='B' || c=='?')
 				components.collisionRects[blockID] = new CollisionRectComponent(1, 1);
 			//components.scoreWhenHitBlock[blockID] = new ScoreWhenHitBlockComponent();
 
