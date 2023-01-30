@@ -23,7 +23,7 @@ void userControlSystem(Components& components, double deltaSeconds) {
 
 void bounceSystem(Components& components) {
 	for (auto& id_bounce : components.collideds) {
-		EntityID id = id_bounce.first;
+ 		EntityID id = id_bounce.first;
 		auto bounce = id_bounce.second;
 
 		auto collision = components.collideds[id];
@@ -35,7 +35,7 @@ void bounceSystem(Components& components) {
 		auto paddlePos = components.positions[collision->other];
 		auto paddleBounce = components.paddleBounces[collision->other];
 
-		if (!paddlePos || !paddleBounce) continue;
+		//if (!paddlePos || !paddleBounce) continue;
 
 
 		if (abs(lround(collision->surfaceNormal.x)) == 1) vel->x *= -1; //vertical   wall

@@ -13,7 +13,7 @@ void marioGame(ConsoleRenderWindow&, int, int);
 
 ConsoleRenderWindow crw;
 
-void playBreaout() {
+void playBreakout() {
 
 	int charSizePixels = 10;
 
@@ -39,8 +39,8 @@ void playMario() {
 
 int main() {
 
-	//playBreaout();
-	playMario();
+	playBreakout();
+	//playMario();
 
 	cout << "Game Over!!" << endl;
 	system("pause");
