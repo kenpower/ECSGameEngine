@@ -90,6 +90,8 @@ void breakoutGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 		
 		deadBlocksSystem(components);
 
+		blockConversionSystem(components);
+
 		renderCharOnConsoleSystem(components, crw);
 
 		renderStringOnConsoleSystem(components, crw);

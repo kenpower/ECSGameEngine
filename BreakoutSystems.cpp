@@ -68,9 +68,10 @@ void deadBlocksSystem(Components& components) {
 		++iter;
 
 		auto del = components.deleteAfterCollisions[id];
-
+		
 		if (collided && del) del->hitsUntilDead--;
 
+		if (collided && del && del->hitsUntilDead==0)
 			components.deleteEntity(id);
 		
 	}
@@ -86,6 +87,18 @@ void scoreBlocksSystem(Components& components, int& gameScore) {
 		if (!collided || !score) continue;
 		
 		gameScore+=score->score;
+
+	}
+}
+
+void blockConversionSystem(Components& components) {
+	for (auto& id_delAfterCol : components.deleteAfterCollisions) {
+		auto del = id_delAfterCol.second;
+
+		if (del && del->hitsUntilDead == 1) {
+			components.stringSprites[id_delAfterCol.first]=  new StringSpriteComponent{ "###" };
+
+		}
 
 	}
 }
