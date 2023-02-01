@@ -62,26 +62,21 @@ void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	Components components;
 
 	auto unitBox = make_shared<CollisionRectComponent>(1, 1);
-	
+
 	auto marioID = newEntityID();
 	components.velocitys[marioID] = new VelocityComponent{ 0.,0. };
 	components.positions[marioID] = new PositionComponent{ 20., 5. };
 	components.stringSprites[marioID] = new StringSpriteComponent{ "M" };
 	components.collisionRects[marioID] = new CollisionRectComponent(1, 1);
 	components.gravities[marioID] = new GravityComponent(15);
-	components.leftRightControls[marioID] = new LeftRightControlComponent(15);
-	components.jumps[marioID] = new JumpComponent(10);
+	components.leftRightControls[marioID] = new LeftRightControlComponent{ 15 };
+	components.jumps[marioID] = new JumpComponent{10};
 
 
 	_wallEntity(components, -1, -1, 1, worldHeight + 2);
 	_wallEntity(components, worldWidth, -1, 1, worldHeight + 2);
 	_wallEntity(components, -1, 0, worldWidth + 2, 1); //leave top line clear for dev info
 	_wallEntity(components, -1, worldHeight, worldWidth + 2, worldHeight + 1);
-
-	auto scoreWhenHit = make_shared<ScoreWhenHitBlockComponent>(5);
-
-	auto blockCollision = make_shared<CollisionRectComponent>(3, 1);
-	auto block = make_shared<DeleteAfterCollisionComponent>();
 
 	makeLevel(components);
 

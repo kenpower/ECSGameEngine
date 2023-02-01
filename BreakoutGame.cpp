@@ -35,8 +35,8 @@ void breakoutGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	components.positions[paddleID] = new PositionComponent{ 10., 35. };
 	components.stringSprites[paddleID] = new StringSpriteComponent{"<====>"};
 	components.collisionRects[paddleID] = new CollisionRectComponent(6, 1);
-	components.leftRightControls[paddleID] = new LeftRightControlComponent(15);
-	components.paddleBounces[paddleID] = new PaddleBounceComponent(3);
+	components.leftRightControls[paddleID] = new LeftRightControlComponent{ 15. };
+	components.paddleBounces[paddleID] = new PaddleBounceComponent{ 3. };
 
 
 	wallEntity(components, -1, -1, 1, worldHeight+2);
@@ -54,8 +54,8 @@ void breakoutGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 				? new StringSpriteComponent{ "XXX" }
 				: new StringSpriteComponent{ "###" };
 			components.collisionRects[blockID] = new CollisionRectComponent(3, 1);
-			components.deleteAfterCollisions[blockID] = new DeleteAfterCollisionComponent();
-			components.scoreWhenHitBlock[blockID] = new ScoreWhenHitBlockComponent();
+			components.deleteAfterCollisions[blockID] = new DeleteAfterCollisionComponent{};
+			components.scoreWhenHitBlock[blockID] = new ScoreWhenHitBlockComponent{1};
 
 			blockColor++;
 		}
