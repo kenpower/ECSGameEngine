@@ -13,7 +13,7 @@ class ConsoleRenderWindow;
 
 void wallEntity(Components& components, int x, int y, int w, int h) {	
 	auto wallID = newEntityID();
-	components.positions[wallID] = new PositionComponent(x, y);
+	components.positions[wallID] = new PositionComponent{ (double)x, (double)y };
 	components.collisionRects[wallID] = new CollisionRectComponent(w, h);
 }
 
@@ -21,19 +21,19 @@ void breakoutGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 
 	Components components;
 
-	auto unitBox = make_shared<CollisionRectComponent>(1,1);
+	auto unitBox = make_shared<CollisionRectComponent>(1, 1);
 
 	auto ballID = newEntityID();
-	components.velocitys[ballID] = new VelocityComponent(10, 10);
-	components.positions[ballID] = new PositionComponent(10, 20);
-	components.charSprites[ballID] = new CharSpriteComponent('O');
+	components.velocitys[ballID] = new VelocityComponent{ 10., 10. };
+	components.positions[ballID] = new PositionComponent{ 10., 20. };
+	components.charSprites[ballID] = new CharSpriteComponent{ 'O' };
 	components.bounces[ballID] = new BounceComponent();
 	components.collisionRects[ballID] = new CollisionRectComponent(1, 1);
 
 
 	auto paddleID = newEntityID();
-	components.positions[paddleID] = new PositionComponent(10, 35);
-	components.stringSprites[paddleID] = new StringSpriteComponent("<====>");
+	components.positions[paddleID] = new PositionComponent{ 10., 35. };
+	components.stringSprites[paddleID] = new StringSpriteComponent{"<====>"};
 	components.collisionRects[paddleID] = new CollisionRectComponent(6, 1);
 	components.leftRightControls[paddleID] = new LeftRightControlComponent(15);
 	components.paddleBounces[paddleID] = new PaddleBounceComponent(3);
@@ -49,10 +49,10 @@ void breakoutGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 		int blockColor = firstBlock % 2;
 		for (int y = 5; y < 20; y += 1) {
 			auto blockID = newEntityID();
-			components.positions[blockID] = new PositionComponent(x, y);
+			components.positions[blockID] = new PositionComponent{ (double)x, (double)y };
 			components.stringSprites[blockID] = blockColor % 2
-				? new StringSpriteComponent("XXX")
-				: new StringSpriteComponent("###");
+				? new StringSpriteComponent{ "XXX" }
+				: new StringSpriteComponent{ "###" };
 			components.collisionRects[blockID] = new CollisionRectComponent(3, 1);
 			components.deleteAfterCollisions[blockID] = new DeleteAfterCollisionComponent();
 			components.scoreWhenHitBlock[blockID] = new ScoreWhenHitBlockComponent();

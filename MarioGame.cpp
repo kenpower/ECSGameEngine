@@ -13,7 +13,7 @@ using namespace std::chrono;
 
 void _wallEntity(Components& components, int x, int y, int w, int h) {
 	auto wallID = newEntityID();
-	components.positions[wallID] = new PositionComponent(x, y);
+	components.positions[wallID] = new PositionComponent{ (double)x, (double)y };
 	components.collisionRects[wallID] = new CollisionRectComponent(w, h);
 }
 
@@ -42,11 +42,11 @@ void makeLevel(Components& components){
 	for (int x = 0; x < windowWidth; x++) {
 		for (int y = 0; y < mapHeight; y++) {
 			auto blockID = newEntityID();
-			components.positions[blockID] = new PositionComponent(x, y+1);
+			components.positions[blockID] = new PositionComponent{ (double)x, (double)(y + 1) };
 			char c = level[x + mapWidth * y];
 			if (c == '.') continue;
-			
-			components.charSprites[blockID] = new CharSpriteComponent(c);
+
+			components.charSprites[blockID] = new CharSpriteComponent{c};
 
 			if (c == 'X' || c=='P' || c=='Z' || c=='B' || c=='?')
 				components.collisionRects[blockID] = new CollisionRectComponent(1, 1);
@@ -64,9 +64,9 @@ void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	auto unitBox = make_shared<CollisionRectComponent>(1, 1);
 	
 	auto marioID = newEntityID();
-	components.velocitys[marioID] = new VelocityComponent(0,0);
-	components.positions[marioID] = new PositionComponent(20, 5);
-	components.stringSprites[marioID] = new StringSpriteComponent("M");
+	components.velocitys[marioID] = new VelocityComponent{ 0.,0. };
+	components.positions[marioID] = new PositionComponent{ 20., 5. };
+	components.stringSprites[marioID] = new StringSpriteComponent{ "M" };
 	components.collisionRects[marioID] = new CollisionRectComponent(1, 1);
 	components.gravities[marioID] = new GravityComponent(15);
 	components.leftRightControls[marioID] = new LeftRightControlComponent(15);
@@ -78,9 +78,6 @@ void marioGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	_wallEntity(components, -1, 0, worldWidth + 2, 1); //leave top line clear for dev info
 	_wallEntity(components, -1, worldHeight, worldWidth + 2, worldHeight + 1);
 
-
-	auto block1 = make_shared<StringSpriteComponent>("XXX");
-	auto block2 = make_shared<StringSpriteComponent>("###");
 	auto scoreWhenHit = make_shared<ScoreWhenHitBlockComponent>(5);
 
 	auto blockCollision = make_shared<CollisionRectComponent>(3, 1);
