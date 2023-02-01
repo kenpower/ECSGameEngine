@@ -44,14 +44,6 @@ void breakoutGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 	wallEntity(components, -1, 0, worldWidth+2, 1); //leave top line clear for dev info
 	wallEntity(components, -1, worldHeight,  worldWidth + 2, worldHeight+1);
 
-
-	auto block1 = make_shared<StringSpriteComponent>("XXX");
-	auto block2 = make_shared<StringSpriteComponent>("###");
-	auto scoreWhenHit = make_shared<ScoreWhenHitBlockComponent>(5);
-
-	auto blockCollision = make_shared<CollisionRectComponent>(3, 1);
-	auto block = make_shared<DeleteAfterCollisionComponent>();
-
 	int firstBlock = 0;
 	for (int x = 3; x < worldWidth - 4; x += 3) {
 		int blockColor = firstBlock % 2;
