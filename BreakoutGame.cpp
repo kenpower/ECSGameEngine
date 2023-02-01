@@ -54,7 +54,7 @@ void breakoutGame(ConsoleRenderWindow& crw, int worldWidth, int worldHeight) {
 				? new StringSpriteComponent{ "XXX" }
 				: new StringSpriteComponent{ "###" };
 			components.collisionRects[blockID] = new CollisionRectComponent(3, 1);
-			components.deleteAfterCollisions[blockID] = new DeleteAfterCollisionComponent{};
+			components.deleteAfterCollisions[blockID] = new DeleteAfterCollisionComponent{ blockColor % 2 ? 2 : 1};
 			components.scoreWhenHitBlock[blockID] = new ScoreWhenHitBlockComponent{1};
 
 			blockColor++;

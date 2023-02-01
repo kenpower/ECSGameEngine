@@ -69,7 +69,8 @@ void deadBlocksSystem(Components& components) {
 
 		auto del = components.deleteAfterCollisions[id];
 
-		if (collided && del)
+		if (collided && del) del->hitsUntilDead--;
+
 			components.deleteEntity(id);
 		
 	}

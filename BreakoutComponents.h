@@ -9,6 +9,7 @@ struct BounceComponent : public Component {
 };
 
 struct DeleteAfterCollisionComponent {
+	int hitsUntilDead;
 };
 
 struct ScoreWhenHitBlockComponent{
